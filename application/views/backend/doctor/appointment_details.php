@@ -298,7 +298,14 @@ var app = '<?php echo base64_decode($id_);?>';
                         'rf_os_esf', 'rf_os_cil', 'rf_os_eje', 'rf_os_add',
                         'rc_od_esf', 'rc_od_cil', 'rc_od_eje', 'rc_od_add',
                         'rc_os_esf', 'rc_os_cil', 'rc_os_eje', 'rc_os_add',
-                        'graf_od_externo', 'graf_os_externo', 'graf_od_fondo', 'graf_os_fondo'
+                        'graf_od_externo', 'graf_os_externo', 'graf_od_fondo', 'graf_os_fondo',
+                        'kera_od_k1', 'kera_od_k1_eje', 'kera_od_k1_nomarca', 'kera_od_k1_irregular', 'kera_od_kprom',
+                        'kera_od_k2', 'kera_od_k2_eje', 'kera_od_k2_nomarca', 'kera_od_k2_irregular',
+                        'kera_os_k1', 'kera_os_k1_eje', 'kera_os_k1_nomarca', 'kera_os_k1_irregular', 'kera_os_kprom',
+                        'kera_os_k2', 'kera_os_k2_eje', 'kera_os_k2_nomarca', 'kera_os_k2_irregular',
+                        'ar_od_esf', 'ar_od_cil', 'ar_od_eje', 'ar_od_nomarca', 'ar_od_dip',
+                        'ar_os_esf', 'ar_os_cil', 'ar_os_eje', 'ar_os_nomarca', 'ar_os_dip',
+                        'ar_notas_ojo', 'ar_notas', 'ar_diferido'
                     );
                     $oft_defaults = array_fill_keys($oft_fields, '');
                     $oft_row = $this->db->get_where('appointment_oftalmology', array('appointment_id' => $details['appointment_id']))->row_array();
@@ -587,6 +594,75 @@ var app = '<?php echo base64_decode($id_);?>';
                                                     </tr>
                                                 </tbody>
                                             </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group" style="border:1px solid #e6e8ee;border-radius:8px;padding:12px;">
+                                        <b>QUERATOMETRÍA</b>
+                                        <?php
+                                            $aid = $details['appointment_id'];
+                                            $kera_eyes = array('od' => 'OD', 'os' => 'OS');
+                                        ?>
+                                        <?php foreach ($kera_eyes as $eye => $eye_label): ?>
+                                        <div class="row" style="margin-top:10px;align-items:center;">
+                                            <div class="col-sm-1"><b><?php echo $eye_label; ?></b></div>
+                                            <div class="col-sm-11">
+                                                <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-bottom:8px;">
+                                                    <div><label style="display:block;font-size:12px;color:#047bf8;">K1</label><input class="form-control" style="width:90px;" onchange="updateConsulta('kera_<?php echo $eye; ?>_k1',<?php echo $aid; ?>,this.value)" value="<?php echo $details['kera_'.$eye.'_k1']; ?>"></div>
+                                                    <span style="padding-bottom:8px;">x</span>
+                                                    <div><label style="display:block;font-size:12px;color:#047bf8;">EJE</label><input class="form-control" style="width:90px;" onchange="updateConsulta('kera_<?php echo $eye; ?>_k1_eje',<?php echo $aid; ?>,this.value)" value="<?php echo $details['kera_'.$eye.'_k1_eje']; ?>"></div>
+                                                    <label style="padding-bottom:8px;"><input type="checkbox" <?php echo $details['kera_'.$eye.'_k1_nomarca'] == '1' ? 'checked' : ''; ?> onchange="updateConsulta('kera_<?php echo $eye; ?>_k1_nomarca',<?php echo $aid; ?>,this.checked ? '1' : '0')"> NO MARCA</label>
+                                                    <label style="padding-bottom:8px;"><input type="checkbox" <?php echo $details['kera_'.$eye.'_k1_irregular'] == '1' ? 'checked' : ''; ?> onchange="updateConsulta('kera_<?php echo $eye; ?>_k1_irregular',<?php echo $aid; ?>,this.checked ? '1' : '0')"> IRREGULAR</label>
+                                                    <div><label style="display:block;font-size:12px;color:#047bf8;">K PROM</label><input class="form-control" style="width:90px;" onchange="updateConsulta('kera_<?php echo $eye; ?>_kprom',<?php echo $aid; ?>,this.value)" value="<?php echo $details['kera_'.$eye.'_kprom']; ?>"></div>
+                                                </div>
+                                                <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;">
+                                                    <div><label style="display:block;font-size:12px;color:#047bf8;">K2</label><input class="form-control" style="width:90px;" onchange="updateConsulta('kera_<?php echo $eye; ?>_k2',<?php echo $aid; ?>,this.value)" value="<?php echo $details['kera_'.$eye.'_k2']; ?>"></div>
+                                                    <span style="padding-bottom:8px;">x</span>
+                                                    <div><label style="display:block;font-size:12px;color:#047bf8;">EJE</label><input class="form-control" style="width:90px;" onchange="updateConsulta('kera_<?php echo $eye; ?>_k2_eje',<?php echo $aid; ?>,this.value)" value="<?php echo $details['kera_'.$eye.'_k2_eje']; ?>"></div>
+                                                    <label style="padding-bottom:8px;"><input type="checkbox" <?php echo $details['kera_'.$eye.'_k2_nomarca'] == '1' ? 'checked' : ''; ?> onchange="updateConsulta('kera_<?php echo $eye; ?>_k2_nomarca',<?php echo $aid; ?>,this.checked ? '1' : '0')"> NO MARCA</label>
+                                                    <label style="padding-bottom:8px;"><input type="checkbox" <?php echo $details['kera_'.$eye.'_k2_irregular'] == '1' ? 'checked' : ''; ?> onchange="updateConsulta('kera_<?php echo $eye; ?>_k2_irregular',<?php echo $aid; ?>,this.checked ? '1' : '0')"> IRREGULAR</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                    <div class="form-group" style="border:1px solid #e6e8ee;border-radius:8px;padding:12px;margin-top:12px;">
+                                        <b>AUTOREFRACTÓMETRO</b>
+                                        <div style="display:flex;gap:8px;margin:10px 0 4px 40px;color:#047bf8;font-size:12px;">
+                                            <span style="width:90px;">ESF</span>
+                                            <span style="width:16px;"></span>
+                                            <span style="width:90px;">CIL</span>
+                                            <span style="width:16px;"></span>
+                                            <span style="width:90px;">EJE</span>
+                                            <span style="width:90px;">NO MARCA</span>
+                                            <span style="width:90px;">DIP</span>
+                                        </div>
+                                        <?php foreach ($kera_eyes as $eye => $eye_label): ?>
+                                        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px;">
+                                            <b style="width:28px;"><?php echo $eye_label; ?></b>
+                                            <input class="form-control" style="width:90px;" onchange="updateConsulta('ar_<?php echo $eye; ?>_esf',<?php echo $aid; ?>,this.value)" value="<?php echo $details['ar_'.$eye.'_esf']; ?>">
+                                            <span>-</span>
+                                            <input class="form-control" style="width:90px;" onchange="updateConsulta('ar_<?php echo $eye; ?>_cil',<?php echo $aid; ?>,this.value)" value="<?php echo $details['ar_'.$eye.'_cil']; ?>">
+                                            <span>x</span>
+                                            <input class="form-control" style="width:90px;" onchange="updateConsulta('ar_<?php echo $eye; ?>_eje',<?php echo $aid; ?>,this.value)" value="<?php echo $details['ar_'.$eye.'_eje']; ?>">
+                                            <label style="width:90px;margin:0;"><input type="checkbox" <?php echo $details['ar_'.$eye.'_nomarca'] == '1' ? 'checked' : ''; ?> onchange="updateConsulta('ar_<?php echo $eye; ?>_nomarca',<?php echo $aid; ?>,this.checked ? '1' : '0')"></label>
+                                            <input class="form-control" style="width:90px;" onchange="updateConsulta('ar_<?php echo $eye; ?>_dip',<?php echo $aid; ?>,this.value)" value="<?php echo $details['ar_'.$eye.'_dip']; ?>">
+                                        </div>
+                                        <?php endforeach; ?>
+                                        <div style="margin-top:12px;">
+                                            <label><b>NOTAS</b></label>
+                                            <div style="margin-bottom:8px;">
+                                                <label style="margin-right:12px;"><input type="radio" name="ar_notas_ojo_<?php echo $aid; ?>" value="od" <?php echo $details['ar_notas_ojo'] == 'od' ? 'checked' : ''; ?> onchange="updateConsulta('ar_notas_ojo',<?php echo $aid; ?>,this.value)"> OD</label>
+                                                <label style="margin-right:12px;"><input type="radio" name="ar_notas_ojo_<?php echo $aid; ?>" value="os" <?php echo $details['ar_notas_ojo'] == 'os' ? 'checked' : ''; ?> onchange="updateConsulta('ar_notas_ojo',<?php echo $aid; ?>,this.value)"> OS</label>
+                                                <label><input type="radio" name="ar_notas_ojo_<?php echo $aid; ?>" value="ou" <?php echo $details['ar_notas_ojo'] == 'ou' ? 'checked' : ''; ?> onchange="updateConsulta('ar_notas_ojo',<?php echo $aid; ?>,this.value)"> OU</label>
+                                            </div>
+                                            <div style="display:flex;gap:10px;align-items:flex-start;">
+                                                <textarea class="form-control" rows="2" onchange="updateConsulta('ar_notas',<?php echo $aid; ?>,this.value)"><?php echo $details['ar_notas']; ?></textarea>
+                                                <button type="button" class="btn <?php echo $details['ar_diferido'] == '1' ? 'btn-danger' : 'btn-danger'; ?>" style="min-width:120px;" onclick="updateConsulta('ar_diferido',<?php echo $aid; ?>,'1'); this.innerText='Diferido';">
+                                                    <?php echo $details['ar_diferido'] == '1' ? 'Diferido' : 'DIFERIDO'; ?>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

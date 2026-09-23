@@ -4166,7 +4166,14 @@ class Doctor extends Drive
             'rf_os_esf', 'rf_os_cil', 'rf_os_eje', 'rf_os_add',
             'rc_od_esf', 'rc_od_cil', 'rc_od_eje', 'rc_od_add',
             'rc_os_esf', 'rc_os_cil', 'rc_os_eje', 'rc_os_add',
-            'graf_od_externo', 'graf_os_externo', 'graf_od_fondo', 'graf_os_fondo'
+            'graf_od_externo', 'graf_os_externo', 'graf_od_fondo', 'graf_os_fondo',
+            'kera_od_k1', 'kera_od_k1_eje', 'kera_od_k1_nomarca', 'kera_od_k1_irregular', 'kera_od_kprom',
+            'kera_od_k2', 'kera_od_k2_eje', 'kera_od_k2_nomarca', 'kera_od_k2_irregular',
+            'kera_os_k1', 'kera_os_k1_eje', 'kera_os_k1_nomarca', 'kera_os_k1_irregular', 'kera_os_kprom',
+            'kera_os_k2', 'kera_os_k2_eje', 'kera_os_k2_nomarca', 'kera_os_k2_irregular',
+            'ar_od_esf', 'ar_od_cil', 'ar_od_eje', 'ar_od_nomarca', 'ar_od_dip',
+            'ar_os_esf', 'ar_os_cil', 'ar_os_eje', 'ar_os_nomarca', 'ar_os_dip',
+            'ar_notas_ojo', 'ar_notas', 'ar_diferido'
        );
 
        if (in_array($cl, $oft_fields, true)) {
