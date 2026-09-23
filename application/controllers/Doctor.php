@@ -4103,7 +4103,7 @@ class Doctor extends Drive
     function save_antecedent()
     {
         $type = $this->input->post('type');
-        $allowed = array('md', 'qx', 'alg');
+        $allowed = array('md', 'qx', 'alg', 'trx', 'fam');
         if (!in_array($type, $allowed, true)) {
             return;
         }

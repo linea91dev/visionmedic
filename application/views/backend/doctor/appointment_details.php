@@ -374,10 +374,14 @@ var app = '<?php echo base64_decode($id_);?>';
                                     $ants_md = array();
                                     $ants_qx = array();
                                     $ants_alg = array();
+                                    $ants_trx = array();
+                                    $ants_fam = array();
                                     foreach ($patient_ants as $ant_row) {
                                         if ($ant_row['type'] == 'md') $ants_md[] = $ant_row;
                                         if ($ant_row['type'] == 'qx') $ants_qx[] = $ant_row;
                                         if ($ant_row['type'] == 'alg') $ants_alg[] = $ant_row;
+                                        if ($ant_row['type'] == 'trx') $ants_trx[] = $ant_row;
+                                        if ($ant_row['type'] == 'fam') $ants_fam[] = $ant_row;
                                     }
                                 ?>
                                 <div class="col-sm-12">
@@ -437,6 +441,46 @@ var app = '<?php echo base64_decode($id_);?>';
                                                 <div class="row">
                                                     <div class="col-sm-6"><label>ALERGIA</label><input type="text" class="form-control ant-item" onchange="saveAntecedentRow(this)" value="<?php echo htmlspecialchars($ant['item']); ?>"></div>
                                                     <div class="col-sm-6"><label>NOTAS</label><textarea class="form-control ant-notes" rows="2" onchange="saveAntecedentRow(this)"><?php echo htmlspecialchars($ant['notes']); ?></textarea></div>
+                                                </div>
+                                            </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="border:1px solid #e6e8ee;border-radius:8px;padding:12px;margin-bottom:12px;">
+                                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                                            <div>
+                                                <div style="font-size:12px;letter-spacing:.4px;color:#8b93a7;">ANTECEDENTES</div>
+                                                <div style="color:#047bf8;font-weight:700;">TRX</div>
+                                            </div>
+                                            <button type="button" class="btn btn-primary" style="border-radius:10px;min-width:42px;" onclick="addAntecedentRow('trx',<?php echo $app_key; ?>,<?php echo $det['patient_id']; ?>)">+</button>
+                                        </div>
+                                        <div id="ant_trx_rows_<?php echo $app_key; ?>" style="margin-top:8px;">
+                                            <?php if (count($ants_trx) == 0) $ants_trx[] = array('antecedent_id' => '', 'item' => '', 'treatment' => '', 'notes' => ''); ?>
+                                            <?php foreach ($ants_trx as $ant): ?>
+                                            <div class="ant-row" data-id="<?php echo $ant['antecedent_id']; ?>" data-type="trx" data-patient="<?php echo $det['patient_id']; ?>" style="border-top:1px solid #f0f2f6;padding-top:10px;margin-top:8px;">
+                                                <div class="row">
+                                                    <div class="col-sm-6"><label>TRAUMA</label><input type="text" class="form-control ant-item" onchange="saveAntecedentRow(this)" value="<?php echo htmlspecialchars($ant['item']); ?>"></div>
+                                                    <div class="col-sm-6"><label>NOTAS</label><textarea class="form-control ant-notes" rows="2" onchange="saveAntecedentRow(this)"><?php echo htmlspecialchars($ant['notes']); ?></textarea></div>
+                                                </div>
+                                            </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="border:1px solid #e6e8ee;border-radius:8px;padding:12px;margin-bottom:12px;">
+                                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                                            <div>
+                                                <div style="font-size:12px;letter-spacing:.4px;color:#8b93a7;">ANTECEDENTES</div>
+                                                <div style="color:#047bf8;font-weight:700;">FAM</div>
+                                            </div>
+                                            <button type="button" class="btn btn-primary" style="border-radius:10px;min-width:42px;" onclick="addAntecedentRow('fam',<?php echo $app_key; ?>,<?php echo $det['patient_id']; ?>)">+</button>
+                                        </div>
+                                        <div id="ant_fam_rows_<?php echo $app_key; ?>" style="margin-top:8px;">
+                                            <?php if (count($ants_fam) == 0) $ants_fam[] = array('antecedent_id' => '', 'item' => '', 'treatment' => '', 'notes' => ''); ?>
+                                            <?php foreach ($ants_fam as $ant): ?>
+                                            <div class="ant-row" data-id="<?php echo $ant['antecedent_id']; ?>" data-type="fam" data-patient="<?php echo $det['patient_id']; ?>" style="border-top:1px solid #f0f2f6;padding-top:10px;margin-top:8px;">
+                                                <div class="row">
+                                                    <div class="col-sm-6"><label>DIAGNÓSTICO</label><input type="text" class="form-control ant-item" onchange="saveAntecedentRow(this)" value="<?php echo htmlspecialchars($ant['item']); ?>"></div>
+                                                    <div class="col-sm-6"><label>FAMILIAR</label><input type="text" class="form-control ant-tx" onchange="saveAntecedentRow(this)" value="<?php echo htmlspecialchars($ant['treatment']); ?>"></div>
                                                 </div>
                                             </div>
                                             <?php endforeach; ?>
@@ -1182,6 +1226,12 @@ function addAntecedentRow(type, appId, patientId) {
     } else if (type === 'qx') {
         fields = '<div class="col-sm-6"><label>CIRUGÍA</label><input type="text" class="form-control ant-item" onchange="saveAntecedentRow(this)"></div>' +
             '<div class="col-sm-6"><label>NOTAS</label><textarea class="form-control ant-notes" rows="2" onchange="saveAntecedentRow(this)"></textarea></div>';
+    } else if (type === 'trx') {
+        fields = '<div class="col-sm-6"><label>TRAUMA</label><input type="text" class="form-control ant-item" onchange="saveAntecedentRow(this)"></div>' +
+            '<div class="col-sm-6"><label>NOTAS</label><textarea class="form-control ant-notes" rows="2" onchange="saveAntecedentRow(this)"></textarea></div>';
+    } else if (type === 'fam') {
+        fields = '<div class="col-sm-6"><label>DIAGNÓSTICO</label><input type="text" class="form-control ant-item" onchange="saveAntecedentRow(this)"></div>' +
+            '<div class="col-sm-6"><label>FAMILIAR</label><input type="text" class="form-control ant-tx" onchange="saveAntecedentRow(this)"></div>';
     } else {
         fields = '<div class="col-sm-6"><label>ALERGIA</label><input type="text" class="form-control ant-item" onchange="saveAntecedentRow(this)"></div>' +
             '<div class="col-sm-6"><label>NOTAS</label><textarea class="form-control ant-notes" rows="2" onchange="saveAntecedentRow(this)"></textarea></div>';
