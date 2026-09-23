@@ -4186,7 +4186,18 @@ class Doctor extends Drive
             'seg_conjuntiva_od_nota', 'seg_conjuntiva_os_nota', 'seg_esclera_od_nota', 'seg_esclera_os_nota',
             'seg_cornea_od_nota', 'seg_cornea_os_nota', 'seg_camara_od_nota', 'seg_camara_os_nota',
             'seg_iris_od_nota', 'seg_iris_os_nota', 'seg_pupila_od_nota', 'seg_pupila_os_nota',
-            'seg_cristalino_od_nota', 'seg_cristalino_os_nota'
+            'seg_cristalino_od_nota', 'seg_cristalino_os_nota',
+            'rx_comentario',
+            'rx_final_od_esf', 'rx_final_od_cil', 'rx_final_od_eje', 'rx_final_od_prisma', 'rx_final_od_base',
+            'rx_final_os_esf', 'rx_final_os_cil', 'rx_final_os_eje', 'rx_final_os_prisma', 'rx_final_os_base',
+            'rx_add_od_esf', 'rx_add_od_cil', 'rx_add_od_eje', 'rx_add_od_prisma', 'rx_add_od_base',
+            'rx_add_os_esf', 'rx_add_os_cil', 'rx_add_os_eje', 'rx_add_os_prisma', 'rx_add_os_base',
+            'rx_dip',
+            'rx_lente_monofocal', 'rx_lente_progresivo', 'rx_lente_bifocal', 'rx_lente_otro',
+            'rx_rec_filtro', 'rx_rec_antireflejo', 'rx_rec_polarizado', 'rx_rec_polarizado_nota',
+            'rx_rec_policarbonato', 'rx_rec_sol', 'rx_rec_tenido', 'rx_rec_tenido_nota',
+            'rx_rec_transitions', 'rx_rec_transitions_nota', 'rx_rec_otros',
+            'rx_contacto'
        );
 
        if (in_array($cl, $oft_fields, true)) {

@@ -75,7 +75,7 @@
                     <p class="_header-license_ztkcf7">Colegiado: <b><?php echo $colegiado;?></b></p>
                 </div>
                 <div class="_header-meta_ztkcf7">
-                    <p><b>Receta de Medicamentos</b></p>
+                    <p><b>Receta</b></p>
                     <p>Generado por: <b>Medicaby</b></p>
                     <p>Impreso por: <b>
                          <?php if($this->session->userdata('login_type') == 'staff'): echo $this->accounts_model->short_name('staff',$this->session->userdata('login_user_id'));
@@ -103,19 +103,70 @@
                             <div class="ember-view">
                                 <div class="_is-subtitle_1cmxxr ember-view">  
                                     <img src="<?php echo base_url();?>public/uploads/pattern.png" alt="">
-                                    Medicamentos
+                                    Receta
                                 </div>
                             </div>
                             <div class="_prescription-drug_6ovcpi">
                                 <?php
-                                    $data_info = $this->db->get_where('prescription', array('appointment_id' => $appointment_id))->result_array();
-                                    foreach($data_info as $details):
+                                    $rx = array();
+                                    if ($this->db->table_exists('appointment_oftalmology')) {
+                                        $rx_row = $this->db->get_where('appointment_oftalmology', array('appointment_id' => $appointment_id))->row_array();
+                                        if (is_array($rx_row)) $rx = $rx_row;
+                                    }
+                                    $rxv = function($key) use ($rx) {
+                                        return isset($rx[$key]) ? $rx[$key] : '';
+                                    };
+                                    $rx_mark = function($key) use ($rxv) {
+                                        return $rxv($key) == '1' ? 'Sí' : '';
+                                    };
                                 ?>
-                                    <p><b><?php echo $details['medicine'];?></b></p>
-                                    <p><?php echo $details['quantity'];?> <?php echo $details['frequency'];?> durante <?php echo $details['duration'];?>.</p>
-                                    <br>
-                                <?php endforeach;?>
-                                <p>Si ocurre una reacción alérgica, suspender el medicamento.</p>
+                                <?php if ($rxv('rx_comentario') != ''): ?>
+                                <p><b>Comentario:</b> <?php echo $rxv('rx_comentario'); ?></p>
+                                <?php endif; ?>
+                                <table border="1" cellspacing="0" cellpadding="4" width="100%" style="border-collapse:collapse;margin-top:8px;">
+                                    <tr>
+                                        <th></th><th></th><th>Esfera</th><th>Cilindro</th><th>Eje</th><th>Prisma</th><th>Base</th>
+                                    </tr>
+                                    <?php foreach (array('final' => 'Final', 'add' => 'Adición') as $g => $gl): ?>
+                                    <?php foreach (array('od' => 'OD', 'os' => 'OS') as $e => $el): ?>
+                                    <tr>
+                                        <?php if ($e == 'od'): ?><td rowspan="2"><b><?php echo $gl; ?></b></td><?php endif; ?>
+                                        <td><?php echo $el; ?></td>
+                                        <td><?php echo $rxv('rx_'.$g.'_'.$e.'_esf'); ?></td>
+                                        <td><?php echo $rxv('rx_'.$g.'_'.$e.'_cil'); ?></td>
+                                        <td><?php echo $rxv('rx_'.$g.'_'.$e.'_eje'); ?></td>
+                                        <td><?php echo $rxv('rx_'.$g.'_'.$e.'_prisma'); ?></td>
+                                        <td><?php echo $rxv('rx_'.$g.'_'.$e.'_base'); ?></td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                    <?php endforeach; ?>
+                                </table>
+                                <p style="margin-top:8px;"><b>DIP:</b> <?php echo $rxv('rx_dip'); ?></p>
+                                <p><b>Tipo de lente:</b>
+                                    <?php
+                                        $lentes = array();
+                                        if ($rxv('rx_lente_monofocal') == '1') $lentes[] = 'Monofocal';
+                                        if ($rxv('rx_lente_progresivo') == '1') $lentes[] = 'Progresivo';
+                                        if ($rxv('rx_lente_bifocal') == '1') $lentes[] = 'Bifocal';
+                                        if ($rxv('rx_lente_otro') == '1') $lentes[] = 'Otro';
+                                        echo implode(', ', $lentes);
+                                    ?>
+                                </p>
+                                <p><b>Recomendación:</b>
+                                    <?php
+                                        $recs = array();
+                                        if ($rxv('rx_rec_filtro') == '1') $recs[] = 'Filtro de luz azul';
+                                        if ($rxv('rx_rec_antireflejo') == '1') $recs[] = 'Antireflejo';
+                                        if ($rxv('rx_rec_polarizado') == '1') $recs[] = 'Polarizado'.($rxv('rx_rec_polarizado_nota') != '' ? ' ('.$rxv('rx_rec_polarizado_nota').')' : '');
+                                        if ($rxv('rx_rec_policarbonato') == '1') $recs[] = 'Policarbonato';
+                                        if ($rxv('rx_rec_sol') == '1') $recs[] = 'Lentes de sol';
+                                        if ($rxv('rx_rec_tenido') == '1') $recs[] = 'Teñido'.($rxv('rx_rec_tenido_nota') != '' ? ' ('.$rxv('rx_rec_tenido_nota').')' : '');
+                                        if ($rxv('rx_rec_transitions') == '1') $recs[] = 'Transitions'.($rxv('rx_rec_transitions_nota') != '' ? ' ('.$rxv('rx_rec_transitions_nota').')' : '');
+                                        if ($rxv('rx_rec_otros') == '1') $recs[] = 'Otros';
+                                        echo implode(', ', $recs);
+                                    ?>
+                                </p>
+                                <p><b>Final en lente de contacto:</b> <?php echo ($rxv('rx_contacto') == 'rigido') ? 'Rígido' : 'Escleral'; ?></p>
                             </div>
                             <?php if($appointment_comment != ''): ?>
                             <div>

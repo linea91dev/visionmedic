@@ -318,7 +318,18 @@ var app = '<?php echo base64_decode($id_);?>';
                         'seg_conjuntiva_od_nota', 'seg_conjuntiva_os_nota', 'seg_esclera_od_nota', 'seg_esclera_os_nota',
                         'seg_cornea_od_nota', 'seg_cornea_os_nota', 'seg_camara_od_nota', 'seg_camara_os_nota',
                         'seg_iris_od_nota', 'seg_iris_os_nota', 'seg_pupila_od_nota', 'seg_pupila_os_nota',
-                        'seg_cristalino_od_nota', 'seg_cristalino_os_nota'
+                        'seg_cristalino_od_nota', 'seg_cristalino_os_nota',
+                        'rx_comentario',
+                        'rx_final_od_esf', 'rx_final_od_cil', 'rx_final_od_eje', 'rx_final_od_prisma', 'rx_final_od_base',
+                        'rx_final_os_esf', 'rx_final_os_cil', 'rx_final_os_eje', 'rx_final_os_prisma', 'rx_final_os_base',
+                        'rx_add_od_esf', 'rx_add_od_cil', 'rx_add_od_eje', 'rx_add_od_prisma', 'rx_add_od_base',
+                        'rx_add_os_esf', 'rx_add_os_cil', 'rx_add_os_eje', 'rx_add_os_prisma', 'rx_add_os_base',
+                        'rx_dip',
+                        'rx_lente_monofocal', 'rx_lente_progresivo', 'rx_lente_bifocal', 'rx_lente_otro',
+                        'rx_rec_filtro', 'rx_rec_antireflejo', 'rx_rec_polarizado', 'rx_rec_polarizado_nota',
+                        'rx_rec_policarbonato', 'rx_rec_sol', 'rx_rec_tenido', 'rx_rec_tenido_nota',
+                        'rx_rec_transitions', 'rx_rec_transitions_nota', 'rx_rec_otros',
+                        'rx_contacto'
                     );
                     $oft_defaults = array_fill_keys($oft_fields, '');
                     $oft_row = $this->db->get_where('appointment_oftalmology', array('appointment_id' => $details['appointment_id']))->row_array();
@@ -1190,89 +1201,74 @@ var app = '<?php echo base64_decode($id_);?>';
                         </div>
                         <?php endif;  ?>
                         <div class="card-widget" style="border: 1px solid #c6c6cc;">
-                            <h5 class="panel-content-title">Receta de medicamentos</h5>
+                            <h5 class="panel-content-title">Receta</h5>
                             <span class="app-divider2"></span>
+                            <?php $rxid = $details['appointment_id']; $rx_contacto = $details['rx_contacto'] == '' ? 'escleral' : $details['rx_contacto']; ?>
                             <div class="row">
-                                <div class="col-md-12">
-                                    <div class="row" style="overflow-y:auto">
-                                        <?php if($details['status'] == 1 && $details['appointment_id'] == $appointment_id):?>
-                                        <div class="col-sm-3">
-                                            <div class="form-group">
-                                                <label>Medicamento</label>
-                                                <input type="text" class="form-control" placeholder="Medicamento" autocomplete="off" id="medicine" />
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <div class="form-group">
-                                                <label>Tomar</label>
-                                                <input type="text" class="form-control" autocomplete="off" id="drink" placeholder="Cantidad" />
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <div class="form-group">
-                                                <label>Frecuencia</label>
-                                                <input type="text" class="form-control" autocomplete="off" id="frequency" placeholder="Cada " />
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <div class="form-group">
-                                                <label>Duración</label>
-                                                <input type="text" class="form-control" autocomplete="off" id="duration" placeholder="Durante" />
-                                            </div>
-                                        </div>
-                                        <hr>
-                                        <div class="col-sm-12">
-                                            <div class="form-group">
-                                                <a class="btn btn-info" onclick="submit_recet(<?php echo $details['appointment_id']?>)" href="javascript:void(0);">+</a>
-                                            </div>
-                                        </div>
-                                        <?php endif; ?>
-                                        <div class="col-sm-12" id="table_results_<?php echo $details['appointment_id']?>">
-                                            <?php 
-                                                    $refresh_query  = $this->db->get_where('prescription',array('appointment_id' => $details['appointment_id']));
-                                                    if($refresh_query->num_rows() > 0)
-                                                    {
-                                                        $html_table = '
-                                                            <table class="table">
-                                                                <tr style="background-color:#f9fbfc; color:#59636d">
-                                                                    <th>Medicamento</th>
-                                                                    <th>Tomar</th>
-                                                                    <th>Frecuencia</th>
-                                                                    <th>Duración</th>';
-                                            
-                                                                if($status == 1 || $status == 0)
-                                                                    $html_table .= '<th>-</th>';
-                                                                    $html_table .= '</tr>';
-                                                        foreach($refresh_query->result_array() as $row)
-                                                        {
-                                                            $html_table .= '
-                                                                <tr>
-                                                                    <td>'.$row['medicine'].'</td>
-                                                                    <td>'.$row['quantity'].'</td>
-                                                                    <td>'.$row['frequency'].'</td>
-                                                                    <td>'.$row['duration'].'</td>';
-                                            
-                                                                    if($status == 1 || $status == 0)
-                                                                    $html_table .= '<td><i style="color:#fd4f57;font-weight:bold;" onClick="delete_element('.$row['prescription_id'].','.$details['appointment_id'].')" class="picons-thin-icon-thin-0056_bin_trash_recycle_delete_garbage_empty"></i></td>';
-                                                                    
-                                                                    
-                                                                    $html_table .= '</tr>';   
-                                                        }
-                                                        $html_table .='</table>';
-                                                        
-                                                        echo $html_table;
-                                                    }else{
-                                                        echo '<div class="col-sm-12"><br><center><h5 class="poppins">Aún no hay medicamentos preescritos</h5><br><img src="'.base_url().'public/uploads/medicamentos.svg" style="max-width:20%;"></center></div>';
-                                                    }
-                                                
-                                                
-                                                
-                                                ?>
-                                        </div>
+                                <div class="col-sm-12">
+                                    <label>COMENTARIO</label>
+                                    <textarea class="form-control" rows="2" onchange="updateConsulta('rx_comentario',<?php echo $rxid; ?>,this.value)"><?php echo $details['rx_comentario']; ?></textarea>
+                                </div>
+                                <div class="col-sm-12" style="margin-top:12px;overflow-x:auto;">
+                                    <table class="table table-bordered" style="margin-bottom:0;">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th></th>
+                                                <th>ESFERA</th>
+                                                <th>CILINDRO</th>
+                                                <th>EJE</th>
+                                                <th>PRISMA</th>
+                                                <th>BASE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach (array('final' => 'FINAL', 'add' => 'ADICIÓN') as $rx_group => $rx_group_label): ?>
+                                            <?php foreach (array('od' => 'OD', 'os' => 'OS') as $rx_eye => $rx_eye_label): ?>
+                                            <tr>
+                                                <?php if ($rx_eye == 'od'): ?><td rowspan="2"><b><?php echo $rx_group_label; ?></b></td><?php endif; ?>
+                                                <td><?php echo $rx_eye_label; ?></td>
+                                                <?php foreach (array('esf' => 'esf', 'cil' => 'cil', 'eje' => 'eje', 'prisma' => 'prisma', 'base' => 'base') as $rx_part): ?>
+                                                <td><input class="form-control" onchange="updateConsulta('rx_<?php echo $rx_group; ?>_<?php echo $rx_eye; ?>_<?php echo $rx_part; ?>',<?php echo $rxid; ?>,this.value)" value="<?php echo $details['rx_'.$rx_group.'_'.$rx_eye.'_'.$rx_part]; ?>"></td>
+                                                <?php endforeach; ?>
+                                            </tr>
+                                            <?php endforeach; ?>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-sm-12" style="margin-top:12px;">
+                                    <b>AUTOREFRACTÓMETRO</b>
+                                    <div style="margin-top:6px;">DIP <input class="form-control" style="display:inline-block;width:140px;margin-left:8px;" onchange="updateConsulta('rx_dip',<?php echo $rxid; ?>,this.value)" value="<?php echo $details['rx_dip']; ?>"></div>
+                                </div>
+                                <div class="col-sm-6" style="margin-top:12px;">
+                                    <b>TIPO DE LENTE</b>
+                                    <div><label><input type="checkbox" <?php echo $details['rx_lente_monofocal'] == '1' ? 'checked' : ''; ?> onchange="updateConsulta('rx_lente_monofocal',<?php echo $rxid; ?>,this.checked ? '1' : '0')"> MONOFOCAL</label></div>
+                                    <div><label><input type="checkbox" <?php echo $details['rx_lente_progresivo'] == '1' ? 'checked' : ''; ?> onchange="updateConsulta('rx_lente_progresivo',<?php echo $rxid; ?>,this.checked ? '1' : '0')"> PROGRESIVO</label></div>
+                                    <div><label><input type="checkbox" <?php echo $details['rx_lente_bifocal'] == '1' ? 'checked' : ''; ?> onchange="updateConsulta('rx_lente_bifocal',<?php echo $rxid; ?>,this.checked ? '1' : '0')"> BIFOCAL</label></div>
+                                    <div><label><input type="checkbox" <?php echo $details['rx_lente_otro'] == '1' ? 'checked' : ''; ?> onchange="updateConsulta('rx_lente_otro',<?php echo $rxid; ?>,this.checked ? '1' : '0')"> OTRO</label></div>
+                                </div>
+                                <div class="col-sm-6" style="margin-top:12px;">
+                                    <b>RECOMENDACIÓN</b>
+                                    <div><label><input type="checkbox" <?php echo $details['rx_rec_filtro'] == '1' ? 'checked' : ''; ?> onchange="updateConsulta('rx_rec_filtro',<?php echo $rxid; ?>,this.checked ? '1' : '0')"> FILTRO DE LUZ AZUL</label></div>
+                                    <div><label><input type="checkbox" <?php echo $details['rx_rec_antireflejo'] == '1' ? 'checked' : ''; ?> onchange="updateConsulta('rx_rec_antireflejo',<?php echo $rxid; ?>,this.checked ? '1' : '0')"> ANTIREFLEJO</label></div>
+                                    <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;"><label style="margin:0;"><input type="checkbox" <?php echo $details['rx_rec_polarizado'] == '1' ? 'checked' : ''; ?> onchange="updateConsulta('rx_rec_polarizado',<?php echo $rxid; ?>,this.checked ? '1' : '0')"> POLARIZADO</label><input class="form-control" style="width:140px;" onchange="updateConsulta('rx_rec_polarizado_nota',<?php echo $rxid; ?>,this.value)" value="<?php echo $details['rx_rec_polarizado_nota']; ?>"></div>
+                                    <div><label><input type="checkbox" <?php echo $details['rx_rec_policarbonato'] == '1' ? 'checked' : ''; ?> onchange="updateConsulta('rx_rec_policarbonato',<?php echo $rxid; ?>,this.checked ? '1' : '0')"> POLICARBONATO</label></div>
+                                    <div><label><input type="checkbox" <?php echo $details['rx_rec_sol'] == '1' ? 'checked' : ''; ?> onchange="updateConsulta('rx_rec_sol',<?php echo $rxid; ?>,this.checked ? '1' : '0')"> LENTES DE SOL</label></div>
+                                    <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;"><label style="margin:0;"><input type="checkbox" <?php echo $details['rx_rec_tenido'] == '1' ? 'checked' : ''; ?> onchange="updateConsulta('rx_rec_tenido',<?php echo $rxid; ?>,this.checked ? '1' : '0')"> TEÑIDO</label><input class="form-control" style="width:140px;" onchange="updateConsulta('rx_rec_tenido_nota',<?php echo $rxid; ?>,this.value)" value="<?php echo $details['rx_rec_tenido_nota']; ?>"></div>
+                                    <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;"><label style="margin:0;"><input type="checkbox" <?php echo $details['rx_rec_transitions'] == '1' ? 'checked' : ''; ?> onchange="updateConsulta('rx_rec_transitions',<?php echo $rxid; ?>,this.checked ? '1' : '0')"> TRANSITIONS</label><input class="form-control" style="width:140px;" onchange="updateConsulta('rx_rec_transitions_nota',<?php echo $rxid; ?>,this.value)" value="<?php echo $details['rx_rec_transitions_nota']; ?>"></div>
+                                    <div><label><input type="checkbox" <?php echo $details['rx_rec_otros'] == '1' ? 'checked' : ''; ?> onchange="updateConsulta('rx_rec_otros',<?php echo $rxid; ?>,this.checked ? '1' : '0')"> OTROS</label></div>
+                                </div>
+                                <div class="col-sm-12" style="margin-top:12px;">
+                                    <b>FINAL EN LENTE DE CONTACTO ESCLERAL O RÍGIDO</b>
+                                    <div>
+                                        <label style="margin-right:16px;"><input type="radio" name="rx_contacto_<?php echo $rxid; ?>" value="escleral" <?php echo $rx_contacto == 'escleral' ? 'checked' : ''; ?> onchange="updateConsulta('rx_contacto',<?php echo $rxid; ?>,this.value)"> ESCLERAL</label>
+                                        <label><input type="radio" name="rx_contacto_<?php echo $rxid; ?>" value="rigido" <?php echo $rx_contacto == 'rigido' ? 'checked' : ''; ?> onchange="updateConsulta('rx_contacto',<?php echo $rxid; ?>,this.value)"> RÍGIDO</label>
                                     </div>
+                                </div>
+                                <div class="col-sm-12">
                                     <hr>
-                                    <a class="btn btn-success" target="_blank" href="<?php echo base_url();?>doctor/print_prescription_details/<?php echo $details['appointment_id'];?>">Imprimir
-                                        receta</a>
+                                    <a class="btn btn-success" target="_blank" href="<?php echo base_url();?>doctor/print_prescription_details/<?php echo $details['appointment_id'];?>">Imprimir receta</a>
                                 </div>
                             </div>
                         </div>
