@@ -739,17 +739,24 @@ var app = '<?php echo base64_decode($id_);?>';
                                 ?>
                                 <div class="col-sm-12">
                                     <div class="form-group" style="border:1px solid #e6e8ee;border-radius:8px;padding:12px;">
-                                        <div class="row">
+                                        <b>Lámpara de hendidura</b>
+                                        <div class="row" style="margin-top:8px;">
                                             <?php foreach (array('od' => 'OD', 'os' => 'OS') as $eye => $eye_label): ?>
                                             <div class="col-sm-6">
                                                 <div style="font-weight:700;border-bottom:1px solid #e6e8ee;margin-bottom:8px;"><?php echo $eye_label; ?></div>
                                                 <?php foreach ($seg_rows as $seg): ?>
+                                                <?php
+                                                    $seg_current = $details['seg_'.$seg['key'].'_'.$eye];
+                                                    if ($seg_current == '') {
+                                                        $seg_current = ($seg['key'] == 'camara') ? 'profunda' : 'ok';
+                                                    }
+                                                ?>
                                                 <div style="display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:8px;">
                                                     <span style="font-size:12px;letter-spacing:.3px;"><?php echo $seg['label']; ?></span>
                                                     <span style="white-space:nowrap;">
                                                         <?php foreach ($seg['opts'] as $opt_val => $opt_label): ?>
                                                         <label style="margin:0 8px 0 0;font-weight:400;color:#047bf8;">
-                                                            <input type="radio" name="seg_<?php echo $seg['key']; ?>_<?php echo $eye; ?>_<?php echo $aid; ?>" value="<?php echo $opt_val; ?>" <?php echo $details['seg_'.$seg['key'].'_'.$eye] == $opt_val ? 'checked' : ''; ?> onchange="updateConsulta('seg_<?php echo $seg['key']; ?>_<?php echo $eye; ?>',<?php echo $aid; ?>,this.value)">
+                                                            <input type="radio" name="seg_<?php echo $seg['key']; ?>_<?php echo $eye; ?>_<?php echo $aid; ?>" value="<?php echo $opt_val; ?>" <?php echo $seg_current == $opt_val ? 'checked' : ''; ?> onchange="updateConsulta('seg_<?php echo $seg['key']; ?>_<?php echo $eye; ?>',<?php echo $aid; ?>,this.value)">
                                                             <?php echo $opt_label; ?>
                                                         </label>
                                                         <?php endforeach; ?>
