@@ -4100,6 +4100,32 @@ class Doctor extends Drive
     }
 
 
+    function save_antecedent()
+    {
+        $type = $this->input->post('type');
+        $allowed = array('md', 'qx', 'alg');
+        if (!in_array($type, $allowed, true)) {
+            return;
+        }
+        $data = array(
+            'patient_id' => $this->input->post('patient_id'),
+            'type' => $type,
+            'item' => $this->input->post('item'),
+            'treatment' => $this->input->post('treatment'),
+            'notes' => $this->input->post('notes')
+        );
+        $this->db->insert('patient_antecedent', $data);
+    }
+
+    function delete_antecedent($antecedent_id = '')
+    {
+        if ($antecedent_id == '') {
+            return;
+        }
+        $this->db->where('antecedent_id', $antecedent_id);
+        $this->db->delete('patient_antecedent');
+    }
+
     function patient_app()
     {
        $id= $this->input->post('id'); 

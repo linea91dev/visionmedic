@@ -365,6 +365,106 @@ var app = '<?php echo base64_decode($id_);?>';
                                         <textarea cols="80" class="form-control" name="instructions" rows="5" onchange="updateConsulta('ef',<?php echo $details['appointment_id'] ?>,this.value)"><?php    echo $details['ef']; ?></textarea>
                                     </div>
                                 </div>
+                                <?php
+                                    $app_key = $details['appointment_id'];
+                                    $patient_ants = array();
+                                    if ($this->db->table_exists('patient_antecedent')) {
+                                        $patient_ants = $this->db->order_by('antecedent_id', 'ASC')->get_where('patient_antecedent', array('patient_id' => $det['patient_id']))->result_array();
+                                    }
+                                    $ants_md = array();
+                                    $ants_qx = array();
+                                    $ants_alg = array();
+                                    foreach ($patient_ants as $ant_row) {
+                                        if ($ant_row['type'] == 'md') $ants_md[] = $ant_row;
+                                        if ($ant_row['type'] == 'qx') $ants_qx[] = $ant_row;
+                                        if ($ant_row['type'] == 'alg') $ants_alg[] = $ant_row;
+                                    }
+                                ?>
+                                <div class="col-sm-12">
+                                    <div class="form-group" style="border:1px solid #e6e8ee;border-radius:8px;padding:12px;margin-bottom:12px;">
+                                        <div style="font-size:12px;letter-spacing:.4px;color:#8b93a7;">ANTECEDENTES</div>
+                                        <div style="color:#047bf8;font-weight:700;margin-bottom:8px;">MD</div>
+                                        <div class="row">
+                                            <div class="col-sm-5">
+                                                <label>DIAGNÓSTICO</label>
+                                                <input type="text" class="form-control" id="ant_md_item_<?php echo $app_key; ?>">
+                                            </div>
+                                            <div class="col-sm-5">
+                                                <label>TRATAMIENTO</label>
+                                                <input type="text" class="form-control" id="ant_md_tx_<?php echo $app_key; ?>">
+                                            </div>
+                                            <div class="col-sm-2" style="padding-top:24px;">
+                                                <a class="btn btn-success" href="javascript:void(0);" onclick="addAntecedent('md',<?php echo $app_key; ?>,<?php echo $det['patient_id']; ?>)">+</a>
+                                            </div>
+                                            <div class="col-sm-10" style="margin-top:8px;">
+                                                <label>NOTAS</label>
+                                                <textarea class="form-control" rows="2" id="ant_md_notes_<?php echo $app_key; ?>"></textarea>
+                                            </div>
+                                        </div>
+                                        <div id="ant_md_list_<?php echo $app_key; ?>" style="margin-top:10px;">
+                                            <?php foreach ($ants_md as $ant): ?>
+                                            <div style="border-top:1px solid #eee;padding:8px 0;">
+                                                <b>Diagnóstico:</b> <?php echo htmlspecialchars($ant['item']); ?>
+                                                <?php if ($ant['treatment'] != ''): ?> · <b>Tratamiento:</b> <?php echo htmlspecialchars($ant['treatment']); ?><?php endif; ?>
+                                                <?php if ($ant['notes'] != ''): ?><div><b>Notas:</b> <?php echo htmlspecialchars($ant['notes']); ?></div><?php endif; ?>
+                                                <a href="javascript:void(0);" onclick="deleteAntecedent(<?php echo $ant['antecedent_id']; ?>)" style="color:#fd4f57;float:right;">Eliminar</a>
+                                            </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="border:1px solid #e6e8ee;border-radius:8px;padding:12px;margin-bottom:12px;">
+                                        <div style="font-size:12px;letter-spacing:.4px;color:#8b93a7;">ANTECEDENTES</div>
+                                        <div style="color:#047bf8;font-weight:700;margin-bottom:8px;">QX</div>
+                                        <div class="row">
+                                            <div class="col-sm-5">
+                                                <label>CIRUGÍA</label>
+                                                <input type="text" class="form-control" id="ant_qx_item_<?php echo $app_key; ?>">
+                                            </div>
+                                            <div class="col-sm-5">
+                                                <label>NOTAS</label>
+                                                <textarea class="form-control" rows="2" id="ant_qx_notes_<?php echo $app_key; ?>"></textarea>
+                                            </div>
+                                            <div class="col-sm-2" style="padding-top:24px;">
+                                                <a class="btn btn-success" href="javascript:void(0);" onclick="addAntecedent('qx',<?php echo $app_key; ?>,<?php echo $det['patient_id']; ?>)">+</a>
+                                            </div>
+                                        </div>
+                                        <div id="ant_qx_list_<?php echo $app_key; ?>" style="margin-top:10px;">
+                                            <?php foreach ($ants_qx as $ant): ?>
+                                            <div style="border-top:1px solid #eee;padding:8px 0;">
+                                                <b>Cirugía:</b> <?php echo htmlspecialchars($ant['item']); ?>
+                                                <?php if ($ant['notes'] != ''): ?><div><b>Notas:</b> <?php echo htmlspecialchars($ant['notes']); ?></div><?php endif; ?>
+                                                <a href="javascript:void(0);" onclick="deleteAntecedent(<?php echo $ant['antecedent_id']; ?>)" style="color:#fd4f57;float:right;">Eliminar</a>
+                                            </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="border:1px solid #e6e8ee;border-radius:8px;padding:12px;margin-bottom:12px;">
+                                        <div style="font-size:12px;letter-spacing:.4px;color:#8b93a7;">ANTECEDENTES</div>
+                                        <div style="color:#047bf8;font-weight:700;margin-bottom:8px;">ALG</div>
+                                        <div class="row">
+                                            <div class="col-sm-5">
+                                                <label>ALERGIA</label>
+                                                <input type="text" class="form-control" id="ant_alg_item_<?php echo $app_key; ?>">
+                                            </div>
+                                            <div class="col-sm-5">
+                                                <label>NOTAS</label>
+                                                <textarea class="form-control" rows="2" id="ant_alg_notes_<?php echo $app_key; ?>"></textarea>
+                                            </div>
+                                            <div class="col-sm-2" style="padding-top:24px;">
+                                                <a class="btn btn-success" href="javascript:void(0);" onclick="addAntecedent('alg',<?php echo $app_key; ?>,<?php echo $det['patient_id']; ?>)">+</a>
+                                            </div>
+                                        </div>
+                                        <div id="ant_alg_list_<?php echo $app_key; ?>" style="margin-top:10px;">
+                                            <?php foreach ($ants_alg as $ant): ?>
+                                            <div style="border-top:1px solid #eee;padding:8px 0;">
+                                                <b>Alergia:</b> <?php echo htmlspecialchars($ant['item']); ?>
+                                                <?php if ($ant['notes'] != ''): ?><div><b>Notas:</b> <?php echo htmlspecialchars($ant['notes']); ?></div><?php endif; ?>
+                                                <a href="javascript:void(0);" onclick="deleteAntecedent(<?php echo $ant['antecedent_id']; ?>)" style="color:#fd4f57;float:right;">Eliminar</a>
+                                            </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-sm-12 row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
@@ -1093,6 +1193,39 @@ api.executeCommand('subject', 'test');
 
 function showGraphics() {
     $('#graphics').toggle();
+}
+
+function addAntecedent(type, appId, patientId) {
+    var item = $('#ant_' + type + '_item_' + appId).val();
+    var treatment = $('#ant_' + type + '_tx_' + appId).length ? $('#ant_' + type + '_tx_' + appId).val() : '';
+    var notes = $('#ant_' + type + '_notes_' + appId).val();
+    if (!item) {
+        return;
+    }
+    $.ajax({
+        url: base_url + 'doctor/save_antecedent',
+        type: 'POST',
+        data: {
+            patient_id: patientId,
+            type: type,
+            item: item,
+            treatment: treatment,
+            notes: notes
+        },
+        success: function() {
+            location.reload();
+        }
+    });
+}
+
+function deleteAntecedent(antecedentId) {
+    $.ajax({
+        url: base_url + 'doctor/delete_antecedent/' + antecedentId,
+        type: 'POST',
+        success: function() {
+            location.reload();
+        }
+    });
 }
 
 <?php if($gen != "M"):?>
