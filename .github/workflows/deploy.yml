@@ -27,3 +27,5 @@ jobs:
             assets/**
             uploads/**
             system/**
+            public/**
+            phpexcel/**
