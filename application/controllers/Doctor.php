@@ -4141,6 +4141,12 @@ class Doctor extends Drive
             'diagnosis' => $this->input->post('diagnosis')
         );
         $dx_id = $this->input->post('dx_id');
+        if ($data['diagnosis'] != '' && $this->db->table_exists('catalog_dx')) {
+            $found = $this->db->get_where('catalog_dx', array('name' => $data['diagnosis']))->row();
+            if (!$found) {
+                $this->db->insert('catalog_dx', array('name' => $data['diagnosis']));
+            }
+        }
         if ($dx_id != '' && is_numeric($dx_id)) {
             $this->db->where('dx_id', $dx_id);
             $this->db->update('appointment_plan_dx', $data);
@@ -4174,6 +4180,25 @@ class Doctor extends Drive
             'duracion' => $this->input->post('duracion')
         );
         $tx_id = $this->input->post('tx_id');
+        if ($data['nombre'] != '' && $this->db->table_exists('catalog_tx')) {
+            $found = $this->db->get_where('catalog_tx', array('nombre' => $data['nombre']))->row();
+            $catalog = array(
+                'nombre' => $data['nombre'],
+                'cantidad' => $data['cantidad'],
+                'principio' => $data['principio'],
+                'presentacion' => $data['presentacion'],
+                'dosis' => $data['dosis'],
+                'frecuencia' => $data['frecuencia'],
+                'aplicacion' => $data['aplicacion'],
+                'duracion' => $data['duracion']
+            );
+            if ($found) {
+                $this->db->where('catalog_tx_id', $found->catalog_tx_id);
+                $this->db->update('catalog_tx', $catalog);
+            } else {
+                $this->db->insert('catalog_tx', $catalog);
+            }
+        }
         if ($tx_id != '' && is_numeric($tx_id)) {
             $this->db->where('tx_id', $tx_id);
             $this->db->update('appointment_plan_tx', $data);

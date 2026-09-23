@@ -1165,6 +1165,14 @@ var app = '<?php echo base64_decode($id_);?>';
                                     }
                                     if (count($plan_dx) == 0) $plan_dx[] = array('dx_id' => '', 'diagnosis' => '');
                                     if (count($plan_tx) == 0) $plan_tx[] = array('tx_id' => '', 'nombre' => '', 'cantidad' => '', 'principio' => '', 'presentacion' => '', 'dosis' => '', 'frecuencia' => '', 'aplicacion' => '', 'duracion' => '');
+                                    $dx_catalog = array();
+                                    $tx_catalog = array();
+                                    if ($this->db->table_exists('catalog_dx')) {
+                                        $dx_catalog = $this->db->order_by('name', 'ASC')->get('catalog_dx')->result_array();
+                                    }
+                                    if ($this->db->table_exists('catalog_tx')) {
+                                        $tx_catalog = $this->db->order_by('nombre', 'ASC')->get('catalog_tx')->result_array();
+                                    }
                                 ?>
                                 <div class="col-sm-12">
                                     <div class="form-group" style="border:1px solid #e6e8ee;border-radius:8px;padding:12px;">
@@ -1176,7 +1184,15 @@ var app = '<?php echo base64_decode($id_);?>';
                                         <div id="plan_dx_<?php echo $plan_id; ?>">
                                             <?php foreach ($plan_dx as $dx): ?>
                                             <div class="plan-dx-row" data-id="<?php echo $dx['dx_id']; ?>" data-app="<?php echo $plan_id; ?>" style="display:flex;gap:8px;align-items:center;margin-top:6px;">
-                                                <input class="form-control plan-dx-input" placeholder="Diagnóstico" onchange="savePlanDx(this)" value="<?php echo htmlspecialchars($dx['diagnosis']); ?>">
+                                                <select class="form-control plan-dx-select" style="width:100%;">
+                                                    <option value=""></option>
+                                                    <?php $dx_found = false; foreach ($dx_catalog as $cat): ?>
+                                                    <option value="<?php echo htmlspecialchars($cat['name'], ENT_QUOTES); ?>" <?php if ($dx['diagnosis'] == $cat['name']) { echo 'selected'; $dx_found = true; } ?>><?php echo htmlspecialchars($cat['name']); ?></option>
+                                                    <?php endforeach; ?>
+                                                    <?php if ($dx['diagnosis'] != '' && !$dx_found): ?>
+                                                    <option value="<?php echo htmlspecialchars($dx['diagnosis'], ENT_QUOTES); ?>" selected><?php echo htmlspecialchars($dx['diagnosis']); ?></option>
+                                                    <?php endif; ?>
+                                                </select>
                                                 <button type="button" class="btn btn-danger btn-sm" onclick="removePlanDx(this)">&times;</button>
                                             </div>
                                             <?php endforeach; ?>
@@ -1201,7 +1217,17 @@ var app = '<?php echo base64_decode($id_);?>';
                                                 <tbody id="plan_tx_<?php echo $plan_id; ?>">
                                                     <?php foreach ($plan_tx as $tx): ?>
                                                     <tr class="plan-tx-row" data-id="<?php echo $tx['tx_id']; ?>" data-app="<?php echo $plan_id; ?>">
-                                                        <td><input class="form-control tx-nombre" onchange="savePlanTx(this)" value="<?php echo htmlspecialchars($tx['nombre']); ?>"></td>
+                                                        <td>
+                                                            <select class="form-control tx-nombre" style="width:100%;">
+                                                                <option value=""></option>
+                                                                <?php $tx_found = false; foreach ($tx_catalog as $cat): ?>
+                                                                <option value="<?php echo htmlspecialchars($cat['nombre'], ENT_QUOTES); ?>" <?php if ($tx['nombre'] == $cat['nombre']) { echo 'selected'; $tx_found = true; } ?>><?php echo htmlspecialchars($cat['nombre']); ?></option>
+                                                                <?php endforeach; ?>
+                                                                <?php if ($tx['nombre'] != '' && !$tx_found): ?>
+                                                                <option value="<?php echo htmlspecialchars($tx['nombre'], ENT_QUOTES); ?>" selected><?php echo htmlspecialchars($tx['nombre']); ?></option>
+                                                                <?php endif; ?>
+                                                            </select>
+                                                        </td>
                                                         <td><input class="form-control tx-cantidad" onchange="savePlanTx(this)" value="<?php echo htmlspecialchars($tx['cantidad']); ?>"></td>
                                                         <td><input class="form-control tx-principio" onchange="savePlanTx(this)" value="<?php echo htmlspecialchars($tx['principio']); ?>"></td>
                                                         <td><input class="form-control tx-presentacion" onchange="savePlanTx(this)" value="<?php echo htmlspecialchars($tx['presentacion']); ?>"></td>
@@ -1551,17 +1577,108 @@ function clearAvNotation() {
     $('#avNotationModal').hide();
 }
 
+var planDxOptions = <?php
+    $dx_js = array();
+    if ($this->db->table_exists('catalog_dx')) {
+        foreach ($this->db->order_by('name', 'ASC')->get('catalog_dx')->result_array() as $cat) {
+            $dx_js[] = $cat['name'];
+        }
+    }
+    echo json_encode($dx_js);
+?>;
+var planTxOptions = <?php
+    $tx_js = array();
+    if ($this->db->table_exists('catalog_tx')) {
+        foreach ($this->db->order_by('nombre', 'ASC')->get('catalog_tx')->result_array() as $cat) {
+            $tx_js[] = array(
+                'nombre' => $cat['nombre'],
+                'cantidad' => $cat['cantidad'],
+                'principio' => $cat['principio'],
+                'presentacion' => $cat['presentacion'],
+                'dosis' => $cat['dosis'],
+                'frecuencia' => $cat['frecuencia'],
+                'aplicacion' => $cat['aplicacion'],
+                'duracion' => $cat['duracion']
+            );
+        }
+    }
+    echo json_encode($tx_js);
+?>;
+
+function planEscape(value) {
+    return $('<div>').text(value || '').html();
+}
+
+function bindDxSelect(el) {
+    if ($(el).hasClass('select2-hidden-accessible')) return;
+    $(el).select2({
+        tags: true,
+        width: '100%',
+        placeholder: 'Seleccionar',
+        dropdownParent: $(document.body)
+    }).on('change', function() {
+        savePlanDx(this);
+    });
+}
+
+function bindTxSelect(el) {
+    if ($(el).hasClass('select2-hidden-accessible')) return;
+    $(el).select2({
+        tags: true,
+        width: '100%',
+        placeholder: 'Seleccionar',
+        dropdownParent: $(document.body)
+    }).on('change', function() {
+        var nombre = $(this).val() || '';
+        var row = $(this).closest('.plan-tx-row');
+        for (var i = 0; i < planTxOptions.length; i++) {
+            if (planTxOptions[i].nombre === nombre) {
+                var item = planTxOptions[i];
+                if (item.cantidad) row.find('.tx-cantidad').val(item.cantidad);
+                if (item.principio) row.find('.tx-principio').val(item.principio);
+                if (item.presentacion) row.find('.tx-presentacion').val(item.presentacion);
+                if (item.dosis) row.find('.tx-dosis').val(item.dosis);
+                if (item.frecuencia) row.find('.tx-frecuencia').val(item.frecuencia);
+                if (item.aplicacion) row.find('.tx-aplicacion').val(item.aplicacion);
+                if (item.duracion) row.find('.tx-duracion').val(item.duracion);
+                break;
+            }
+        }
+        savePlanTx(this);
+    });
+}
+
+function dxSelectHtml() {
+    var html = '<select class="form-control plan-dx-select" style="width:100%;"><option value=""></option>';
+    for (var i = 0; i < planDxOptions.length; i++) {
+        html += '<option value="' + planEscape(planDxOptions[i]) + '">' + planEscape(planDxOptions[i]) + '</option>';
+    }
+    html += '</select>';
+    return html;
+}
+
+function txSelectHtml() {
+    var html = '<select class="form-control tx-nombre" style="width:100%;"><option value=""></option>';
+    for (var i = 0; i < planTxOptions.length; i++) {
+        html += '<option value="' + planEscape(planTxOptions[i].nombre) + '">' + planEscape(planTxOptions[i].nombre) + '</option>';
+    }
+    html += '</select>';
+    return html;
+}
+
 function addPlanDx(appId) {
-    var row = '<div class="plan-dx-row" data-id="" data-app="' + appId + '" style="display:flex;gap:8px;align-items:center;margin-top:6px;">' +
-        '<input class="form-control plan-dx-input" placeholder="Diagnóstico" onchange="savePlanDx(this)">' +
-        '<button type="button" class="btn btn-danger btn-sm" onclick="removePlanDx(this)">&times;</button></div>';
+    var row = $('<div class="plan-dx-row" data-id="" data-app="' + appId + '" style="display:flex;gap:8px;align-items:center;margin-top:6px;">' +
+        dxSelectHtml() +
+        '<button type="button" class="btn btn-danger btn-sm" onclick="removePlanDx(this)">&times;</button></div>');
     $('#plan_dx_' + appId).append(row);
+    bindDxSelect(row.find('.plan-dx-select'));
 }
 
 function savePlanDx(el) {
     var row = $(el).closest('.plan-dx-row');
-    var diagnosis = row.find('.plan-dx-input').val() || '';
+    var diagnosis = row.find('.plan-dx-select').val() || '';
     if (diagnosis === '') return;
+    if (planDxOptions.indexOf(diagnosis) === -1) planDxOptions.push(diagnosis);
     $.ajax({
         url: base_url + 'doctor/save_plan_dx',
         type: 'POST',
@@ -1583,8 +1700,8 @@ function removePlanDx(btn) {
 }
 
 function addPlanTx(appId) {
-    var row = '<tr class="plan-tx-row" data-id="" data-app="' + appId + '">' +
-        '<td><input class="form-control tx-nombre" onchange="savePlanTx(this)"></td>' +
+    var row = $('<tr class="plan-tx-row" data-id="" data-app="' + appId + '">' +
+        '<td>' + txSelectHtml() + '</td>' +
         '<td><input class="form-control tx-cantidad" onchange="savePlanTx(this)"></td>' +
         '<td><input class="form-control tx-principio" onchange="savePlanTx(this)"></td>' +
         '<td><input class="form-control tx-presentacion" onchange="savePlanTx(this)"></td>' +
@@ -1592,14 +1709,34 @@ function addPlanTx(appId) {
         '<td><input class="form-control tx-frecuencia" onchange="savePlanTx(this)"></td>' +
         '<td><input class="form-control tx-aplicacion" onchange="savePlanTx(this)"></td>' +
         '<td><input class="form-control tx-duracion" onchange="savePlanTx(this)"></td>' +
-        '<td><button type="button" class="btn btn-danger btn-sm" onclick="removePlanTx(this)">&times;</button></td></tr>';
+        '<td><button type="button" class="btn btn-danger btn-sm" onclick="removePlanTx(this)">&times;</button></td></tr>');
     $('#plan_tx_' + appId).append(row);
+    bindTxSelect(row.find('.tx-nombre'));
 }
 
 function savePlanTx(el) {
     var row = $(el).closest('.plan-tx-row');
     var nombre = row.find('.tx-nombre').val() || '';
     if (nombre === '' && (row.attr('data-id') || '') === '') return;
+    var txItem = {
+        nombre: nombre,
+        cantidad: row.find('.tx-cantidad').val() || '',
+        principio: row.find('.tx-principio').val() || '',
+        presentacion: row.find('.tx-presentacion').val() || '',
+        dosis: row.find('.tx-dosis').val() || '',
+        frecuencia: row.find('.tx-frecuencia').val() || '',
+        aplicacion: row.find('.tx-aplicacion').val() || '',
+        duracion: row.find('.tx-duracion').val() || ''
+    };
+    var txExists = false;
+    for (var i = 0; i < planTxOptions.length; i++) {
+        if (planTxOptions[i].nombre === nombre) {
+            planTxOptions[i] = txItem;
+            txExists = true;
+            break;
+        }
+    }
+    if (!txExists && nombre !== '') planTxOptions.push(txItem);
     $.ajax({
         url: base_url + 'doctor/save_plan_tx',
         type: 'POST',
@@ -1630,6 +1767,11 @@ function removePlanTx(btn) {
     }
     row.remove();
 }
+
+$(function() {
+    $('.plan-dx-select').each(function() { bindDxSelect(this); });
+    $('.tx-nombre').each(function() { bindTxSelect(this); });
+});
 
 function addAntecedentRow(type, appId, patientId) {
     var fields = '';
