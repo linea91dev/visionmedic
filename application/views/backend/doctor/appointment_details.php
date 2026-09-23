@@ -1388,9 +1388,9 @@ var app = '<?php echo base64_decode($id_);?>';
                                             $su=0;
                                             if($details['status']!= 4 && $details['status'] != 10 ):
                                             if ($details['practice'] > 0): ?>
-                                            <input type="number" class="form-control monto" style="width: 150px; margin-right:0;" value="<?php echo $su = $this->db->get_where('service', array( 'service_id' => $details['practice']))->row()->cost; ?>" onkeyup="change_amout(this.value, <?php echo $details['appointment_id']?>)" onchange="change_amout(this.value, <?php echo $details['appointment_id']?>)" <?php echo $details['status']== 1? '' : 'disabled' ;?> /><br>
+                                            <input type="number" class="form-control monto" style="width: 150px; margin-right:0;" value="<?php echo $su = $this->db->get_where('service', array( 'service_id' => $details['practice']))->row()->cost; ?>" onkeyup="change_amout(this.value, <?php echo $details['appointment_id']?>)" onchange="change_amout(this.value, <?php echo $details['appointment_id']?>)" <?php echo ($details['status']== 1 || $details['status']== 11)? '' : 'disabled' ;?> /><br>
                                             <?php else: ?>
-                                            <input type="number" class="form-control monto" style="width: 150px; margin-right:0;" value="0" onkeyup="change_amout(this.value, <?php echo $details['appointment_id']?>)" onchange="change_amout(this.value, <?php echo $details['appointment_id']?>)" <?php echo $details['status']== 1? '' : 'disabled' ;?> /><br>
+                                            <input type="number" class="form-control monto" style="width: 150px; margin-right:0;" value="0" onkeyup="change_amout(this.value, <?php echo $details['appointment_id']?>)" onchange="change_amout(this.value, <?php echo $details['appointment_id']?>)" <?php echo ($details['status']== 1 || $details['status']== 11)? '' : 'disabled' ;?> /><br>
                                             <?php endif; 
                                             else: ?>
                                             <input type="number" class="form-control monto" style="width: 150px; margin-right:0;" value="<?php echo $details['charges'] ?>" onkeyup="change_amout(this.value, <?php echo $details['appointment_id']?>)" onchange="change_amout(this.value,<?php echo $details['appointment_id']?>)" disabled /><br>
@@ -1407,7 +1407,7 @@ var app = '<?php echo base64_decode($id_);?>';
                                             </span>
                                         </span>
                                         <hr>
-                                        <?php if($details['status']==1):?>
+                                        <?php if($details['status']==1 || $details['status']==11):?>
                                         <button class="btn btn-primary" style="width:30%; float:right">
                                             Finalizar cita
                                         </button>

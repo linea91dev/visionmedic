@@ -1887,6 +1887,20 @@ class Doctor extends Drive
             $this->session->set_flashdata('flash_message' , "Cita cancelada correctamente.");
             redirect(base_url() . 'doctor/appointments/', 'refresh');
         }
+        if($param1 == 'fondo')
+        {
+            $this->db->where('appointment_id', $param2);
+            $this->db->update('appointment', array('status' => 11));
+            $this->session->set_flashdata('flash_message' , "Cita enviada a fondo de ojo.");
+            redirect(base_url() . 'doctor/appointments/', 'refresh');
+        }
+        if($param1 == 'retomar')
+        {
+            $this->db->where('appointment_id', $param2);
+            $this->db->update('appointment', array('status' => 1));
+            $this->session->set_flashdata('flash_message' , "Cita retomada.");
+            redirect(base_url() . 'doctor/fondo_ojo/', 'refresh');
+        }
         if($param1 == 'change')
         {
             $this->log_model->reschedule_appointment($param2);
@@ -1932,6 +1946,28 @@ class Doctor extends Drive
     }
     
     
+    function fondo_ojo()
+    {
+        if ($this->session->userdata('doctor_login') != 1)
+        {
+            redirect(base_url(), 'refresh');
+        }
+        if($this->input->post('date') != '')
+        {
+            $page_data['filter'] = base64_encode($this->input->post('date'));
+        }else
+        {
+            $page_data['filter'] = false;
+        }
+        if($this->input->post('doctor_id') != '')
+        {
+            $this->session->set_userdata('doctor_id', $this->input->post('doctor_id'));
+        }
+        $page_data['page_name'] = 'fondo_ojo';
+        $page_data['page_title'] = 'Fondo de ojo';
+        $this->load->view('backend/index', $page_data);
+    }
+
     function pending_payment(){
         if ($this->session->userdata('doctor_login') != 1)
         {

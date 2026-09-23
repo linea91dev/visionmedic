@@ -181,6 +181,7 @@
                                                    ?>
                                             <a class="dropdown-item" href="javascript:void(0);" onclick="confirm('<?php echo $appointment['appointment_id'];?>')">Confirmar</a>
                                             <a class="dropdown-item" href="javascript:void(0);" onclick="modal_lg('<?php echo base_url();?>modal/popup/modal_reprogramar/<?php echo $appointment['appointment_id'];?>');">Reprogramar</a>
+                                            <a class="dropdown-item" href="javascript:void(0);" onclick="send_fondo('<?php echo $appointment['appointment_id'];?>')">Enviar a fondo de ojo</a>
                                             <a class="dropdown-item" href="javascript:void(0);" onclick="cancel_appointment('<?php echo  $appointment['appointment_id'];?>')">Cancelar</a>
 
                                             <?php          
@@ -190,6 +191,7 @@
                                             ?>
 
                                             <a class="dropdown-item" href="javascript:void(0);" onclick="modal_lg('<?php echo base_url();?>modal/popup/modal_reprogramar/<?php echo $appointment['appointment_id'];?>');">Reprogramar</a>
+                                            <a class="dropdown-item" href="javascript:void(0);" onclick="send_fondo('<?php echo $appointment['appointment_id'];?>')">Enviar a fondo de ojo</a>
                                             <a class="dropdown-item" href="javascript:void(0);" onclick="cancel_appointment('<?php echo  $appointment['appointment_id'];?>')">Cancelar</a>
 
                                             <?php          
@@ -338,6 +340,28 @@ function confirm(appointment_id) {
     }).then((result) => {
         if (result.value) {
             location.href = "<?php echo base_url();?>doctor/appointments/confirm/" + appointment_id;
+        }
+    })
+}
+
+function send_fondo(appointment_id) {
+    Swal.fire({
+        title: '¿Enviar a fondo de ojo?',
+        text: "La cita saldrá de la lista del día y quedará pendiente para retomarla.",
+        type: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#9fd13b',
+        cancelButtonColor: '#fd4f57',
+        confirmButtonText: 'Enviar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: "<?php echo base_url();?>doctor/appointments/fondo/" + appointment_id,
+                success: function() {
+                    location.reload();
+                }
+            });
         }
     })
 }

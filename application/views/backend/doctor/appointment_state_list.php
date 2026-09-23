@@ -88,4 +88,27 @@
             <label class="custom-control-label" for="customCheck6">Archivadas</label>
         </div>
     </li>
+    <li>
+        <div class="custom-control custom-radio">
+            <input <?php if ($page_name=="fondo_ojo"){ echo 'checked'; } ?> name="type" type="radio" class="custom-control-input" id="customCheckFondo" onclick="window.location.href='<?php echo base_url();?>doctor/fondo_ojo/';">
+            <span class="badge badge-fondo pull-right"><?php echo $this->crud_model->count_fondo($doctor_id); ?></span>
+            <label class="custom-control-label" for="customCheckFondo">Fondo de ojo</label>
+        </div>
+    </li>
 </ul>
+<style>
+.badge-fondo {
+    border-radius: 25px!important;
+    padding: 3px 12px;
+    border: 1px solid #6b4c9a;
+    color: #6b4c9a!important;
+    background-color: #f3eefe;
+}
+.alert-fondo, .alert-fondo-text {
+    color: #6b4c9a!important;
+}
+.alert-fondo {
+    background-color: #f3eefe;
+    border: 1px solid #6b4c9a!important;
+}
+</style>

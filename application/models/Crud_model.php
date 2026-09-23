@@ -2938,6 +2938,16 @@ class Crud_model extends CI_Model
         return $appointments;
     }
     
+    function appointment_fondo_doc($doctor_id, $clinic_id){
+        $appointments = $this->db->query("SELECT * FROM `appointment` WHERE status = 11 and clinic_id = ".$clinic_id." and doctor_id = '".$doctor_id."' ORDER BY order_date DESC");
+        return $appointments;
+    }
+
+    function count_fondo($doctor_id){
+        $appointments = $this->db->query("SELECT * FROM `appointment` WHERE status = 11 and clinic_id = ".$this->session->userdata('current_clinic')." and doctor_id = '".$doctor_id."'")->num_rows();
+        return $appointments;
+    }
+
     function count_archived($doctor_id, $date)
     {
         $appointments = $this->db->query("SELECT * FROM `appointment` WHERE status = 4 and clinic_id = ".$this->session->userdata('current_clinic')." and date ='".$date."' and doctor_id = '".$doctor_id."'")->num_rows();
