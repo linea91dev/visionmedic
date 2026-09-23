@@ -308,7 +308,12 @@ var app = '<?php echo base64_decode($id_);?>';
                         'ar_notas_ojo', 'ar_notas', 'ar_diferido',
                         'av_od_avl_sc', 'av_od_avl_cc', 'av_od_avc_sc', 'av_od_avc_cc', 'av_od_avl_ph',
                         'av_os_avl_sc', 'av_os_avl_cc', 'av_os_avc_sc', 'av_os_avc_cc', 'av_os_avl_ph',
-                        'av_optotipo', 'av_notas_ojo', 'av_notas', 'av_diferido'
+                        'av_optotipo', 'av_notas_ojo', 'av_notas', 'av_diferido',
+                        'seg_vias_od', 'seg_vias_os', 'seg_parpados_od', 'seg_parpados_os',
+                        'seg_conjuntiva_od', 'seg_conjuntiva_os', 'seg_esclera_od', 'seg_esclera_os',
+                        'seg_cornea_od', 'seg_cornea_os', 'seg_camara_od', 'seg_camara_os',
+                        'seg_iris_od', 'seg_iris_os', 'seg_pupila_od', 'seg_pupila_os',
+                        'seg_cristalino_od', 'seg_cristalino_os'
                     );
                     $oft_defaults = array_fill_keys($oft_fields, '');
                     $oft_row = $this->db->get_where('appointment_oftalmology', array('appointment_id' => $details['appointment_id']))->row_array();
@@ -716,6 +721,43 @@ var app = '<?php echo base64_decode($id_);?>';
                                                     <?php echo $details['av_diferido'] == '1' ? 'Diferido' : 'DIFERIDO'; ?>
                                                 </button>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php
+                                    $seg_rows = array(
+                                        array('key' => 'vias', 'label' => 'VÍAS LAGRIMALES', 'opts' => array('ok' => 'OK', 'diferido' => 'DIFERIDO', 'otro' => 'OTRO')),
+                                        array('key' => 'parpados', 'label' => 'PÁRPADOS Y PESTAÑAS', 'opts' => array('ok' => 'OK', 'diferido' => 'DIFERIDO', 'otro' => 'OTRO')),
+                                        array('key' => 'conjuntiva', 'label' => 'CONJUNTIVA', 'opts' => array('ok' => 'OK', 'diferido' => 'DIFERIDO', 'otro' => 'OTRO')),
+                                        array('key' => 'esclera', 'label' => 'ESCLERA', 'opts' => array('ok' => 'OK', 'diferido' => 'DIFERIDO', 'otro' => 'OTRO')),
+                                        array('key' => 'cornea', 'label' => 'CÓRNEA', 'opts' => array('ok' => 'OK', 'diferido' => 'DIFERIDO', 'otro' => 'OTRO')),
+                                        array('key' => 'camara', 'label' => 'CÁMARA ANTERIOR', 'opts' => array('profunda' => 'PROFUNDA', 'estrecha' => 'ESTRECHA', 'otro' => 'OTRO')),
+                                        array('key' => 'iris', 'label' => 'IRIS', 'opts' => array('ok' => 'OK', 'diferido' => 'DIFERIDO', 'otro' => 'OTRO')),
+                                        array('key' => 'pupila', 'label' => 'PUPILA', 'opts' => array('ok' => 'OK', 'diferido' => 'DIFERIDO', 'otro' => 'OTRO')),
+                                        array('key' => 'cristalino', 'label' => 'CRISTALINO', 'opts' => array('ok' => 'OK', 'diferido' => 'DIFERIDO', 'otro' => 'OTRO'))
+                                    );
+                                ?>
+                                <div class="col-sm-12">
+                                    <div class="form-group" style="border:1px solid #e6e8ee;border-radius:8px;padding:12px;">
+                                        <div class="row">
+                                            <?php foreach (array('od' => 'OD', 'os' => 'OS') as $eye => $eye_label): ?>
+                                            <div class="col-sm-6">
+                                                <div style="font-weight:700;border-bottom:1px solid #e6e8ee;margin-bottom:8px;"><?php echo $eye_label; ?></div>
+                                                <?php foreach ($seg_rows as $seg): ?>
+                                                <div style="display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:8px;">
+                                                    <span style="font-size:12px;letter-spacing:.3px;"><?php echo $seg['label']; ?></span>
+                                                    <span style="white-space:nowrap;">
+                                                        <?php foreach ($seg['opts'] as $opt_val => $opt_label): ?>
+                                                        <label style="margin:0 8px 0 0;font-weight:400;color:#047bf8;">
+                                                            <input type="radio" name="seg_<?php echo $seg['key']; ?>_<?php echo $eye; ?>_<?php echo $aid; ?>" value="<?php echo $opt_val; ?>" <?php echo $details['seg_'.$seg['key'].'_'.$eye] == $opt_val ? 'checked' : ''; ?> onchange="updateConsulta('seg_<?php echo $seg['key']; ?>_<?php echo $eye; ?>',<?php echo $aid; ?>,this.value)">
+                                                            <?php echo $opt_label; ?>
+                                                        </label>
+                                                        <?php endforeach; ?>
+                                                    </span>
+                                                </div>
+                                                <?php endforeach; ?>
+                                            </div>
+                                            <?php endforeach; ?>
                                         </div>
                                     </div>
                                 </div>

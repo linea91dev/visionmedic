@@ -4176,7 +4176,12 @@ class Doctor extends Drive
             'ar_notas_ojo', 'ar_notas', 'ar_diferido',
             'av_od_avl_sc', 'av_od_avl_cc', 'av_od_avc_sc', 'av_od_avc_cc', 'av_od_avl_ph',
             'av_os_avl_sc', 'av_os_avl_cc', 'av_os_avc_sc', 'av_os_avc_cc', 'av_os_avl_ph',
-            'av_optotipo', 'av_notas_ojo', 'av_notas', 'av_diferido'
+            'av_optotipo', 'av_notas_ojo', 'av_notas', 'av_diferido',
+            'seg_vias_od', 'seg_vias_os', 'seg_parpados_od', 'seg_parpados_os',
+            'seg_conjuntiva_od', 'seg_conjuntiva_os', 'seg_esclera_od', 'seg_esclera_os',
+            'seg_cornea_od', 'seg_cornea_os', 'seg_camara_od', 'seg_camara_os',
+            'seg_iris_od', 'seg_iris_os', 'seg_pupila_od', 'seg_pupila_os',
+            'seg_cristalino_od', 'seg_cristalino_os'
        );
 
        if (in_array($cl, $oft_fields, true)) {
