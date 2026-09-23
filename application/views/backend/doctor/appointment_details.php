@@ -1153,23 +1153,69 @@ var app = '<?php echo base64_decode($id_);?>';
                                     });
                                 })();
                                 </script>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <b>Tratamiento:</b>
-                                        <textarea cols="80" class="form-control" name="ckplan" rows="5" onchange="updateConsulta('tx',<?php echo $details['appointment_id'] ?>,this.value)"><?php   echo $details['tx']?></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <b>Impresión clinica:</b>
-                                        <textarea cols="80" class="form-control" name="ckplan" rows="5" onchange="updateConsulta('ic',<?php echo $details['appointment_id'] ?>,this.value)"><?php   echo $details['ic']?> </textarea>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <b>Plan:</b>
-                                        <input cols="80" class="form-control" name="ckplan" rows="1" onchange="updateConsulta('plan',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php   echo $details['plan']?>">
-                                        </input>
+                                <?php
+                                    $plan_id = $details['appointment_id'];
+                                    $plan_dx = array();
+                                    $plan_tx = array();
+                                    if ($this->db->table_exists('appointment_plan_dx')) {
+                                        $plan_dx = $this->db->order_by('dx_id', 'ASC')->get_where('appointment_plan_dx', array('appointment_id' => $plan_id))->result_array();
+                                    }
+                                    if ($this->db->table_exists('appointment_plan_tx')) {
+                                        $plan_tx = $this->db->order_by('tx_id', 'ASC')->get_where('appointment_plan_tx', array('appointment_id' => $plan_id))->result_array();
+                                    }
+                                    if (count($plan_dx) == 0) $plan_dx[] = array('dx_id' => '', 'diagnosis' => '');
+                                    if (count($plan_tx) == 0) $plan_tx[] = array('tx_id' => '', 'nombre' => '', 'cantidad' => '', 'principio' => '', 'presentacion' => '', 'dosis' => '', 'frecuencia' => '', 'aplicacion' => '', 'duracion' => '');
+                                ?>
+                                <div class="col-sm-12">
+                                    <div class="form-group" style="border:1px solid #e6e8ee;border-radius:8px;padding:12px;">
+                                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                                            <b>PLAN / TRATAMIENTO (TX)</b>
+                                            <a class="btn btn-primary btn-sm" target="_blank" href="<?php echo base_url();?>doctor/print_prescription_details/<?php echo $plan_id;?>">IMPRIMIR RECETA</a>
+                                        </div>
+                                        <div style="margin-top:10px;"><b>DX</b></div>
+                                        <div id="plan_dx_<?php echo $plan_id; ?>">
+                                            <?php foreach ($plan_dx as $dx): ?>
+                                            <div class="plan-dx-row" data-id="<?php echo $dx['dx_id']; ?>" data-app="<?php echo $plan_id; ?>" style="display:flex;gap:8px;align-items:center;margin-top:6px;">
+                                                <input class="form-control plan-dx-input" placeholder="Diagnóstico" onchange="savePlanDx(this)" value="<?php echo htmlspecialchars($dx['diagnosis']); ?>">
+                                                <button type="button" class="btn btn-danger btn-sm" onclick="removePlanDx(this)">&times;</button>
+                                            </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                        <button type="button" class="btn btn-success btn-sm" style="margin-top:6px;" onclick="addPlanDx(<?php echo $plan_id; ?>)">+</button>
+                                        <div style="margin-top:14px;overflow-x:auto;">
+                                            <b>TX</b>
+                                            <table class="table table-bordered" style="margin-top:6px;min-width:980px;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>NOMBRE COMERCIAL</th>
+                                                        <th>CANTIDAD</th>
+                                                        <th>PRINCIPIO ACTIVO</th>
+                                                        <th>PRESENTACIÓN</th>
+                                                        <th>DOSIS</th>
+                                                        <th>FRECUENCIA</th>
+                                                        <th>APLICACIÓN</th>
+                                                        <th>TIEMPO DE DURACIÓN</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="plan_tx_<?php echo $plan_id; ?>">
+                                                    <?php foreach ($plan_tx as $tx): ?>
+                                                    <tr class="plan-tx-row" data-id="<?php echo $tx['tx_id']; ?>" data-app="<?php echo $plan_id; ?>">
+                                                        <td><input class="form-control tx-nombre" onchange="savePlanTx(this)" value="<?php echo htmlspecialchars($tx['nombre']); ?>"></td>
+                                                        <td><input class="form-control tx-cantidad" onchange="savePlanTx(this)" value="<?php echo htmlspecialchars($tx['cantidad']); ?>"></td>
+                                                        <td><input class="form-control tx-principio" onchange="savePlanTx(this)" value="<?php echo htmlspecialchars($tx['principio']); ?>"></td>
+                                                        <td><input class="form-control tx-presentacion" onchange="savePlanTx(this)" value="<?php echo htmlspecialchars($tx['presentacion']); ?>"></td>
+                                                        <td><input class="form-control tx-dosis" onchange="savePlanTx(this)" value="<?php echo htmlspecialchars($tx['dosis']); ?>"></td>
+                                                        <td><input class="form-control tx-frecuencia" onchange="savePlanTx(this)" value="<?php echo htmlspecialchars($tx['frecuencia']); ?>"></td>
+                                                        <td><input class="form-control tx-aplicacion" onchange="savePlanTx(this)" value="<?php echo htmlspecialchars($tx['aplicacion']); ?>"></td>
+                                                        <td><input class="form-control tx-duracion" onchange="savePlanTx(this)" value="<?php echo htmlspecialchars($tx['duracion']); ?>"></td>
+                                                        <td><button type="button" class="btn btn-danger btn-sm" onclick="removePlanTx(this)">&times;</button></td>
+                                                    </tr>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
+                                            <button type="button" class="btn btn-success btn-sm" onclick="addPlanTx(<?php echo $plan_id; ?>)">Agregar TX</button>
+                                        </div>
                                     </div>
                                 </div>
                                 <br>
@@ -1503,6 +1549,86 @@ function clearAvNotation() {
     $('input[name="av_notation_pick"]').prop('checked', false);
     $('#av_custom_value').val('');
     $('#avNotationModal').hide();
+}
+
+function addPlanDx(appId) {
+    var row = '<div class="plan-dx-row" data-id="" data-app="' + appId + '" style="display:flex;gap:8px;align-items:center;margin-top:6px;">' +
+        '<input class="form-control plan-dx-input" placeholder="Diagnóstico" onchange="savePlanDx(this)">' +
+        '<button type="button" class="btn btn-danger btn-sm" onclick="removePlanDx(this)">&times;</button></div>';
+    $('#plan_dx_' + appId).append(row);
+}
+
+function savePlanDx(el) {
+    var row = $(el).closest('.plan-dx-row');
+    var diagnosis = row.find('.plan-dx-input').val() || '';
+    if (diagnosis === '') return;
+    $.ajax({
+        url: base_url + 'doctor/save_plan_dx',
+        type: 'POST',
+        data: { dx_id: row.attr('data-id'), appointment_id: row.attr('data-app'), diagnosis: diagnosis },
+        success: function(resp) {
+            var id = $.trim(resp);
+            if (id) row.attr('data-id', id);
+        }
+    });
+}
+
+function removePlanDx(btn) {
+    var row = $(btn).closest('.plan-dx-row');
+    var id = row.attr('data-id');
+    if (id) {
+        $.post(base_url + 'doctor/delete_plan_dx/' + id);
+    }
+    row.remove();
+}
+
+function addPlanTx(appId) {
+    var row = '<tr class="plan-tx-row" data-id="" data-app="' + appId + '">' +
+        '<td><input class="form-control tx-nombre" onchange="savePlanTx(this)"></td>' +
+        '<td><input class="form-control tx-cantidad" onchange="savePlanTx(this)"></td>' +
+        '<td><input class="form-control tx-principio" onchange="savePlanTx(this)"></td>' +
+        '<td><input class="form-control tx-presentacion" onchange="savePlanTx(this)"></td>' +
+        '<td><input class="form-control tx-dosis" onchange="savePlanTx(this)"></td>' +
+        '<td><input class="form-control tx-frecuencia" onchange="savePlanTx(this)"></td>' +
+        '<td><input class="form-control tx-aplicacion" onchange="savePlanTx(this)"></td>' +
+        '<td><input class="form-control tx-duracion" onchange="savePlanTx(this)"></td>' +
+        '<td><button type="button" class="btn btn-danger btn-sm" onclick="removePlanTx(this)">&times;</button></td></tr>';
+    $('#plan_tx_' + appId).append(row);
+}
+
+function savePlanTx(el) {
+    var row = $(el).closest('.plan-tx-row');
+    var nombre = row.find('.tx-nombre').val() || '';
+    if (nombre === '' && (row.attr('data-id') || '') === '') return;
+    $.ajax({
+        url: base_url + 'doctor/save_plan_tx',
+        type: 'POST',
+        data: {
+            tx_id: row.attr('data-id'),
+            appointment_id: row.attr('data-app'),
+            nombre: nombre,
+            cantidad: row.find('.tx-cantidad').val() || '',
+            principio: row.find('.tx-principio').val() || '',
+            presentacion: row.find('.tx-presentacion').val() || '',
+            dosis: row.find('.tx-dosis').val() || '',
+            frecuencia: row.find('.tx-frecuencia').val() || '',
+            aplicacion: row.find('.tx-aplicacion').val() || '',
+            duracion: row.find('.tx-duracion').val() || ''
+        },
+        success: function(resp) {
+            var id = $.trim(resp);
+            if (id) row.attr('data-id', id);
+        }
+    });
+}
+
+function removePlanTx(btn) {
+    var row = $(btn).closest('.plan-tx-row');
+    var id = row.attr('data-id');
+    if (id) {
+        $.post(base_url + 'doctor/delete_plan_tx/' + id);
+    }
+    row.remove();
 }
 
 function addAntecedentRow(type, appId, patientId) {

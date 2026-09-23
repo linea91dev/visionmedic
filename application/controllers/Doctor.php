@@ -4134,6 +4134,65 @@ class Doctor extends Drive
         $this->db->delete('patient_antecedent');
     }
 
+    function save_plan_dx()
+    {
+        $data = array(
+            'appointment_id' => $this->input->post('appointment_id'),
+            'diagnosis' => $this->input->post('diagnosis')
+        );
+        $dx_id = $this->input->post('dx_id');
+        if ($dx_id != '' && is_numeric($dx_id)) {
+            $this->db->where('dx_id', $dx_id);
+            $this->db->update('appointment_plan_dx', $data);
+            echo $dx_id;
+            return;
+        }
+        $this->db->insert('appointment_plan_dx', $data);
+        echo $this->db->insert_id();
+    }
+
+    function delete_plan_dx($dx_id = '')
+    {
+        if ($dx_id == '' || !is_numeric($dx_id)) {
+            return;
+        }
+        $this->db->where('dx_id', $dx_id);
+        $this->db->delete('appointment_plan_dx');
+    }
+
+    function save_plan_tx()
+    {
+        $data = array(
+            'appointment_id' => $this->input->post('appointment_id'),
+            'nombre' => $this->input->post('nombre'),
+            'cantidad' => $this->input->post('cantidad'),
+            'principio' => $this->input->post('principio'),
+            'presentacion' => $this->input->post('presentacion'),
+            'dosis' => $this->input->post('dosis'),
+            'frecuencia' => $this->input->post('frecuencia'),
+            'aplicacion' => $this->input->post('aplicacion'),
+            'duracion' => $this->input->post('duracion')
+        );
+        $tx_id = $this->input->post('tx_id');
+        if ($tx_id != '' && is_numeric($tx_id)) {
+            $this->db->where('tx_id', $tx_id);
+            $this->db->update('appointment_plan_tx', $data);
+            echo $tx_id;
+            return;
+        }
+        $this->db->insert('appointment_plan_tx', $data);
+        echo $this->db->insert_id();
+    }
+
+    function delete_plan_tx($tx_id = '')
+    {
+        if ($tx_id == '' || !is_numeric($tx_id)) {
+            return;
+        }
+        $this->db->where('tx_id', $tx_id);
+        $this->db->delete('appointment_plan_tx');
+    }
+
     function patient_app()
     {
        $id= $this->input->post('id'); 

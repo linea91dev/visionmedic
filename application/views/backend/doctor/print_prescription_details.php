@@ -167,6 +167,24 @@
                                     ?>
                                 </p>
                                 <p><b>Final en lente de contacto:</b> <?php echo ($rxv('rx_contacto') == 'rigido') ? 'Rígido' : 'Escleral'; ?></p>
+                                <?php if ($this->db->table_exists('appointment_plan_dx')): $plan_dx = $this->db->get_where('appointment_plan_dx', array('appointment_id' => $appointment_id))->result_array(); ?>
+                                <?php if (count($plan_dx) > 0): ?>
+                                <p style="margin-top:10px;"><b>DX</b></p>
+                                <?php foreach ($plan_dx as $dx): ?><p><?php echo $dx['diagnosis']; ?></p><?php endforeach; ?>
+                                <?php endif; endif; ?>
+                                <?php if ($this->db->table_exists('appointment_plan_tx')): $plan_tx = $this->db->get_where('appointment_plan_tx', array('appointment_id' => $appointment_id))->result_array(); ?>
+                                <?php if (count($plan_tx) > 0): ?>
+                                <p style="margin-top:10px;"><b>TX</b></p>
+                                <table border="1" cellspacing="0" cellpadding="4" width="100%" style="border-collapse:collapse;">
+                                    <tr><th>Nombre comercial</th><th>Cantidad</th><th>Principio activo</th><th>Presentación</th><th>Dosis</th><th>Frecuencia</th><th>Aplicación</th><th>Duración</th></tr>
+                                    <?php foreach ($plan_tx as $tx): ?>
+                                    <tr>
+                                        <td><?php echo $tx['nombre']; ?></td><td><?php echo $tx['cantidad']; ?></td><td><?php echo $tx['principio']; ?></td><td><?php echo $tx['presentacion']; ?></td>
+                                        <td><?php echo $tx['dosis']; ?></td><td><?php echo $tx['frecuencia']; ?></td><td><?php echo $tx['aplicacion']; ?></td><td><?php echo $tx['duracion']; ?></td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </table>
+                                <?php endif; endif; ?>
                             </div>
                             <?php if($appointment_comment != ''): ?>
                             <div>
