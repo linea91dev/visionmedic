@@ -4173,7 +4173,10 @@ class Doctor extends Drive
             'kera_os_k2', 'kera_os_k2_eje', 'kera_os_k2_nomarca', 'kera_os_k2_irregular',
             'ar_od_esf', 'ar_od_cil', 'ar_od_eje', 'ar_od_nomarca', 'ar_od_dip',
             'ar_os_esf', 'ar_os_cil', 'ar_os_eje', 'ar_os_nomarca', 'ar_os_dip',
-            'ar_notas_ojo', 'ar_notas', 'ar_diferido'
+            'ar_notas_ojo', 'ar_notas', 'ar_diferido',
+            'av_od_avl_sc', 'av_od_avl_cc', 'av_od_avc_sc', 'av_od_avc_cc', 'av_od_avl_ph',
+            'av_os_avl_sc', 'av_os_avl_cc', 'av_os_avc_sc', 'av_os_avc_cc', 'av_os_avl_ph',
+            'av_optotipo', 'av_notas_ojo', 'av_notas', 'av_diferido'
        );
 
        if (in_array($cl, $oft_fields, true)) {

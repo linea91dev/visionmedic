@@ -305,7 +305,10 @@ var app = '<?php echo base64_decode($id_);?>';
                         'kera_os_k2', 'kera_os_k2_eje', 'kera_os_k2_nomarca', 'kera_os_k2_irregular',
                         'ar_od_esf', 'ar_od_cil', 'ar_od_eje', 'ar_od_nomarca', 'ar_od_dip',
                         'ar_os_esf', 'ar_os_cil', 'ar_os_eje', 'ar_os_nomarca', 'ar_os_dip',
-                        'ar_notas_ojo', 'ar_notas', 'ar_diferido'
+                        'ar_notas_ojo', 'ar_notas', 'ar_diferido',
+                        'av_od_avl_sc', 'av_od_avl_cc', 'av_od_avc_sc', 'av_od_avc_cc', 'av_od_avl_ph',
+                        'av_os_avl_sc', 'av_os_avl_cc', 'av_os_avc_sc', 'av_os_avc_cc', 'av_os_avl_ph',
+                        'av_optotipo', 'av_notas_ojo', 'av_notas', 'av_diferido'
                     );
                     $oft_defaults = array_fill_keys($oft_fields, '');
                     $oft_row = $this->db->get_where('appointment_oftalmology', array('appointment_id' => $details['appointment_id']))->row_array();
@@ -661,6 +664,49 @@ var app = '<?php echo base64_decode($id_);?>';
                                                 <textarea class="form-control" rows="2" onchange="updateConsulta('ar_notas',<?php echo $aid; ?>,this.value)"><?php echo $details['ar_notas']; ?></textarea>
                                                 <button type="button" class="btn <?php echo $details['ar_diferido'] == '1' ? 'btn-danger' : 'btn-danger'; ?>" style="min-width:120px;" onclick="updateConsulta('ar_diferido',<?php echo $aid; ?>,'1'); this.innerText='Diferido';">
                                                     <?php echo $details['ar_diferido'] == '1' ? 'Diferido' : 'DIFERIDO'; ?>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="border:1px solid #e6e8ee;border-radius:8px;padding:12px;margin-top:12px;">
+                                        <b>AGUDEZA VISUAL</b>
+                                        <div style="display:flex;gap:8px;margin:10px 0 4px 36px;font-size:12px;font-weight:600;">
+                                            <span style="width:90px;">AVL SC</span>
+                                            <span style="width:90px;color:#2e9e4f;">AVL CC</span>
+                                            <span style="width:90px;color:#2e9e4f;">AVC SC</span>
+                                            <span style="width:90px;color:#2e9e4f;">AVC CC</span>
+                                            <span style="width:90px;color:#e23b3b;">AVL PH</span>
+                                        </div>
+                                        <?php foreach ($kera_eyes as $eye => $eye_label): ?>
+                                        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px;">
+                                            <b style="width:28px;"><?php echo $eye_label; ?></b>
+                                            <input class="form-control" style="width:90px;" onchange="updateConsulta('av_<?php echo $eye; ?>_avl_sc',<?php echo $aid; ?>,this.value)" value="<?php echo $details['av_'.$eye.'_avl_sc']; ?>">
+                                            <input class="form-control" style="width:90px;" onchange="updateConsulta('av_<?php echo $eye; ?>_avl_cc',<?php echo $aid; ?>,this.value)" value="<?php echo $details['av_'.$eye.'_avl_cc']; ?>">
+                                            <input class="form-control" style="width:90px;" onchange="updateConsulta('av_<?php echo $eye; ?>_avc_sc',<?php echo $aid; ?>,this.value)" value="<?php echo $details['av_'.$eye.'_avc_sc']; ?>">
+                                            <input class="form-control" style="width:90px;" onchange="updateConsulta('av_<?php echo $eye; ?>_avc_cc',<?php echo $aid; ?>,this.value)" value="<?php echo $details['av_'.$eye.'_avc_cc']; ?>">
+                                            <input class="form-control" style="width:90px;" onchange="updateConsulta('av_<?php echo $eye; ?>_avl_ph',<?php echo $aid; ?>,this.value)" value="<?php echo $details['av_'.$eye.'_avl_ph']; ?>">
+                                        </div>
+                                        <?php endforeach; ?>
+                                        <div style="margin-top:14px;">
+                                            <b>TIPO DE OPTOTIPO</b>
+                                            <div style="display:flex;gap:28px;margin-top:8px;color:#e23b3b;font-size:22px;font-weight:700;">
+                                                <label style="text-align:center;margin:0;">N<br><input type="radio" name="av_optotipo_<?php echo $aid; ?>" value="n" <?php echo $details['av_optotipo'] == 'n' ? 'checked' : ''; ?> onchange="updateConsulta('av_optotipo',<?php echo $aid; ?>,this.value)"></label>
+                                                <label style="text-align:center;margin:0;">2<br><input type="radio" name="av_optotipo_<?php echo $aid; ?>" value="2" <?php echo $details['av_optotipo'] == '2' ? 'checked' : ''; ?> onchange="updateConsulta('av_optotipo',<?php echo $aid; ?>,this.value)"></label>
+                                                <label style="text-align:center;margin:0;">&#8962;<br><input type="radio" name="av_optotipo_<?php echo $aid; ?>" value="casa" <?php echo $details['av_optotipo'] == 'casa' ? 'checked' : ''; ?> onchange="updateConsulta('av_optotipo',<?php echo $aid; ?>,this.value)"></label>
+                                                <label style="text-align:center;margin:0;">E<br><input type="radio" name="av_optotipo_<?php echo $aid; ?>" value="e" <?php echo $details['av_optotipo'] == 'e' ? 'checked' : ''; ?> onchange="updateConsulta('av_optotipo',<?php echo $aid; ?>,this.value)"></label>
+                                            </div>
+                                        </div>
+                                        <div style="margin-top:12px;">
+                                            <label><b>NOTAS</b></label>
+                                            <div style="margin-bottom:8px;">
+                                                <label style="margin-right:12px;"><input type="radio" name="av_notas_ojo_<?php echo $aid; ?>" value="od" <?php echo $details['av_notas_ojo'] == 'od' ? 'checked' : ''; ?> onchange="updateConsulta('av_notas_ojo',<?php echo $aid; ?>,this.value)"> OD</label>
+                                                <label style="margin-right:12px;"><input type="radio" name="av_notas_ojo_<?php echo $aid; ?>" value="os" <?php echo $details['av_notas_ojo'] == 'os' ? 'checked' : ''; ?> onchange="updateConsulta('av_notas_ojo',<?php echo $aid; ?>,this.value)"> OS</label>
+                                                <label><input type="radio" name="av_notas_ojo_<?php echo $aid; ?>" value="ou" <?php echo $details['av_notas_ojo'] == 'ou' ? 'checked' : ''; ?> onchange="updateConsulta('av_notas_ojo',<?php echo $aid; ?>,this.value)"> OU</label>
+                                            </div>
+                                            <div style="display:flex;gap:10px;align-items:flex-start;">
+                                                <textarea class="form-control" rows="2" onchange="updateConsulta('av_notas',<?php echo $aid; ?>,this.value)"><?php echo $details['av_notas']; ?></textarea>
+                                                <button type="button" class="btn btn-danger" style="min-width:120px;" onclick="updateConsulta('av_diferido',<?php echo $aid; ?>,'1'); this.innerText='Diferido';">
+                                                    <?php echo $details['av_diferido'] == '1' ? 'Diferido' : 'DIFERIDO'; ?>
                                                 </button>
                                             </div>
                                         </div>
