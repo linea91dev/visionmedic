@@ -1,5 +1,6 @@
 # No subir al repositorio
 /application/libraries/
+/application/models/Whatsapp.php
 /assets/
 /uploads/
 /system/
