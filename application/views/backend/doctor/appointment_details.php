@@ -313,7 +313,12 @@ var app = '<?php echo base64_decode($id_);?>';
                         'seg_conjuntiva_od', 'seg_conjuntiva_os', 'seg_esclera_od', 'seg_esclera_os',
                         'seg_cornea_od', 'seg_cornea_os', 'seg_camara_od', 'seg_camara_os',
                         'seg_iris_od', 'seg_iris_os', 'seg_pupila_od', 'seg_pupila_os',
-                        'seg_cristalino_od', 'seg_cristalino_os'
+                        'seg_cristalino_od', 'seg_cristalino_os',
+                        'seg_vias_od_nota', 'seg_vias_os_nota', 'seg_parpados_od_nota', 'seg_parpados_os_nota',
+                        'seg_conjuntiva_od_nota', 'seg_conjuntiva_os_nota', 'seg_esclera_od_nota', 'seg_esclera_os_nota',
+                        'seg_cornea_od_nota', 'seg_cornea_os_nota', 'seg_camara_od_nota', 'seg_camara_os_nota',
+                        'seg_iris_od_nota', 'seg_iris_os_nota', 'seg_pupila_od_nota', 'seg_pupila_os_nota',
+                        'seg_cristalino_od_nota', 'seg_cristalino_os_nota'
                     );
                     $oft_defaults = array_fill_keys($oft_fields, '');
                     $oft_row = $this->db->get_where('appointment_oftalmology', array('appointment_id' => $details['appointment_id']))->row_array();
@@ -751,16 +756,19 @@ var app = '<?php echo base64_decode($id_);?>';
                                                         $seg_current = ($seg['key'] == 'camara') ? 'profunda' : 'ok';
                                                     }
                                                 ?>
-                                                <div style="display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:8px;">
-                                                    <span style="font-size:12px;letter-spacing:.3px;"><?php echo $seg['label']; ?></span>
-                                                    <span style="white-space:nowrap;">
-                                                        <?php foreach ($seg['opts'] as $opt_val => $opt_label): ?>
-                                                        <label style="margin:0 8px 0 0;font-weight:400;color:#047bf8;">
-                                                            <input type="radio" name="seg_<?php echo $seg['key']; ?>_<?php echo $eye; ?>_<?php echo $aid; ?>" value="<?php echo $opt_val; ?>" <?php echo $seg_current == $opt_val ? 'checked' : ''; ?> onchange="updateConsulta('seg_<?php echo $seg['key']; ?>_<?php echo $eye; ?>',<?php echo $aid; ?>,this.value)">
-                                                            <?php echo $opt_label; ?>
-                                                        </label>
-                                                        <?php endforeach; ?>
-                                                    </span>
+                                                <div style="margin-bottom:8px;">
+                                                    <div style="display:flex;justify-content:space-between;gap:8px;align-items:center;">
+                                                        <span style="font-size:12px;letter-spacing:.3px;"><?php echo $seg['label']; ?></span>
+                                                        <span style="white-space:nowrap;">
+                                                            <?php foreach ($seg['opts'] as $opt_val => $opt_label): ?>
+                                                            <label style="margin:0 8px 0 0;font-weight:400;color:#047bf8;">
+                                                                <input type="radio" name="seg_<?php echo $seg['key']; ?>_<?php echo $eye; ?>_<?php echo $aid; ?>" value="<?php echo $opt_val; ?>" <?php echo $seg_current == $opt_val ? 'checked' : ''; ?> onchange="updateConsulta('seg_<?php echo $seg['key']; ?>_<?php echo $eye; ?>',<?php echo $aid; ?>,this.value); document.getElementById('seg_nota_<?php echo $seg['key']; ?>_<?php echo $eye; ?>_<?php echo $aid; ?>').style.display = this.value == 'otro' ? 'block' : 'none';">
+                                                                <?php echo $opt_label; ?>
+                                                            </label>
+                                                            <?php endforeach; ?>
+                                                        </span>
+                                                    </div>
+                                                    <input id="seg_nota_<?php echo $seg['key']; ?>_<?php echo $eye; ?>_<?php echo $aid; ?>" class="form-control" placeholder="Nota" style="margin-top:4px;<?php echo $seg_current == 'otro' ? '' : 'display:none;'; ?>" onchange="updateConsulta('seg_<?php echo $seg['key']; ?>_<?php echo $eye; ?>_nota',<?php echo $aid; ?>,this.value)" value="<?php echo htmlspecialchars($details['seg_'.$seg['key'].'_'.$eye.'_nota']); ?>">
                                                 </div>
                                                 <?php endforeach; ?>
                                             </div>
