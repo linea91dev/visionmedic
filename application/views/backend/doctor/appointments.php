@@ -220,11 +220,15 @@
                                     <div class="pipeline-item">
                                         <div class="pi-body">
                                             <div class="avatar">
-                                                <img alt="" src="<?php echo $this->accounts_model->get_photo('patient', $appointment['patient_id']);?>" width="45px" style="border-radius:25px">
+                                                <a href="<?php echo base_url();?>doctor/appointment_details/<?php echo base64_encode($appointment['appointment_id']);?>">
+                                                    <img alt="" src="<?php echo $this->accounts_model->get_photo('patient', $appointment['patient_id']);?>" width="45px" style="border-radius:25px">
+                                                </a>
                                             </div>
                                             <div class="pi-info">
                                                 <div class="h6 pi-name alert-<?php echo $className;?>-text">
-                                                    <?php echo $this->accounts_model->get_full_name('patient', $appointment['patient_id']);?>
+                                                    <a href="<?php echo base_url();?>doctor/appointment_details/<?php echo base64_encode($appointment['appointment_id']);?>" class="alert-<?php echo $className;?>-text" style="text-decoration:none;">
+                                                        <?php echo $this->accounts_model->get_full_name('patient', $appointment['patient_id']);?>
+                                                    </a>
                                                 </div>
                                                 <div class="pi-sub alert-<?php echo $className;?>-text">
                                                     <?php if($appointment['practice'] > 0):?>
