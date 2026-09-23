@@ -1,0 +1,3 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
+
+ERROR - 2026-02-14 16:48:39 --> Severity: Core Warning --> PHP Startup: Unable to load dynamic library 'monarxprotect-php74.so' (tried: /opt/cpanel/ea-php74/root/usr/lib64/php/modules/monarxprotect-php74.so (/opt/cpanel/ea-php74/root/usr/lib64/php/modules/monarxprotect-php74.so: cannot open shared object file: No such file or directory), /opt/cpanel/ea-php74/root/usr/lib64/php/modules/monarxprotect-php74.so.so (/opt/cpanel/ea-php74/root/usr/lib64/php/modules/monarxprotect-php74.so.so: cannot open shared object file: No such file or directory)) Unknown 0
