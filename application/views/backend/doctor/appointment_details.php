@@ -677,14 +677,21 @@ var app = '<?php echo base64_decode($id_);?>';
                                             <span style="width:90px;color:#2e9e4f;">AVC CC</span>
                                             <span style="width:90px;color:#e23b3b;">AVL PH</span>
                                         </div>
+                                        <?php
+                                            $av_cols = array(
+                                                'avl_sc' => 'AVL SC',
+                                                'avl_cc' => 'AVL CC',
+                                                'avc_sc' => 'AVC SC',
+                                                'avc_cc' => 'AVC CC',
+                                                'avl_ph' => 'AVL PH'
+                                            );
+                                        ?>
                                         <?php foreach ($kera_eyes as $eye => $eye_label): ?>
                                         <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px;">
                                             <b style="width:28px;"><?php echo $eye_label; ?></b>
-                                            <input class="form-control" style="width:90px;" onchange="updateConsulta('av_<?php echo $eye; ?>_avl_sc',<?php echo $aid; ?>,this.value)" value="<?php echo $details['av_'.$eye.'_avl_sc']; ?>">
-                                            <input class="form-control" style="width:90px;" onchange="updateConsulta('av_<?php echo $eye; ?>_avl_cc',<?php echo $aid; ?>,this.value)" value="<?php echo $details['av_'.$eye.'_avl_cc']; ?>">
-                                            <input class="form-control" style="width:90px;" onchange="updateConsulta('av_<?php echo $eye; ?>_avc_sc',<?php echo $aid; ?>,this.value)" value="<?php echo $details['av_'.$eye.'_avc_sc']; ?>">
-                                            <input class="form-control" style="width:90px;" onchange="updateConsulta('av_<?php echo $eye; ?>_avc_cc',<?php echo $aid; ?>,this.value)" value="<?php echo $details['av_'.$eye.'_avc_cc']; ?>">
-                                            <input class="form-control" style="width:90px;" onchange="updateConsulta('av_<?php echo $eye; ?>_avl_ph',<?php echo $aid; ?>,this.value)" value="<?php echo $details['av_'.$eye.'_avl_ph']; ?>">
+                                            <?php foreach ($av_cols as $av_key => $av_label): ?>
+                                            <input class="form-control" readonly style="width:90px;cursor:pointer;background:#fff;" onclick="openAvNotation(this,'av_<?php echo $eye; ?>_<?php echo $av_key; ?>',<?php echo $aid; ?>,'<?php echo $av_label; ?>')" value="<?php echo $details['av_'.$eye.'_'.$av_key]; ?>">
+                                            <?php endforeach; ?>
                                         </div>
                                         <?php endforeach; ?>
                                         <div style="margin-top:14px;">
@@ -1325,6 +1332,45 @@ api.executeCommand('subject', 'test');
 <script src="<?php echo base_url();?>public/assets/appointments/js/appointments_details.js"></script>
 <?php endforeach; ?>
 
+<div id="avNotationModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;">
+    <div style="background:#fff;width:640px;max-width:94%;max-height:90vh;overflow:auto;margin:4vh auto;border-radius:8px;padding:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+            <b id="avNotationTitle">AVL SC</b>
+            <a href="javascript:void(0);" onclick="$('#avNotationModal').hide();" style="font-size:22px;text-decoration:none;color:#333;">&times;</a>
+        </div>
+        <div style="margin-top:10px;font-size:12px;color:#8b93a7;">NOTACIONES EQUIVALENTES</div>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:8px 0 12px;">
+            <label style="margin:0;"><input type="radio" name="av_notation_pick" value="(NPL)"> (NPL)</label>
+            <label style="margin:0;"><input type="radio" name="av_notation_pick" value="(PL)"> (PL)</label>
+            <label style="margin:0;"><input type="radio" name="av_notation_pick" value="(MM)"> (MM)</label>
+            <input id="av_custom_value" type="text" class="form-control" style="width:90px;" placeholder="+">
+            <label style="margin:0;"><input type="radio" name="av_notation_pick" value="(FSM)"> (FSM)</label>
+            <button type="button" class="btn btn-primary btn-sm" onclick="acceptAvNotation()">Aceptar</button>
+        </div>
+        <div style="overflow:auto;">
+            <table class="table table-bordered" style="font-size:13px;margin-bottom:10px;">
+                <thead>
+                    <tr>
+                        <th>DECIMAL</th>
+                        <th>US</th>
+                        <th>CC</th>
+                        <th>(MM)</th>
+                        <th>20/200</th>
+                        <th>JAEGER</th>
+                    </tr>
+                </thead>
+                <tbody id="avNotationBody"></tbody>
+            </table>
+        </div>
+        <div style="display:flex;justify-content:space-between;">
+            <button type="button" class="btn btn-default" onclick="clearAvNotation()">LIMPIAR</button>
+            <div>
+                <button type="button" class="btn btn-default" onclick="$('#avNotationModal').hide();">CANCELAR</button>
+                <button type="button" class="btn btn-primary" onclick="acceptAvNotation()">ACEPTAR</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.0.0-beta.11/chart.js"></script>
 <script>
   $('form').on('keydown', function(event) {
@@ -1337,6 +1383,73 @@ api.executeCommand('subject', 'test');
 
 function showGraphics() {
     $('#graphics').toggle();
+}
+
+var avNotationTarget = null;
+var avNotationRows = [
+    ['0.05', '20/400', '6/120', '0.05', '20/400', 'J16'],
+    ['0.1', '20/200', '6/60', '0.1', '20/200', 'J10'],
+    ['0.12', '20/160', '6/48', '0.12', '20/160', ''],
+    ['0.16', '20/125', '6/36', '0.16', '20/125', 'J7'],
+    ['0.2', '20/100', '6/30', '0.2', '20/100', 'J6'],
+    ['0.25', '20/80', '6/24', '0.25', '20/80', 'J5'],
+    ['0.3', '20/70', '6/21', '0.3', '20/60', ''],
+    ['0.4', '20/50', '6/15', '0.4', '20/50', 'J3'],
+    ['0.5', '20/40', '6/12', '0.5', '20/40', 'J2'],
+    ['0.6', '20/30', '6/9', '0.62', '20/30', 'J1'],
+    ['0.7', '20/25', '6/8', '0.75', '20/25', ''],
+    ['0.8', '20/25', '6/7.5', '0.8', '20/25', 'J1+'],
+    ['0.9', '20/22', '6/6.7', '0.9', '20/22', ''],
+    ['1.0', '20/20', '6/6', '1', '20/20', ''],
+    ['1.2', '20/15', '6/5', '1.25', '20/15', ''],
+    ['1.5', '20/13', '6/4', '1.5', '20/13', ''],
+    ['2.0', '20/10', '6/3', '2', '20/10', '']
+];
+
+function openAvNotation(el, field, appId, title) {
+    avNotationTarget = { el: el, field: field, appId: appId };
+    $('#avNotationTitle').text(title);
+    $('input[name="av_notation_pick"]').prop('checked', false);
+    $('#av_custom_value').val('');
+    if (!$('#avNotationBody').data('ready')) {
+        var html = '';
+        for (var i = 0; i < avNotationRows.length; i++) {
+            html += '<tr>';
+            for (var c = 0; c < avNotationRows[i].length; c++) {
+                var val = avNotationRows[i][c];
+                html += '<td style="text-align:center;padding:4px 8px;">';
+                if (val) {
+                    html += '<label style="margin:0;font-weight:400;cursor:pointer;"><input type="radio" name="av_notation_pick" value="' + val + '"> ' + val + '</label>';
+                }
+                html += '</td>';
+            }
+            html += '</tr>';
+        }
+        $('#avNotationBody').html(html).data('ready', 1);
+    }
+    $('#avNotationModal').show();
+}
+
+function acceptAvNotation() {
+    var val = $('input[name="av_notation_pick"]:checked').val() || '';
+    if ($('#av_custom_value').val()) {
+        val = $('#av_custom_value').val();
+    }
+    if (avNotationTarget && val !== '') {
+        $(avNotationTarget.el).val(val);
+        updateConsulta(avNotationTarget.field, avNotationTarget.appId, val);
+    }
+    $('#avNotationModal').hide();
+}
+
+function clearAvNotation() {
+    if (avNotationTarget) {
+        $(avNotationTarget.el).val('');
+        updateConsulta(avNotationTarget.field, avNotationTarget.appId, '');
+    }
+    $('input[name="av_notation_pick"]').prop('checked', false);
+    $('#av_custom_value').val('');
+    $('#avNotationModal').hide();
 }
 
 function addAntecedentRow(type, appId, patientId) {
