@@ -4114,7 +4114,15 @@ class Doctor extends Drive
             'treatment' => $this->input->post('treatment'),
             'notes' => $this->input->post('notes')
         );
+        $antecedent_id = $this->input->post('antecedent_id');
+        if ($antecedent_id != '' && is_numeric($antecedent_id)) {
+            $this->db->where('antecedent_id', $antecedent_id);
+            $this->db->update('patient_antecedent', $data);
+            echo $antecedent_id;
+            return;
+        }
         $this->db->insert('patient_antecedent', $data);
+        echo $this->db->insert_id();
     }
 
     function delete_antecedent($antecedent_id = '')

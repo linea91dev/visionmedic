@@ -382,84 +382,62 @@ var app = '<?php echo base64_decode($id_);?>';
                                 ?>
                                 <div class="col-sm-12">
                                     <div class="form-group" style="border:1px solid #e6e8ee;border-radius:8px;padding:12px;margin-bottom:12px;">
-                                        <div style="font-size:12px;letter-spacing:.4px;color:#8b93a7;">ANTECEDENTES</div>
-                                        <div style="color:#047bf8;font-weight:700;margin-bottom:8px;">MD</div>
-                                        <div class="row">
-                                            <div class="col-sm-5">
-                                                <label>DIAGNÓSTICO</label>
-                                                <input type="text" class="form-control" id="ant_md_item_<?php echo $app_key; ?>">
+                                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                                            <div>
+                                                <div style="font-size:12px;letter-spacing:.4px;color:#8b93a7;">ANTECEDENTES</div>
+                                                <div style="color:#047bf8;font-weight:700;">MD</div>
                                             </div>
-                                            <div class="col-sm-5">
-                                                <label>TRATAMIENTO</label>
-                                                <input type="text" class="form-control" id="ant_md_tx_<?php echo $app_key; ?>">
-                                            </div>
-                                            <div class="col-sm-2" style="padding-top:24px;">
-                                                <a class="btn btn-success" href="javascript:void(0);" onclick="addAntecedent('md',<?php echo $app_key; ?>,<?php echo $det['patient_id']; ?>)">+</a>
-                                            </div>
-                                            <div class="col-sm-10" style="margin-top:8px;">
-                                                <label>NOTAS</label>
-                                                <textarea class="form-control" rows="2" id="ant_md_notes_<?php echo $app_key; ?>"></textarea>
-                                            </div>
+                                            <button type="button" class="btn btn-primary" style="border-radius:10px;min-width:42px;" onclick="addAntecedentRow('md',<?php echo $app_key; ?>,<?php echo $det['patient_id']; ?>)">+</button>
                                         </div>
-                                        <div id="ant_md_list_<?php echo $app_key; ?>" style="margin-top:10px;">
+                                        <div id="ant_md_rows_<?php echo $app_key; ?>" style="margin-top:8px;">
+                                            <?php if (count($ants_md) == 0) $ants_md[] = array('antecedent_id' => '', 'item' => '', 'treatment' => '', 'notes' => ''); ?>
                                             <?php foreach ($ants_md as $ant): ?>
-                                            <div style="border-top:1px solid #eee;padding:8px 0;">
-                                                <b>Diagnóstico:</b> <?php echo htmlspecialchars($ant['item']); ?>
-                                                <?php if ($ant['treatment'] != ''): ?> · <b>Tratamiento:</b> <?php echo htmlspecialchars($ant['treatment']); ?><?php endif; ?>
-                                                <?php if ($ant['notes'] != ''): ?><div><b>Notas:</b> <?php echo htmlspecialchars($ant['notes']); ?></div><?php endif; ?>
-                                                <a href="javascript:void(0);" onclick="deleteAntecedent(<?php echo $ant['antecedent_id']; ?>)" style="color:#fd4f57;float:right;">Eliminar</a>
+                                            <div class="ant-row" data-id="<?php echo $ant['antecedent_id']; ?>" data-type="md" data-patient="<?php echo $det['patient_id']; ?>" style="border-top:1px solid #f0f2f6;padding-top:10px;margin-top:8px;">
+                                                <div class="row">
+                                                    <div class="col-sm-6"><label>DIAGNÓSTICO</label><input type="text" class="form-control ant-item" onchange="saveAntecedentRow(this)" value="<?php echo htmlspecialchars($ant['item']); ?>"></div>
+                                                    <div class="col-sm-6"><label>TRATAMIENTO</label><input type="text" class="form-control ant-tx" onchange="saveAntecedentRow(this)" value="<?php echo htmlspecialchars($ant['treatment']); ?>"></div>
+                                                    <div class="col-sm-12" style="margin-top:8px;"><label>NOTAS</label><textarea class="form-control ant-notes" rows="2" onchange="saveAntecedentRow(this)"><?php echo htmlspecialchars($ant['notes']); ?></textarea></div>
+                                                </div>
                                             </div>
                                             <?php endforeach; ?>
                                         </div>
                                     </div>
                                     <div class="form-group" style="border:1px solid #e6e8ee;border-radius:8px;padding:12px;margin-bottom:12px;">
-                                        <div style="font-size:12px;letter-spacing:.4px;color:#8b93a7;">ANTECEDENTES</div>
-                                        <div style="color:#047bf8;font-weight:700;margin-bottom:8px;">QX</div>
-                                        <div class="row">
-                                            <div class="col-sm-5">
-                                                <label>CIRUGÍA</label>
-                                                <input type="text" class="form-control" id="ant_qx_item_<?php echo $app_key; ?>">
+                                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                                            <div>
+                                                <div style="font-size:12px;letter-spacing:.4px;color:#8b93a7;">ANTECEDENTES</div>
+                                                <div style="color:#047bf8;font-weight:700;">QX</div>
                                             </div>
-                                            <div class="col-sm-5">
-                                                <label>NOTAS</label>
-                                                <textarea class="form-control" rows="2" id="ant_qx_notes_<?php echo $app_key; ?>"></textarea>
-                                            </div>
-                                            <div class="col-sm-2" style="padding-top:24px;">
-                                                <a class="btn btn-success" href="javascript:void(0);" onclick="addAntecedent('qx',<?php echo $app_key; ?>,<?php echo $det['patient_id']; ?>)">+</a>
-                                            </div>
+                                            <button type="button" class="btn btn-primary" style="border-radius:10px;min-width:42px;" onclick="addAntecedentRow('qx',<?php echo $app_key; ?>,<?php echo $det['patient_id']; ?>)">+</button>
                                         </div>
-                                        <div id="ant_qx_list_<?php echo $app_key; ?>" style="margin-top:10px;">
+                                        <div id="ant_qx_rows_<?php echo $app_key; ?>" style="margin-top:8px;">
+                                            <?php if (count($ants_qx) == 0) $ants_qx[] = array('antecedent_id' => '', 'item' => '', 'treatment' => '', 'notes' => ''); ?>
                                             <?php foreach ($ants_qx as $ant): ?>
-                                            <div style="border-top:1px solid #eee;padding:8px 0;">
-                                                <b>Cirugía:</b> <?php echo htmlspecialchars($ant['item']); ?>
-                                                <?php if ($ant['notes'] != ''): ?><div><b>Notas:</b> <?php echo htmlspecialchars($ant['notes']); ?></div><?php endif; ?>
-                                                <a href="javascript:void(0);" onclick="deleteAntecedent(<?php echo $ant['antecedent_id']; ?>)" style="color:#fd4f57;float:right;">Eliminar</a>
+                                            <div class="ant-row" data-id="<?php echo $ant['antecedent_id']; ?>" data-type="qx" data-patient="<?php echo $det['patient_id']; ?>" style="border-top:1px solid #f0f2f6;padding-top:10px;margin-top:8px;">
+                                                <div class="row">
+                                                    <div class="col-sm-6"><label>CIRUGÍA</label><input type="text" class="form-control ant-item" onchange="saveAntecedentRow(this)" value="<?php echo htmlspecialchars($ant['item']); ?>"></div>
+                                                    <div class="col-sm-6"><label>NOTAS</label><textarea class="form-control ant-notes" rows="2" onchange="saveAntecedentRow(this)"><?php echo htmlspecialchars($ant['notes']); ?></textarea></div>
+                                                </div>
                                             </div>
                                             <?php endforeach; ?>
                                         </div>
                                     </div>
                                     <div class="form-group" style="border:1px solid #e6e8ee;border-radius:8px;padding:12px;margin-bottom:12px;">
-                                        <div style="font-size:12px;letter-spacing:.4px;color:#8b93a7;">ANTECEDENTES</div>
-                                        <div style="color:#047bf8;font-weight:700;margin-bottom:8px;">ALG</div>
-                                        <div class="row">
-                                            <div class="col-sm-5">
-                                                <label>ALERGIA</label>
-                                                <input type="text" class="form-control" id="ant_alg_item_<?php echo $app_key; ?>">
+                                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                                            <div>
+                                                <div style="font-size:12px;letter-spacing:.4px;color:#8b93a7;">ANTECEDENTES</div>
+                                                <div style="color:#047bf8;font-weight:700;">ALG</div>
                                             </div>
-                                            <div class="col-sm-5">
-                                                <label>NOTAS</label>
-                                                <textarea class="form-control" rows="2" id="ant_alg_notes_<?php echo $app_key; ?>"></textarea>
-                                            </div>
-                                            <div class="col-sm-2" style="padding-top:24px;">
-                                                <a class="btn btn-success" href="javascript:void(0);" onclick="addAntecedent('alg',<?php echo $app_key; ?>,<?php echo $det['patient_id']; ?>)">+</a>
-                                            </div>
+                                            <button type="button" class="btn btn-primary" style="border-radius:10px;min-width:42px;" onclick="addAntecedentRow('alg',<?php echo $app_key; ?>,<?php echo $det['patient_id']; ?>)">+</button>
                                         </div>
-                                        <div id="ant_alg_list_<?php echo $app_key; ?>" style="margin-top:10px;">
+                                        <div id="ant_alg_rows_<?php echo $app_key; ?>" style="margin-top:8px;">
+                                            <?php if (count($ants_alg) == 0) $ants_alg[] = array('antecedent_id' => '', 'item' => '', 'treatment' => '', 'notes' => ''); ?>
                                             <?php foreach ($ants_alg as $ant): ?>
-                                            <div style="border-top:1px solid #eee;padding:8px 0;">
-                                                <b>Alergia:</b> <?php echo htmlspecialchars($ant['item']); ?>
-                                                <?php if ($ant['notes'] != ''): ?><div><b>Notas:</b> <?php echo htmlspecialchars($ant['notes']); ?></div><?php endif; ?>
-                                                <a href="javascript:void(0);" onclick="deleteAntecedent(<?php echo $ant['antecedent_id']; ?>)" style="color:#fd4f57;float:right;">Eliminar</a>
+                                            <div class="ant-row" data-id="<?php echo $ant['antecedent_id']; ?>" data-type="alg" data-patient="<?php echo $det['patient_id']; ?>" style="border-top:1px solid #f0f2f6;padding-top:10px;margin-top:8px;">
+                                                <div class="row">
+                                                    <div class="col-sm-6"><label>ALERGIA</label><input type="text" class="form-control ant-item" onchange="saveAntecedentRow(this)" value="<?php echo htmlspecialchars($ant['item']); ?>"></div>
+                                                    <div class="col-sm-6"><label>NOTAS</label><textarea class="form-control ant-notes" rows="2" onchange="saveAntecedentRow(this)"><?php echo htmlspecialchars($ant['notes']); ?></textarea></div>
+                                                </div>
                                             </div>
                                             <?php endforeach; ?>
                                         </div>
@@ -1195,25 +1173,47 @@ function showGraphics() {
     $('#graphics').toggle();
 }
 
-function addAntecedent(type, appId, patientId) {
-    var item = $('#ant_' + type + '_item_' + appId).val();
-    var treatment = $('#ant_' + type + '_tx_' + appId).length ? $('#ant_' + type + '_tx_' + appId).val() : '';
-    var notes = $('#ant_' + type + '_notes_' + appId).val();
-    if (!item) {
+function addAntecedentRow(type, appId, patientId) {
+    var fields = '';
+    if (type === 'md') {
+        fields = '<div class="col-sm-6"><label>DIAGNÓSTICO</label><input type="text" class="form-control ant-item" onchange="saveAntecedentRow(this)"></div>' +
+            '<div class="col-sm-6"><label>TRATAMIENTO</label><input type="text" class="form-control ant-tx" onchange="saveAntecedentRow(this)"></div>' +
+            '<div class="col-sm-12" style="margin-top:8px;"><label>NOTAS</label><textarea class="form-control ant-notes" rows="2" onchange="saveAntecedentRow(this)"></textarea></div>';
+    } else if (type === 'qx') {
+        fields = '<div class="col-sm-6"><label>CIRUGÍA</label><input type="text" class="form-control ant-item" onchange="saveAntecedentRow(this)"></div>' +
+            '<div class="col-sm-6"><label>NOTAS</label><textarea class="form-control ant-notes" rows="2" onchange="saveAntecedentRow(this)"></textarea></div>';
+    } else {
+        fields = '<div class="col-sm-6"><label>ALERGIA</label><input type="text" class="form-control ant-item" onchange="saveAntecedentRow(this)"></div>' +
+            '<div class="col-sm-6"><label>NOTAS</label><textarea class="form-control ant-notes" rows="2" onchange="saveAntecedentRow(this)"></textarea></div>';
+    }
+    var row = '<div class="ant-row" data-id="" data-type="' + type + '" data-patient="' + patientId + '" style="border-top:1px solid #f0f2f6;padding-top:10px;margin-top:8px;"><div class="row">' + fields + '</div></div>';
+    $('#ant_' + type + '_rows_' + appId).append(row);
+}
+
+function saveAntecedentRow(el) {
+    var row = $(el).closest('.ant-row');
+    var item = row.find('.ant-item').val() || '';
+    var treatment = row.find('.ant-tx').length ? row.find('.ant-tx').val() : '';
+    var notes = row.find('.ant-notes').val() || '';
+    if (item === '' && treatment === '' && notes === '') {
         return;
     }
     $.ajax({
         url: base_url + 'doctor/save_antecedent',
         type: 'POST',
         data: {
-            patient_id: patientId,
-            type: type,
+            antecedent_id: row.attr('data-id'),
+            patient_id: row.attr('data-patient'),
+            type: row.attr('data-type'),
             item: item,
             treatment: treatment,
             notes: notes
         },
-        success: function() {
-            location.reload();
+        success: function(resp) {
+            var id = $.trim(resp);
+            if (id) {
+                row.attr('data-id', id);
+            }
         }
     });
 }
