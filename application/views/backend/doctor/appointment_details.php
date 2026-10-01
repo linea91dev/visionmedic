@@ -313,12 +313,12 @@ var app = '<?php echo base64_decode($id_);?>';
                         'seg_conjuntiva_od', 'seg_conjuntiva_os', 'seg_esclera_od', 'seg_esclera_os',
                         'seg_cornea_od', 'seg_cornea_os', 'seg_camara_od', 'seg_camara_os',
                         'seg_iris_od', 'seg_iris_os', 'seg_pupila_od', 'seg_pupila_os',
-                        'seg_cristalino_od', 'seg_cristalino_os',
+                        'seg_cristalino_od', 'seg_cristalino_os', 'seg_gonioscopia_od', 'seg_gonioscopia_os',
                         'seg_vias_od_nota', 'seg_vias_os_nota', 'seg_parpados_od_nota', 'seg_parpados_os_nota',
                         'seg_conjuntiva_od_nota', 'seg_conjuntiva_os_nota', 'seg_esclera_od_nota', 'seg_esclera_os_nota',
                         'seg_cornea_od_nota', 'seg_cornea_os_nota', 'seg_camara_od_nota', 'seg_camara_os_nota',
                         'seg_iris_od_nota', 'seg_iris_os_nota', 'seg_pupila_od_nota', 'seg_pupila_os_nota',
-                        'seg_cristalino_od_nota', 'seg_cristalino_os_nota',
+                        'seg_cristalino_od_nota', 'seg_cristalino_os_nota', 'seg_gonioscopia_od_nota', 'seg_gonioscopia_os_nota',
                         'rx_comentario',
                         'rx_final_od_esf', 'rx_final_od_cil', 'rx_final_od_eje', 'rx_final_od_prisma', 'rx_final_od_base',
                         'rx_final_os_esf', 'rx_final_os_cil', 'rx_final_os_eje', 'rx_final_os_prisma', 'rx_final_os_base',
@@ -682,7 +682,8 @@ var app = '<?php echo base64_decode($id_);?>';
                                         array('key' => 'camara', 'label' => 'CÁMARA ANTERIOR', 'opts' => array('profunda' => 'PROFUNDA', 'estrecha' => 'ESTRECHA', 'otro' => 'OTRO')),
                                         array('key' => 'iris', 'label' => 'IRIS', 'opts' => array('ok' => 'OK', 'diferido' => 'DIFERIDO', 'otro' => 'OTRO')),
                                         array('key' => 'pupila', 'label' => 'PUPILA', 'opts' => array('ok' => 'OK', 'diferido' => 'DIFERIDO', 'otro' => 'OTRO')),
-                                        array('key' => 'cristalino', 'label' => 'CRISTALINO', 'opts' => array('ok' => 'OK', 'diferido' => 'DIFERIDO', 'otro' => 'OTRO'))
+                                        array('key' => 'cristalino', 'label' => 'CRISTALINO', 'opts' => array('ok' => 'OK', 'diferido' => 'DIFERIDO', 'otro' => 'OTRO')),
+                                        array('key' => 'gonioscopia', 'label' => 'GONIOSCOPIA', 'opts' => array('ok' => 'OK', 'diferido' => 'DIFERIDO', 'otro' => 'OTRO'))
                                     );
                                 ?>
                                                                 <div class="col-sm-12">
@@ -846,88 +847,6 @@ var app = '<?php echo base64_decode($id_);?>';
                                     };
                                 }
                                 </script>
-                                <div class="col-sm-12">
-                                    <div class="form-group">
-                                        <b>Exploración oftalmológica:</b>
-                                        <div class="row" style="margin-top:8px;">
-                                            <div class="col-sm-12">
-                                                <div class="table-responsive">
-                                                    <table class="table table-bordered" style="margin-bottom:10px;">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>LH</th>
-                                                                <th>OD</th>
-                                                                <th>OS</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>Vías lagrimales</td>
-                                                                <td><input class="form-control" onchange="updateConsulta('oft_vias_lagrimales_od',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['oft_vias_lagrimales_od'];?>"></td>
-                                                                <td><input class="form-control" onchange="updateConsulta('oft_vias_lagrimales_os',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['oft_vias_lagrimales_os'];?>"></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Párpados y pestañas</td>
-                                                                <td><input class="form-control" onchange="updateConsulta('oft_parpados_pestanas_od',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['oft_parpados_pestanas_od'];?>"></td>
-                                                                <td><input class="form-control" onchange="updateConsulta('oft_parpados_pestanas_os',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['oft_parpados_pestanas_os'];?>"></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Conjuntiva</td>
-                                                                <td><input class="form-control" onchange="updateConsulta('oft_conjuntiva_od',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['oft_conjuntiva_od'];?>"></td>
-                                                                <td><input class="form-control" onchange="updateConsulta('oft_conjuntiva_os',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['oft_conjuntiva_os'];?>"></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Esclera y córnea</td>
-                                                                <td><input class="form-control" onchange="updateConsulta('oft_esclera_cornea_od',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['oft_esclera_cornea_od'];?>"></td>
-                                                                <td><input class="form-control" onchange="updateConsulta('oft_esclera_cornea_os',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['oft_esclera_cornea_os'];?>"></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Cámara anterior</td>
-                                                                <td><input class="form-control" onchange="updateConsulta('oft_camara_anterior_od',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['oft_camara_anterior_od'];?>"></td>
-                                                                <td><input class="form-control" onchange="updateConsulta('oft_camara_anterior_os',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['oft_camara_anterior_os'];?>"></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Iris</td>
-                                                                <td><input class="form-control" onchange="updateConsulta('oft_iris_od',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['oft_iris_od'];?>"></td>
-                                                                <td><input class="form-control" onchange="updateConsulta('oft_iris_os',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['oft_iris_os'];?>"></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Cristalino</td>
-                                                                <td><input class="form-control" onchange="updateConsulta('oft_cristalino_od',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['oft_cristalino_od'];?>"></td>
-                                                                <td><input class="form-control" onchange="updateConsulta('oft_cristalino_os',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['oft_cristalino_os'];?>"></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Gonioscopia</td>
-                                                                <td><input class="form-control" onchange="updateConsulta('oft_gonioscopia_od',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['oft_gonioscopia_od'];?>"></td>
-                                                                <td><input class="form-control" onchange="updateConsulta('oft_gonioscopia_os',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['oft_gonioscopia_os'];?>"></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Vítreo</td>
-                                                                <td><input class="form-control" onchange="updateConsulta('oft_vitreo_od',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['oft_vitreo_od'];?>"></td>
-                                                                <td><input class="form-control" onchange="updateConsulta('oft_vitreo_os',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['oft_vitreo_os'];?>"></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Nervio óptico</td>
-                                                                <td><input class="form-control" onchange="updateConsulta('oft_nervio_optico_od',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['oft_nervio_optico_od'];?>"></td>
-                                                                <td><input class="form-control" onchange="updateConsulta('oft_nervio_optico_os',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['oft_nervio_optico_os'];?>"></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Retina p. post</td>
-                                                                <td><input class="form-control" onchange="updateConsulta('oft_retina_p_post_od',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['oft_retina_p_post_od'];?>"></td>
-                                                                <td><input class="form-control" onchange="updateConsulta('oft_retina_p_post_os',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['oft_retina_p_post_os'];?>"></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Retina periférica</td>
-                                                                <td><input class="form-control" onchange="updateConsulta('oft_retina_periferica_od',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['oft_retina_periferica_od'];?>"></td>
-                                                                <td><input class="form-control" onchange="updateConsulta('oft_retina_periferica_os',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['oft_retina_periferica_os'];?>"></td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <b>Esquema gráfico ocular:</b>
