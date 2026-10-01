@@ -28,7 +28,9 @@
                             <tr>
                                 <td>
                                     <div class="user-with-avatar">
-                                        <img alt="" src="<?php echo $this->accounts_model->get_photo('patient', $pt['patient_id']);?>"><span> <?php echo $this->accounts_model->get_name('patient', $pt['patient_id']);?> </span>
+                                        <a href="<?php echo base_url(); ?>doctor/patient_profile/<?php echo base64_encode($pt['patient_id']); ?>" style="text-decoration:none;color:inherit;">
+                                            <img alt="" src="<?php echo $this->accounts_model->get_photo('patient', $pt['patient_id']);?>"><span> <?php echo $this->accounts_model->get_name('patient', $pt['patient_id']);?> </span>
+                                        </a>
                                     </div>
                                 </td>
                                 <td>
@@ -49,21 +51,15 @@
                                 </td>
                                 <td>
                                     <span class="smaller lighter">
-                                    <?php 
-                                        $this->db->order_by('appointment_id', 'desc');
-                                        $this->db->where('patient_id', $pt['patient_id']);
-                                        $app_pt = $this->db->get('appointment')->row();
-                                        echo $this->crud_model->formatear2($app_pt->date);      
-                                    ?>
+                                    <?php echo $this->crud_model->formatear2($this->crud_model->date_appointment($pt['patient_id'])); ?>
                                     </span>
                                 </td>
                                 <td class="nowrap">
                                     <span style="color:#99bf2d;font-weight:bold;    font-family: 'CircularStd', sans-serif;font-size: 13px;">
                                     <?php
-									   $originalDate = $pt['date_of_birth'];
-                                        $newDate = date("d-m-Y", strtotime($originalDate));
+                                        $birth = strtotime($pt['date_of_birth']);
+                                        echo $birth ? $this->accounts_model->get_age(date('d/m/Y', $birth)) : '';
                                     ?>
-                                    <?php echo $this->accounts_model->get_age($newDate);?>
                                     </span>
                                 </td>
                                 <td class="row-actions">
