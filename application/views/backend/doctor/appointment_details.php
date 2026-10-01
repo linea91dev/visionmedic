@@ -380,14 +380,7 @@ var app = '<?php echo base64_decode($id_);?>';
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <b>Motivo de consulta:</b>
-                                        <textarea cols="80" class="form-control" name="instructions" rows="1" onchange="updateConsulta('mc',<?php echo $details['appointment_id'] ?>,this.value)"><?php echo $details['comment']; ?></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12">
-                                    <div class="form-group">
-                                        <b>MC:</b>
-                                        <textarea cols="80" class="form-control" name="ckplan" rows="5" onchange="updateConsulta('he',<?php echo $details['appointment_id'] ?>,this.value)"><?php   echo $details['he']?>
-                                        </textarea>
+                                        <textarea cols="80" class="form-control" name="instructions" rows="5" onchange="updateConsulta('comment',<?php echo $details['appointment_id'] ?>,this.value)"><?php echo $details['comment']; ?></textarea>
                                     </div>
                                 </div>
                                 <div class="col-sm-12">
