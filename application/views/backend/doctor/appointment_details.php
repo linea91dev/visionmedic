@@ -563,17 +563,17 @@ var app = '<?php echo base64_decode($id_);?>';
                                             <div class="col-sm-1"><b><?php echo $eye_label; ?></b></div>
                                             <div class="col-sm-11">
                                                 <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;margin-bottom:8px;">
-                                                    <div><label style="display:block;font-size:12px;color:#047bf8;">K1</label><input class="form-control" style="width:90px;" onchange="updateConsulta('kera_<?php echo $eye; ?>_k1',<?php echo $aid; ?>,this.value)" value="<?php echo $details['kera_'.$eye.'_k1']; ?>"></div>
+                                                    <div><label style="display:block;font-size:12px;color:#047bf8;">K1</label><input id="kera_<?php echo $eye; ?>_k1_<?php echo $aid; ?>" class="form-control" style="width:90px;" onchange="syncKeraProm('<?php echo $eye; ?>',<?php echo $aid; ?>,'k1',this.value)" value="<?php echo $details['kera_'.$eye.'_k1']; ?>"></div>
                                                     <span style="padding-bottom:8px;">x</span>
-                                                    <div><label style="display:block;font-size:12px;color:#047bf8;">EJE</label><input class="form-control" style="width:90px;" onchange="updateConsulta('kera_<?php echo $eye; ?>_k1_eje',<?php echo $aid; ?>,this.value)" value="<?php echo $details['kera_'.$eye.'_k1_eje']; ?>"></div>
+                                                    <div><label style="display:block;font-size:12px;color:#047bf8;">EJE</label><input class="form-control" style="width:90px;" onchange="syncKeraEje('<?php echo $eye; ?>',<?php echo $aid; ?>,this.value)" value="<?php echo $details['kera_'.$eye.'_k1_eje']; ?>"></div>
                                                     <label style="padding-bottom:8px;"><input type="checkbox" <?php echo $details['kera_'.$eye.'_k1_nomarca'] == '1' ? 'checked' : ''; ?> onchange="updateConsulta('kera_<?php echo $eye; ?>_k1_nomarca',<?php echo $aid; ?>,this.checked ? '1' : '0')"> NO MARCA</label>
                                                     <label style="padding-bottom:8px;"><input type="checkbox" <?php echo $details['kera_'.$eye.'_k1_irregular'] == '1' ? 'checked' : ''; ?> onchange="updateConsulta('kera_<?php echo $eye; ?>_k1_irregular',<?php echo $aid; ?>,this.checked ? '1' : '0')"> IRREGULAR</label>
-                                                    <div><label style="display:block;font-size:12px;color:#047bf8;">K PROM</label><input class="form-control" style="width:90px;" onchange="updateConsulta('kera_<?php echo $eye; ?>_kprom',<?php echo $aid; ?>,this.value)" value="<?php echo $details['kera_'.$eye.'_kprom']; ?>"></div>
+                                                    <div><label style="display:block;font-size:12px;color:#047bf8;">K PROM</label><input id="kera_<?php echo $eye; ?>_kprom_<?php echo $aid; ?>" class="form-control" style="width:90px;" onchange="updateConsulta('kera_<?php echo $eye; ?>_kprom',<?php echo $aid; ?>,this.value)" value="<?php echo $details['kera_'.$eye.'_kprom']; ?>"></div>
                                                 </div>
                                                 <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;">
-                                                    <div><label style="display:block;font-size:12px;color:#047bf8;">K2</label><input class="form-control" style="width:90px;" onchange="updateConsulta('kera_<?php echo $eye; ?>_k2',<?php echo $aid; ?>,this.value)" value="<?php echo $details['kera_'.$eye.'_k2']; ?>"></div>
+                                                    <div><label style="display:block;font-size:12px;color:#047bf8;">K2</label><input id="kera_<?php echo $eye; ?>_k2_<?php echo $aid; ?>" class="form-control" style="width:90px;" onchange="syncKeraProm('<?php echo $eye; ?>',<?php echo $aid; ?>,'k2',this.value)" value="<?php echo $details['kera_'.$eye.'_k2']; ?>"></div>
                                                     <span style="padding-bottom:8px;">x</span>
-                                                    <div><label style="display:block;font-size:12px;color:#047bf8;">EJE</label><input class="form-control" style="width:90px;" onchange="updateConsulta('kera_<?php echo $eye; ?>_k2_eje',<?php echo $aid; ?>,this.value)" value="<?php echo $details['kera_'.$eye.'_k2_eje']; ?>"></div>
+                                                    <div><label style="display:block;font-size:12px;color:#047bf8;">EJE</label><input id="kera_<?php echo $eye; ?>_k2_eje_<?php echo $aid; ?>" class="form-control" style="width:90px;" onchange="updateConsulta('kera_<?php echo $eye; ?>_k2_eje',<?php echo $aid; ?>,this.value)" value="<?php echo $details['kera_'.$eye.'_k2_eje']; ?>"></div>
                                                     <label style="padding-bottom:8px;"><input type="checkbox" <?php echo $details['kera_'.$eye.'_k2_nomarca'] == '1' ? 'checked' : ''; ?> onchange="updateConsulta('kera_<?php echo $eye; ?>_k2_nomarca',<?php echo $aid; ?>,this.checked ? '1' : '0')"> NO MARCA</label>
                                                     <label style="padding-bottom:8px;"><input type="checkbox" <?php echo $details['kera_'.$eye.'_k2_irregular'] == '1' ? 'checked' : ''; ?> onchange="updateConsulta('kera_<?php echo $eye; ?>_k2_irregular',<?php echo $aid; ?>,this.checked ? '1' : '0')"> IRREGULAR</label>
                                                 </div>
@@ -1462,6 +1462,31 @@ var avNotationRows = [
     ['1.5', '20/13', '6/4', '1.5', '20/13', ''],
     ['2.0', '20/10', '6/3', '2', '20/10', '']
 ];
+
+function syncKeraProm(eye, appId, which, value) {
+    updateConsulta('kera_' + eye + '_' + which, appId, value);
+    var k1 = document.getElementById('kera_' + eye + '_k1_' + appId);
+    var k2 = document.getElementById('kera_' + eye + '_k2_' + appId);
+    var prom = document.getElementById('kera_' + eye + '_kprom_' + appId);
+    if (!k1 || !k2 || !prom) return;
+    var a = parseFloat(String(k1.value).replace(',', '.'));
+    var b = parseFloat(String(k2.value).replace(',', '.'));
+    if (isNaN(a) || isNaN(b)) return;
+    var avg = Math.round(((a + b) / 2) * 100) / 100;
+    prom.value = avg;
+    updateConsulta('kera_' + eye + '_kprom', appId, avg);
+}
+
+function syncKeraEje(eye, appId, value) {
+    updateConsulta('kera_' + eye + '_k1_eje', appId, value);
+    var n = parseFloat(String(value).replace(',', '.'));
+    if (isNaN(n)) return;
+    var k2 = n + 90;
+    if (k2 > 180) k2 = n - 90;
+    var box = document.getElementById('kera_' + eye + '_k2_eje_' + appId);
+    if (box) box.value = k2;
+    updateConsulta('kera_' + eye + '_k2_eje', appId, k2);
+}
 
 function openAvNotation(el, field, appId, title) {
     avNotationTarget = { el: el, field: field, appId: appId };
