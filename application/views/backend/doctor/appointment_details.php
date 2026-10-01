@@ -814,6 +814,38 @@ var app = '<?php echo base64_decode($id_);?>';
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-sm-12" style="margin-bottom:12px;">
+                                    <?php if ($details['status'] == 11): ?>
+                                        <span style="display:inline-block;background:#6b4c9a;color:#fff;border-radius:4px;padding:6px 12px;font-size:13px;">En fondo de ojo</span>
+                                    <?php elseif ($details['status'] == 0 || $details['status'] == 1): ?>
+                                        <a class="btn btn-sm" style="background:#6b4c9a;color:#fff;" href="javascript:void(0);" onclick="sendFondoDetalle(<?php echo $details['appointment_id']; ?>)">Enviar a fondo de ojo</a>
+                                    <?php endif; ?>
+                                </div>
+                                <script>
+                                if (typeof window.sendFondoDetalle !== 'function') {
+                                    window.sendFondoDetalle = function(appointment_id) {
+                                        Swal.fire({
+                                            title: '¿Enviar a fondo de ojo?',
+                                            text: 'La cita saldrá de la lista del día y quedará pendiente para retomarla.',
+                                            type: 'info',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#9fd13b',
+                                            cancelButtonColor: '#fd4f57',
+                                            confirmButtonText: 'Enviar',
+                                            cancelButtonText: 'Cancelar'
+                                        }).then(function(result) {
+                                            if (result.value) {
+                                                $.ajax({
+                                                    url: '<?php echo base_url(); ?>doctor/appointments/fondo/' + appointment_id,
+                                                    success: function() {
+                                                        location.reload();
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    };
+                                }
+                                </script>
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <b>Exploración oftalmológica:</b>
@@ -914,12 +946,12 @@ var app = '<?php echo base64_decode($id_);?>';
                                             <div class="col-sm-6 col-md-3">
                                                 <label><b>O.D. (fondo)</b></label>
                                                 <canvas id="graf_od_fondo_<?php echo $details['appointment_id']; ?>" width="240" height="150" style="width:100%; border:1px solid #c6c6cc; border-radius:8px; background:#fff; touch-action:none;"></canvas>
-                                                <a class="btn btn-default btn-sm" style="margin-top:6px;" href="javascript:void(0);" onclick="clearOcularCanvas('graf_od_fondo_<?php echo $details['appointment_id']; ?>','graf_od_fondo',<?php echo $details['appointment_id']; ?>,'retina')">Limpiar</a>
+                                                <a class="btn btn-default btn-sm" style="margin-top:6px;" href="javascript:void(0);" onclick="clearOcularCanvas('graf_od_fondo_<?php echo $details['appointment_id']; ?>','graf_od_fondo',<?php echo $details['appointment_id']; ?>,'retina-od')">Limpiar</a>
                                             </div>
                                             <div class="col-sm-6 col-md-3">
                                                 <label><b>O.S. (fondo)</b></label>
                                                 <canvas id="graf_os_fondo_<?php echo $details['appointment_id']; ?>" width="240" height="150" style="width:100%; border:1px solid #c6c6cc; border-radius:8px; background:#fff; touch-action:none;"></canvas>
-                                                <a class="btn btn-default btn-sm" style="margin-top:6px;" href="javascript:void(0);" onclick="clearOcularCanvas('graf_os_fondo_<?php echo $details['appointment_id']; ?>','graf_os_fondo',<?php echo $details['appointment_id']; ?>,'retina')">Limpiar</a>
+                                                <a class="btn btn-default btn-sm" style="margin-top:6px;" href="javascript:void(0);" onclick="clearOcularCanvas('graf_os_fondo_<?php echo $details['appointment_id']; ?>','graf_os_fondo',<?php echo $details['appointment_id']; ?>,'retina-os')">Limpiar</a>
                                             </div>
                                         </div>
                                     </div>
@@ -948,19 +980,24 @@ var app = '<?php echo base64_decode($id_);?>';
                                                 ctx.fillStyle = '#1f1f1f';
                                                 ctx.fill();
                                             } else {
+                                                var cx = width / 2;
+                                                var cy = height / 2;
+                                                var nasal = type === 'retina-od' ? 22 : (type === 'retina-os' ? -22 : 0);
+                                                var dx = cx + nasal;
+                                                var dy = cy;
                                                 ctx.beginPath();
-                                                ctx.arc(width / 2, height / 2, 55, 0, Math.PI * 2);
+                                                ctx.arc(cx, cy, 55, 0, Math.PI * 2);
                                                 ctx.stroke();
                                                 ctx.beginPath();
-                                                ctx.arc(width / 2, height / 2, 10, 0, Math.PI * 2);
+                                                ctx.arc(dx, dy, 9, 0, Math.PI * 2);
                                                 ctx.stroke();
                                                 ctx.beginPath();
-                                                ctx.moveTo(width / 2 - 50, height / 2 - 35);
-                                                ctx.bezierCurveTo(width / 2 + 10, height / 2 - 55, width / 2 + 20, height / 2 + 15, width / 2 - 45, height / 2 + 35);
+                                                ctx.moveTo(dx - 30, dy - 24);
+                                                ctx.bezierCurveTo(dx + 8, dy - 46, dx + 14, dy + 12, dx - 26, dy + 28);
                                                 ctx.stroke();
                                                 ctx.beginPath();
-                                                ctx.moveTo(width / 2 + 50, height / 2 - 35);
-                                                ctx.bezierCurveTo(width / 2 - 10, height / 2 - 55, width / 2 - 20, height / 2 + 15, width / 2 + 45, height / 2 + 35);
+                                                ctx.moveTo(dx + 30, dy - 24);
+                                                ctx.bezierCurveTo(dx - 8, dy - 46, dx - 14, dy + 12, dx + 26, dy + 28);
                                                 ctx.stroke();
                                             }
                                         };
@@ -1065,14 +1102,14 @@ var app = '<?php echo base64_decode($id_);?>';
                                         id: 'graf_od_fondo_<?php echo $details['appointment_id']; ?>',
                                         field: 'graf_od_fondo',
                                         appId: <?php echo $details['appointment_id']; ?>,
-                                        template: 'retina',
+                                        template: 'retina-od',
                                         value: <?php echo json_encode($details['graf_od_fondo']); ?>
                                     });
                                     window.setupOcularCanvas({
                                         id: 'graf_os_fondo_<?php echo $details['appointment_id']; ?>',
                                         field: 'graf_os_fondo',
                                         appId: <?php echo $details['appointment_id']; ?>,
-                                        template: 'retina',
+                                        template: 'retina-os',
                                         value: <?php echo json_encode($details['graf_os_fondo']); ?>
                                     });
                                 })();
