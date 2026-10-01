@@ -518,69 +518,6 @@ var app = '<?php echo base64_decode($id_);?>';
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-12 row">
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <b>M:(x)</b>
-                                            <input class="form-control" name="instructions" onchange="updateConsulta('w',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['w'];?>"></input>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <b>Q:(x)</b>
-                                            <input class="form-control" name="instructions" onchange="updateConsulta('t',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['t'];?>"></input>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <b>Far(x):</b>
-                                            <input class="form-control" name="instructions" onchange="updateConsulta('cc',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['cc'];?>"></input>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <b>FECHA:</b>
-                                            <input class="form-control" name="instructions" onchange="updateConsulta('imc',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['imc'];?>"></input>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <div class="form-group">
-                                            <b>FAM:</b>
-                                            <hr>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <b>DM:</b>
-                                            <input class="form-control" name="instructions" onchange="updateConsulta('temp',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['temp'];?>"></input>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <b>HTA:</b>
-                                            <input class="form-control" name="instructions" onchange="updateConsulta('fr',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['fr'];?>"></input>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <b>Corazon:</b>
-                                            <input class="form-control" name="instructions" onchange="updateConsulta('fc',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['fc'];?>"></input>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <b>CA:</b>
-                                            <input class="form-control" name="instructions" onchange="updateConsulta('pa',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['pa'];?>"></input>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <b>ACV:</b>
-                                            <input class="form-control" name="instructions" onchange="updateConsulta('so2',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['so2'];?>"></input>
-                                        </div>
-                                    </div>
-                                </div>
-                                
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <b>Evaluación visual:</b>
