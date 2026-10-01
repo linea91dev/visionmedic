@@ -892,16 +892,6 @@ var app = '<?php echo base64_decode($id_);?>';
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-sm-6">
-                                                        <label><b>IC:</b></label>
-                                                        <textarea class="form-control" rows="2" onchange="updateConsulta('oft_ic',<?php echo $details['appointment_id'] ?>,this.value)"><?php echo $details['oft_ic'];?></textarea>
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <label><b>Tx:</b></label>
-                                                        <textarea class="form-control" rows="2" onchange="updateConsulta('oft_tx',<?php echo $details['appointment_id'] ?>,this.value)"><?php echo $details['oft_tx'];?></textarea>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
