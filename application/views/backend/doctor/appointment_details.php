@@ -601,7 +601,9 @@ var app = '<?php echo base64_decode($id_);?>';
                                             <span>x</span>
                                             <input class="form-control" style="width:90px;" onchange="updateConsulta('ar_<?php echo $eye; ?>_eje',<?php echo $aid; ?>,this.value)" value="<?php echo $details['ar_'.$eye.'_eje']; ?>">
                                             <label style="width:90px;margin:0;"><input type="checkbox" <?php echo $details['ar_'.$eye.'_nomarca'] == '1' ? 'checked' : ''; ?> onchange="updateConsulta('ar_<?php echo $eye; ?>_nomarca',<?php echo $aid; ?>,this.checked ? '1' : '0')"></label>
-                                            <input class="form-control" style="width:90px;" onchange="updateConsulta('ar_<?php echo $eye; ?>_dip',<?php echo $aid; ?>,this.value)" value="<?php echo $details['ar_'.$eye.'_dip']; ?>">
+                                            <?php if ($eye == 'od'): ?>
+                                            <input class="form-control" style="width:90px;" onchange="updateConsulta('ar_od_dip',<?php echo $aid; ?>,this.value)" value="<?php echo $details['ar_od_dip']; ?>">
+                                            <?php endif; ?>
                                         </div>
                                         <?php endforeach; ?>
                                         <div style="margin-top:12px;">
