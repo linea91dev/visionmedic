@@ -217,12 +217,6 @@ var user_id = '<?php echo $this->session->userdata('login_user_id');?>';
                                                 <input type="text" class="form-control" name="second_last_name">
                                             </div>
                                         </div>
-                                        <div class="col-sm-3" style="display:none;" id="dpi">
-                                            <div class="form-group m-b-15">
-                                                <label for="simpleinput">DPI</label><span class="error_show" id="errordpi"></span>
-                                                <input type="number" class="form-control" name="dpi" id="">
-                                            </div>
-                                        </div>
                                         <div class="col-sm-3" style="display:none;" id="phone">
                                             <div class="form-group m-b-15">
                                                 <label for="simpleinput">Celular</label><span class="error_show" id="errorp"></span>
@@ -230,10 +224,16 @@ var user_id = '<?php echo $this->session->userdata('login_user_id');?>';
                                                 <small>* Ingresar código de área p.j: 502xxxxxxxx</small>
                                             </div>
                                         </div>
-                                        <div class="col-sm-3" style="display:none;" id="email">
+                                        <div class="col-sm-3" style="display:none;" id="dpi">
                                             <div class="form-group m-b-15">
-                                                <label for="simpleinput">Correo electronico:</label><span class="error_show" id="errorm"></span>
-                                                <input type="text" class="form-control" name="email">
+                                                <label for="simpleinput">DPI</label><span class="error_show" id="errordpi"></span>
+                                                <input type="number" class="form-control" name="dpi" id="">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3" style="display:none;" id="phone_contact">
+                                            <div class="form-group m-b-15">
+                                                <label for="simpleinput">Teléfono secundario</label>
+                                                <input type="text" class="form-control" name="phone_contact" maxlength="15">
                                             </div>
                                         </div>
                                         <div class="col-sm-3" id="date_of_birth" style="display:none">
@@ -289,3 +289,14 @@ var user_id = '<?php echo $this->session->userdata('login_user_id');?>';
     <script src="<?php echo base_url();?>public/assets/theme/js/select2.min.js"></script>
     <script src="<?php echo base_url();?>public/assets/theme/js/vanillaCalendar.js"></script>
     <script src="<?php echo base_url();?>public/assets/appointments/js/appointment_form.js"></script>
+    <script>
+    $(document).ready(function() {
+        $("input[name='patient_type']").on('click', function() {
+            if ($("#exist").is(":checked")) {
+                $("#dpi, #phone_contact").hide(500);
+            } else {
+                $("#dpi, #phone_contact").show(500);
+            }
+        });
+    });
+    </script>

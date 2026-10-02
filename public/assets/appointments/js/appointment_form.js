@@ -175,6 +175,8 @@ $(document).ready(function() {
             $("#address").hide(500);
             $("#second_last_name").hide(500);
             $("#phone").hide(500);
+            $("#dpi").hide(500);
+            $("#phone_contact").hide(500);
             $("#email").hide(500);
             $("#date_of_birth").hide(500);
             $("#whatsapp").hide(500);
@@ -189,7 +191,9 @@ $(document).ready(function() {
             $("#second_last_name").show(500);
             $("#address").show(500);
             $("#phone").show(500);
-            $("#email").show(500);
+            $("#dpi").show(500);
+            $("#phone_contact").show(500);
+            $("#email").hide(500);
             $("#date_of_birth").show(500);
             $("#whatsapp").show(500);
             $("#gender").show(500);

@@ -300,6 +300,7 @@ class Appointment_model extends CI_Model
             $data2['email']         = $this->input->post('email');
             $data2['dpi']         = $this->input->post('dpi');
             $data2['phone']         = $this->input->post('phone');
+            $data2['phone_contact'] = $this->input->post('phone_contact');
             $data2['gender']        = $this->input->post('gender');
             $data2['address']        = $this->input->post('address');
             $data2['marital_status']        = $this->input->post('marital_status');
