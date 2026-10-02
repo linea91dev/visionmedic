@@ -1058,7 +1058,7 @@ var app = '<?php echo base64_decode($id_);?>';
                                     <div class="form-group" style="border:1px solid #e6e8ee;border-radius:8px;padding:12px;">
                                         <div style="display:flex;justify-content:space-between;align-items:center;">
                                             <b>PLAN / TRATAMIENTO (TX)</b>
-                                            <a class="btn btn-primary btn-sm" target="_blank" href="<?php echo base_url();?>doctor/print_prescription_details/<?php echo $plan_id;?>">IMPRIMIR RECETA</a>
+                                            <a class="btn btn-primary btn-sm" target="_blank" href="<?php echo base_url();?>doctor/print_prescription_details/<?php echo $plan_id;?>/tratamiento">IMPRIMIR RECETA</a>
                                         </div>
                                         <div style="margin-top:10px;"><b>DX</b></div>
                                         <div id="plan_dx_<?php echo $plan_id; ?>">
@@ -1153,7 +1153,7 @@ var app = '<?php echo base64_decode($id_);?>';
                         </div>
                         <?php endif;  ?>
                         <div class="card-widget" style="border: 1px solid #c6c6cc;">
-                            <h5 class="panel-content-title">Receta</h5>
+                            <h5 class="panel-content-title">Receta de lentes</h5>
                             <span class="app-divider2"></span>
                             <?php $rxid = $details['appointment_id']; $rx_contacto = $details['rx_contacto'] == '' ? 'escleral' : $details['rx_contacto']; ?>
                             <div class="row">
@@ -1220,7 +1220,7 @@ var app = '<?php echo base64_decode($id_);?>';
                                 </div>
                                 <div class="col-sm-12">
                                     <hr>
-                                    <a class="btn btn-success" target="_blank" href="<?php echo base_url();?>doctor/print_prescription_details/<?php echo $details['appointment_id'];?>">Imprimir receta</a>
+                                    <a class="btn btn-success" target="_blank" href="<?php echo base_url();?>doctor/print_prescription_details/<?php echo $details['appointment_id'];?>/lentes">Imprimir receta de lentes</a>
                                 </div>
                             </div>
                         </div>

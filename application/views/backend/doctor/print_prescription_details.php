@@ -61,6 +61,10 @@
         $specialty_2 = $this->db->get_where('specialtie', array('specialtie_id' => $specialty_id_2))->row()->name;
     }
     $appointment_comment = $this->db->get_where('appointment', array('appointment_id' => $appointment_id))->row()->doctor_comment;
+    if (!isset($doc_type) || $doc_type != 'lentes') {
+        $doc_type = 'tratamiento';
+    }
+    $doc_title = ($doc_type == 'lentes') ? 'Receta de lentes' : 'Receta';
 ?>
 <body onload="window.print()">
     <div id="printMe" class="_print-content_ztkcf7 ember-view">
@@ -75,7 +79,7 @@
                     <p class="_header-license_ztkcf7">Colegiado: <b><?php echo $colegiado;?></b></p>
                 </div>
                 <div class="_header-meta_ztkcf7">
-                    <p><b>Receta</b></p>
+                    <p><b><?php echo $doc_title; ?></b></p>
                     <p>Generado por: <b>Medicaby</b></p>
                     <p>Impreso por: <b>
                          <?php if($this->session->userdata('login_type') == 'staff'): echo $this->accounts_model->short_name('staff',$this->session->userdata('login_user_id'));
@@ -103,23 +107,21 @@
                             <div class="ember-view">
                                 <div class="_is-subtitle_1cmxxr ember-view">  
                                     <img src="<?php echo base_url();?>public/uploads/pattern.png" alt="">
-                                    Receta
+                                    <?php echo $doc_title; ?>
                                 </div>
                             </div>
                             <div class="_prescription-drug_6ovcpi">
                                 <?php
                                     $rx = array();
-                                    if ($this->db->table_exists('appointment_oftalmology')) {
+                                    if ($doc_type == 'lentes' && $this->db->table_exists('appointment_oftalmology')) {
                                         $rx_row = $this->db->get_where('appointment_oftalmology', array('appointment_id' => $appointment_id))->row_array();
                                         if (is_array($rx_row)) $rx = $rx_row;
                                     }
                                     $rxv = function($key) use ($rx) {
                                         return isset($rx[$key]) ? $rx[$key] : '';
                                     };
-                                    $rx_mark = function($key) use ($rxv) {
-                                        return $rxv($key) == '1' ? 'Sí' : '';
-                                    };
                                 ?>
+                                <?php if ($doc_type == 'lentes'): ?>
                                 <?php if ($rxv('rx_comentario') != ''): ?>
                                 <p><b>Comentario:</b> <?php echo $rxv('rx_comentario'); ?></p>
                                 <?php endif; ?>
@@ -167,6 +169,7 @@
                                     ?>
                                 </p>
                                 <p><b>Final en lente de contacto:</b> <?php echo ($rxv('rx_contacto') == 'rigido') ? 'Rígido' : 'Escleral'; ?></p>
+                                <?php else: ?>
                                 <?php if ($this->db->table_exists('appointment_plan_dx')): $plan_dx = $this->db->get_where('appointment_plan_dx', array('appointment_id' => $appointment_id))->result_array(); ?>
                                 <?php if (count($plan_dx) > 0): ?>
                                 <p style="margin-top:10px;"><b>DX</b></p>
@@ -185,19 +188,20 @@
                                     <?php endforeach; ?>
                                 </table>
                                 <?php endif; endif; ?>
-                            </div>
-                            <?php if($appointment_comment != ''): ?>
-                            <div>
-                                <p class="_medical-instructions-title_6ovcpi">Instrucciones Médicas:</p>
-                                <div class="_wysiwyg-editor_2x3vh5 ember-view _viewerMode_2x3vh5 _printPdfView_2x3vh5">
-                                    <div class="ember-view">
-                                        <div class="tui-editor-contents">
-                                            <p><?php echo $appointment_comment;?></p>
+                                <?php if($appointment_comment != ''): ?>
+                                <div>
+                                    <p class="_medical-instructions-title_6ovcpi">Instrucciones Médicas:</p>
+                                    <div class="_wysiwyg-editor_2x3vh5 ember-view _viewerMode_2x3vh5 _printPdfView_2x3vh5">
+                                        <div class="ember-view">
+                                            <div class="tui-editor-contents">
+                                                <p><?php echo $appointment_comment;?></p>
+                                            </div>
                                         </div>
-                                    </div>  
+                                    </div>
                                 </div>
+                                <?php endif; ?>
+                                <?php endif; ?>
                             </div>
-                            <?php endif;?>
                         </div>
                     </div>
                     <div style="width: 33%;  margin: 50px 0 30px auto;  padding-top: 5px; text-align: center;  font-size: 14px;" >

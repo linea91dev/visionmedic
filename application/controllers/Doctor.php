@@ -333,6 +333,7 @@ class Doctor extends Drive
             redirect(base_url(), 'refresh');
         }
         $page_data['appointment_id']    = $param1;
+        $page_data['doc_type']          = ($param2 == 'lentes') ? 'lentes' : 'tratamiento';
         $this->load->view('backend/doctor/print_prescription_details', $page_data);
     }
     function print_dictamen_details($param1 = '', $param2 = '')
