@@ -667,6 +667,14 @@ class Tables_model extends CI_Model
             {
                 $sub_array[] = '<span class="badge badge-amarillo" style="color: #fff;background-color: #e6b517;">Pendiente de cobro</span>';
             }
+            elseif($row->status == '11')
+            {
+                $sub_array[] = '<span class="badge" style="color: #fff;background-color: #6b4c9a;">Fondo de ojo</span>';
+            }
+            else
+            {
+                $sub_array[] = '<span class="badge badge-secondary">'.$row->status.'</span>';
+            }
             
         
             $data[] = $sub_array; 
