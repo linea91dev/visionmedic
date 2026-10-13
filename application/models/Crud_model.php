@@ -837,6 +837,10 @@ class Crud_model extends CI_Model
         $data['area_code']           = $this->input->post('area');
         $data['country_code']        = $this->input->post('code');
         $data['sms_confirm']        = $this->input->post('sms_confirm');
+        $cita_intervalo = (int) $this->input->post('interval');
+        if ($cita_intervalo > 0) {
+            $data['time_interval'] = $cita_intervalo;
+        }
      
         $this->db->where('clinic_id', $this->session->userdata('current_clinic'));
         $this->db->update('clinic', $data);

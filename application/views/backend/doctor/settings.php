@@ -187,6 +187,15 @@
 		                                </div>
 		                                <br>
 		                                <div class="form-group">
+		                                    <label class="form-control-label">Intervalo de las citas</label>
+		                                    <?php $cita_intervalo = $this->crud_model->check_item('time_interval'); if ($cita_intervalo == '') $cita_intervalo = 30; ?>
+		                                    <select class="form-control" name="interval">
+		                                        <?php foreach (array(10, 15, 20, 30, 45, 60) as $mins): ?>
+		                                        <option value="<?php echo $mins; ?>" <?php if ((int) $cita_intervalo == $mins) echo 'selected'; ?>><?php echo $mins; ?> minutos</option>
+		                                        <?php endforeach; ?>
+		                                    </select>
+		                                </div>
+		                                <div class="form-group">
 		                                    <label class="form-control-label">Moneda</label>
 		                                    <select class="itemName form-control" style="width:100%" name="currency" id="currency">
 						                        <option value="Q" <?php $mon = $this->db->get_where('clinic', array('clinic_id' => $this->session->userdata('current_clinic')))->row()->currency; if($mon == 'Q') echo "selected";?>>Guatemala.</option>

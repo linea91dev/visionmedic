@@ -10,6 +10,7 @@
     $y         = date('h:i', strtotime($fday));
     $xy        = round((float)$fday);
     $intervalo = $this->db->get_where('clinic', array('clinic_id' => $clinic_id))->row()->time_interval;
+    if (!$intervalo || !is_numeric($intervalo) || $intervalo < 1) $intervalo = 30;
     if($filter){
         $apply = base64_decode($filter);
     }
@@ -130,29 +131,26 @@
             <div class="col-sm-7">
                 <div class="all-tasks-w">
                     <?php 
-                    $horas = $this->crud_model->interval($inicial, $final, $intervalo);
-                    for($i = $x; $i <= $xy; $i++): 
+                    $bloques = $this->crud_model->interval($inicial, $fday, $intervalo);
+                    if (!is_array($bloques)) $bloques = array();
+                    foreach($bloques as $bloque): 
                 ?>
                     <div class="tasks-section">
                         <div class="tasks-header-w">
                             <a class="tasks-header-toggler" href="#"><i class="batch-icon-alarm-clock"></i></a>
                             <h5 class="tasks-header">
-                                <?php if($i < 10) $print = '0'.$i.':00'; else $print = $i.':00'; echo date("g:i A", strtotime($print));?>
+                                <?php echo date("g:i A", strtotime($bloque));?>
                             </h5>
                         </div>
                         <div class="tasks-list-w">
                             <ul class="tasks-list">
                                 <?php
-                                
-                                    $min = array("00");
-                                    foreach($min as $v):
-                                        if($i < 10) $querys = '0'.$i; else $querys = $i;
                                     if($filter)
                                     {
-                                        $appointments =  $this->crud_model->appointment_today_doc($doctor_id,$apply,$clinic_id, $querys)->result_array();
+                                        $appointments =  $this->crud_model->appointment_today_doc($doctor_id,$apply,$clinic_id, $bloque)->result_array();
                                     }else
                                     {
-                                        $appointments =  $this->crud_model->appointment_today_doc($doctor_id,date('d/m/Y'),$clinic_id, $querys)->result_array();
+                                        $appointments =  $this->crud_model->appointment_today_doc($doctor_id,date('d/m/Y'),$clinic_id, $bloque)->result_array();
                                     }
 
 
@@ -260,11 +258,10 @@
                                     </div>
                                 </div>
                                 <?php endforeach;?>
-                                <?php endforeach;?>
                             </ul>
                         </div>
                     </div>
-                    <?php endfor;?>
+                    <?php endforeach;?>
                 </div>
             </div>
             <div class="col-sm-5" id="appointment_details">
