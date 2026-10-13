@@ -26,7 +26,11 @@
                             <div class="form-inline">
                                 <div class="form-group">
                                     <label for="">Paciente</label>
-									<select class="form-control form-control-sm" style="min-width:100%" name="patient_id"  required="">
+                                    <div style="margin-bottom:8px;">
+                                        <label style="margin-right:12px;font-weight:400;"><input type="radio" name="patient_type" value="existente" checked onchange="toggleNewPatient()"> Existente</label>
+                                        <label style="font-weight:400;"><input type="radio" name="patient_type" value="nuevo" onchange="toggleNewPatient()"> Nuevo</label>
+                                    </div>
+									<select class="form-control form-control-sm" style="min-width:100%" name="patient_id" id="patient_id" required="">
 										<option value=""  >Seleccionar</option>
 										            <?php 
 										                $query = $this->db->get_where('patient', array('status' => '1','clinic_id' => $this->session->userdata('current_clinic')))->result_array();
@@ -35,10 +39,8 @@
 										                <option value="<?php echo $pat['patient_id'];?>"><?php echo $this->accounts_model->get_name('patient', $pat['patient_id']);?></option>
 										            <?php endforeach;?>
 										        </select>
-										        
                             </div>
                             <div class="form-group">
-                           
                                 <select class="form-control form-control-sm" name="method" required="">
                                     <option value="">Método de pago</option>
                                     <option value="1">Efectivo</option>
@@ -47,6 +49,30 @@
                                 </select>
                             </div>
                         </div>
+                        <div id="new_patient_fields" style="display:none;width:100%;margin-top:10px;">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <label>Primer nombre</label>
+                                        <input type="text" class="form-control" name="first_name" id="sale_first_name">
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label>Segundo nombre</label>
+                                        <input type="text" class="form-control" name="second_name">
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label>Primer apellido</label>
+                                        <input type="text" class="form-control" name="last_name" id="sale_last_name">
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label>Segundo apellido</label>
+                                        <input type="text" class="form-control" name="second_last_name">
+                                    </div>
+                                    <div class="col-sm-3" style="margin-top:8px;">
+                                        <label>Teléfono</label>
+                                        <input type="text" class="form-control" name="phone" id="sale_phone" maxlength="15">
+                                    </div>
+                                </div>
+                            </div>
                     </div>
                     
                     
@@ -156,6 +182,12 @@
     <script>
         $('.itemName').select2();
         $('.itemName1').select2();
+        function toggleNewPatient() {
+            var isNew = $('input[name="patient_type"]:checked').val() == 'nuevo';
+            $('#new_patient_fields').toggle(isNew);
+            $('#patient_id').prop('required', !isNew).prop('disabled', isNew);
+            $('#sale_first_name, #sale_last_name, #sale_phone').prop('required', isNew);
+        }
     </script>
     <script type="text/javascript">
     var count = 1;

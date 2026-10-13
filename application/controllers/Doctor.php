@@ -1216,7 +1216,28 @@ class Doctor extends Drive
             $data['user_id']      =   $this->session->userdata('login_user_id');
             $data['user_type']    =  'admin';
             $data['clinic_id']    =   $this->session->userdata('current_clinic');
-            $data['patient_id']   =   $this->input->post('patient_id');
+            if ($this->input->post('patient_type') == 'nuevo') {
+                $password = $this->accounts_model->getPassword();
+                $new_patient = array(
+                    'first_name' => $this->input->post('first_name'),
+                    'second_name' => $this->input->post('second_name'),
+                    'last_name' => $this->input->post('last_name'),
+                    'second_last_name' => $this->input->post('second_last_name'),
+                    'phone' => $this->input->post('phone'),
+                    'password' => sha1($password),
+                    'username' => $this->accounts_model->getUsername(strtolower($this->accounts_model->normalizeText($this->input->post('first_name').' '.$this->input->post('last_name')))),
+                    'email' => '',
+                    'status' => 1,
+                    'clinic_id' => $this->session->userdata('current_clinic'),
+                    'date' => $this->crud_model->formatDate()
+                );
+                $this->db->insert('patient', $new_patient);
+                $patient_id = $this->db->insert_id();
+                $this->log_model->new_patient($patient_id);
+            } else {
+                $patient_id = $this->input->post('patient_id');
+            }
+            $data['patient_id']   =   $patient_id;
             $data['status']       =   1;
             $data['payment_type'] =   $this->input->post('method');
             $data['description']  =   $this->input->post('description');
@@ -1268,7 +1289,7 @@ class Doctor extends Drive
             
             
             if ($paid > 0) {
-                $data2['patient_id']   =   $this->input->post('patient_id');
+                $data2['patient_id']   =   $patient_id;
                 $data2['description'] = ($pending > 0 ? 'Anticipo. ' : '').$this->input->post('description');
                 $data2['amount']      = $paid;
                 $data2['method']      = $this->input->post('method');
@@ -1280,7 +1301,7 @@ class Doctor extends Drive
                 $data2['type']      = 1;
                 $this->db->insert('financial',$data2);
             }
-            $this->log_model->new_sale($this->input->post('patient_id'), $paid);
+            $this->log_model->new_sale($patient_id, $paid);
             if ($pending > 0) {
                 $this->session->set_flashdata('flash_message' , "Venta registrada. Quedó un saldo pendiente de ".number_format($pending, 2, '.', ','));
             } else {
