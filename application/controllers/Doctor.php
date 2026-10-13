@@ -761,6 +761,37 @@ class Doctor extends Drive
         {
             redirect(base_url(), 'refresh');
         }
+
+        if($param1 == 'abono')
+        {
+            $cart = $this->db->get_where('cart', array('cart_id' => $param2))->row();
+            if ($cart) {
+                $paid_row = $this->db->select_sum('amount')->get_where('financial', array('cart_id' => $cart->cart_id))->row();
+                $paid = ($paid_row && $paid_row->amount !== null) ? (float) $paid_row->amount : 0;
+                $balance = round((float) $cart->total - $paid, 2);
+                $amount = round((float) str_replace(',', '.', $this->input->post('amount')), 2);
+                if ($amount <= 0 || $amount - $balance > 0.009) {
+                    $this->session->set_flashdata('error_message' , "El abono no puede ser mayor al saldo pendiente.");
+                } else {
+                    $data2['patient_id'] = $cart->patient_id;
+                    $data2['description'] = 'Abono. '.$this->input->post('description');
+                    $data2['amount'] = $amount;
+                    $data2['method'] = $this->input->post('method');
+                    $data2['clinic_id'] = $this->session->userdata('current_clinic');
+                    $data2['date'] = date('d/m/Y');
+                    $data2['user_id'] = $this->session->userdata('login_user_id');
+                    $data2['user_type'] = $this->session->userdata('login_type');
+                    $data2['cart_id'] = $cart->cart_id;
+                    $data2['type'] = 1;
+                    $this->db->insert('financial', $data2);
+                    $new_balance = round($balance - $amount, 2);
+                    $this->db->where('cart_id', $cart->cart_id);
+                    $this->db->update('cart', array('status' => ($new_balance > 0.009 ? 2 : 1)));
+                    $this->session->set_flashdata('flash_message' , $new_balance > 0.009 ? "Abono registrado. Saldo pendiente: ".number_format($new_balance, 2, '.', ',') : "La venta quedó pagada.");
+                }
+            }
+            redirect(base_url() . 'doctor/sale_details/'.base64_encode($param2), 'refresh');
+        }
         
         if($param1 == 'email')
         {
@@ -1219,24 +1250,42 @@ class Doctor extends Drive
                 $total_amount += $sub_total;
                 array_push($sales_order_entries , $new_order_entry);
             }
-            $data['total']   =   round($total_amount , 2);
+            $total_amount = round($total_amount , 2);
+            $anticipo_raw = $this->input->post('anticipo');
+            if ($anticipo_raw === null || $anticipo_raw === '') {
+                $paid = $total_amount;
+            } else {
+                $paid = round((float) str_replace(',', '.', $anticipo_raw), 2);
+            }
+            if ($paid < 0) $paid = 0;
+            if ($paid > $total_amount) $paid = $total_amount;
+            $pending = round($total_amount - $paid, 2);
+            $data['status'] = ($pending > 0) ? 2 : 1;
+            $data['total']   =   $total_amount;
             $data['products']  =   serialize($sales_order_entries);
             $this->db->insert('cart' , $data);
             $id_cart = $this->db->insert_id();
             
             
-            $data2['patient_id']   =   $this->input->post('patient_id');
-            $data2['description'] = $this->input->post('description');
-            $data2['amount']      = round($total_amount , 2);
-            $data2['method']      = $this->input->post('method');
-            $data2['clinic_id']   = $this->session->userdata('current_clinic'); 
-            $data2['date']        = date('d/m/Y');
-            $data2['user_id']     = $this->session->userdata('login_user_id');
-            $data2['user_type']   = $this->session->userdata('login_type');
-            $data2['cart_id']   = $id_cart;
-            $this->db->insert('financial',$data2);
-            $this->log_model->new_sale($this->input->post('patient_id'),round($total_amount , 2));
-            $this->session->set_flashdata('flash_message' , "La venta se registro correctamente");
+            if ($paid > 0) {
+                $data2['patient_id']   =   $this->input->post('patient_id');
+                $data2['description'] = ($pending > 0 ? 'Anticipo. ' : '').$this->input->post('description');
+                $data2['amount']      = $paid;
+                $data2['method']      = $this->input->post('method');
+                $data2['clinic_id']   = $this->session->userdata('current_clinic'); 
+                $data2['date']        = date('d/m/Y');
+                $data2['user_id']     = $this->session->userdata('login_user_id');
+                $data2['user_type']   = $this->session->userdata('login_type');
+                $data2['cart_id']   = $id_cart;
+                $data2['type']      = 1;
+                $this->db->insert('financial',$data2);
+            }
+            $this->log_model->new_sale($this->input->post('patient_id'), $paid);
+            if ($pending > 0) {
+                $this->session->set_flashdata('flash_message' , "Venta registrada. Quedó un saldo pendiente de ".number_format($pending, 2, '.', ','));
+            } else {
+                $this->session->set_flashdata('flash_message' , "La venta se registro correctamente");
+            }
             redirect(base_url() . 'doctor/sales/', 'refresh');
         }
         if($param1 == 'delete_product'){

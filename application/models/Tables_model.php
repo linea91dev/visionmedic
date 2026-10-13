@@ -119,7 +119,7 @@ class Tables_model extends CI_Model
         {
             $this->db->order_by('cart_id', 'DESC');
             $this->db->from("cart");
-            $this->db->where('status','1');
+            $this->db->where_in('status', array('1', '2'));
             $this->db->where('clinic_id',$this->session->userdata('current_clinic'));
         }
         
@@ -794,6 +794,14 @@ class Tables_model extends CI_Model
             
         
             $sub_array[] = '<span class="smaller lighter">'.$currency.'. '.number_format($row->total,'2','.',',').'</span>';
+            $paid_row = $this->db->select_sum('amount')->get_where('financial', array('cart_id' => $row->cart_id))->row();
+            $paid = ($paid_row && $paid_row->amount !== null) ? (float) $paid_row->amount : 0;
+            $balance = round((float) $row->total - $paid, 2);
+            if ($balance > 0.009) {
+                $sub_array[] = '<span class="badge" style="color:#fff;background-color:#e6b517;">Pendiente '.$currency.'. '.number_format($balance, 2, '.', ',').'</span>';
+            } else {
+                $sub_array[] = '<span class="badge" style="color:#fff;background-color:#528410;">Pagada</span>';
+            }
             $sub_array[] = '<span class="smaller lighter">'.$row->date.'</span>';
             $sub_array[] = '<div class="dropdown">
                                 <div class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

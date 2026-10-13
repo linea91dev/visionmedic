@@ -53,7 +53,7 @@
     {
         
         count = '<?php echo $count;?>';
-        grand_total = Number( $('#sb_total').html() );
+        grand_total = 0;
         for(i = 1; i <= count; i++) 
         {
             if ($('#subtotal_'+ i).length) {
@@ -64,6 +64,7 @@
         
         grand_total = grand_total.toFixed(2);
         $('#grand_total').html('<?php echo $currency;?>. '+grand_total);
+        if (typeof updateSaldo === 'function') updateSaldo();
 
         
         

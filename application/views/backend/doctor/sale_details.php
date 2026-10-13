@@ -122,6 +122,48 @@
                                         <div class="order-summary-label"><span>Total</span></div>
                                         <div class="order-summary-value"><?php echo $currency.'. '.number_format($details['total'],'2','.',',');?></div>
                                     </div>
+                                    <?php
+                                        $sale_paid = 0;
+                                        $sale_payments = $this->db->order_by('income_id', 'ASC')->get_where('financial', array('cart_id' => $details['cart_id']))->result_array();
+                                        foreach ($sale_payments as $sale_payment) {
+                                            $sale_paid += (float) $sale_payment['amount'];
+                                        }
+                                        $sale_balance = round((float) $details['total'] - $sale_paid, 2);
+                                        if ($sale_balance < 0) $sale_balance = 0;
+                                    ?>
+                                    <div class="order-summary-row">
+                                        <div class="order-summary-label"><span>Pagado</span></div>
+                                        <div class="order-summary-value"><?php echo $currency.'. '.number_format($sale_paid, 2, '.', ',');?></div>
+                                    </div>
+                                    <div class="order-summary-row">
+                                        <div class="order-summary-label"><span>Saldo pendiente</span></div>
+                                        <div class="order-summary-value"><?php echo $currency.'. '.number_format($sale_balance, 2, '.', ',');?></div>
+                                    </div>
+                                    <?php if (count($sale_payments) > 0): ?>
+                                    <div style="margin-top:10px;">
+                                        <?php foreach ($sale_payments as $sale_payment): ?>
+                                        <div style="font-size:13px;margin-bottom:4px;">
+                                            <?php echo $sale_payment['date']; ?> —
+                                            <?php echo $currency.'. '.number_format($sale_payment['amount'], 2, '.', ','); ?>
+                                            <?php if ($sale_payment['description'] != '') echo ' ('.$sale_payment['description'].')'; ?>
+                                        </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                    <?php endif; ?>
+                                    <?php if ($sale_balance > 0.009): ?>
+                                    <form method="POST" action="<?php echo base_url(); ?>doctor/sale_details/abono/<?php echo $details['cart_id']; ?>" style="margin-top:12px;">
+                                        <label>Abono</label>
+                                        <input type="number" step="0.01" min="0.01" max="<?php echo $sale_balance; ?>" name="amount" class="form-control" required value="<?php echo number_format($sale_balance, 2, '.', ''); ?>">
+                                        <select class="form-control" name="method" required style="margin-top:8px;">
+                                            <option value="">Método de pago</option>
+                                            <option value="1">Efectivo</option>
+                                            <option value="2">Tarjeta</option>
+                                            <option value="3">Depósito</option>
+                                        </select>
+                                        <input type="text" class="form-control" name="description" placeholder="Nota del abono" style="margin-top:8px;">
+                                        <button class="btn btn-success" type="submit" style="margin-top:8px;">Registrar abono</button>
+                                    </form>
+                                    <?php endif; ?>
                             </div>
                         </div>
                         </div>

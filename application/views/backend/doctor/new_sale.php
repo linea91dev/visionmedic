@@ -119,12 +119,28 @@
                     <div class="col-sm-12" style="margin-top: 15px;">
                     <div class="order-foot">
                         <div class="row">
-                            <div class="col-md-12 mb-4">
+                            <div class="col-md-7 mb-4">
                                 <h5>Nota: </h5>
                                 <div class="form-group">
                                     <textarea class="form-control" name="description" placeholder="Escribe una nota a esta venta..." rows="7"></textarea>
                                 </div>
-                                <button class="btn btn-success" type="submit">Confirmar venta</button>
+                            </div>
+                            <div class="col-md-5 mb-4">
+                                <h5>Pago</h5>
+                                <div class="order-summary-row">
+                                    <div class="order-summary-label"><span>Total</span></div>
+                                    <div class="order-summary-value" id="grand_total">0.00</div>
+                                </div>
+                                <input type="hidden" name="sale_total" id="sale_total_raw" value="0">
+                                <div class="form-group" style="margin-top:12px;">
+                                    <label>Anticipo</label>
+                                    <input type="number" step="0.01" min="0" class="form-control" name="anticipo" id="anticipo" placeholder="Vacío = cobrar el total" onkeyup="updateSaldo()" onchange="updateSaldo()">
+                                </div>
+                                <div class="order-summary-row">
+                                    <div class="order-summary-label"><span>Saldo pendiente</span></div>
+                                    <div class="order-summary-value" id="saldo_pendiente">0.00</div>
+                                </div>
+                                <button class="btn btn-success" type="submit" style="margin-top:12px;">Confirmar venta</button>
                             </div>
                             
                         </div>
@@ -174,6 +190,18 @@
     {
         n.parentNode.parentNode.parentNode.removeChild(n.parentNode.parentNode);
         calculate_grand_total();
+    }
+    function updateSaldo()
+    {
+        var text = $('#grand_total').text() || '0';
+        var total = parseFloat(String(text).replace(/[^0-9.\-]/g, '')) || 0;
+        $('#sale_total_raw').val(total.toFixed(2));
+        var raw = $('#anticipo').val();
+        var paid = raw === '' ? total : parseFloat(String(raw).replace(',', '.'));
+        if (isNaN(paid) || paid < 0) paid = 0;
+        if (paid > total) paid = total;
+        var saldo = Math.round((total - paid) * 100) / 100;
+        $('#saldo_pendiente').text(saldo.toFixed(2));
     }
     </script>
  

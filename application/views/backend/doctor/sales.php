@@ -42,6 +42,7 @@
                                             <th>Responsable</th>
                                             <th>Método de pago</th>
                                             <th>Total&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                            <th>Estado</th>
                                             <th>Fecha</th>
                                             <th>Acciones</th>
                                         </tr>
