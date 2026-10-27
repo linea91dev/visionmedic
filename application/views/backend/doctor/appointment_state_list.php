@@ -16,35 +16,6 @@
     </li>
     <li>
         <div class="custom-control custom-radio">
-            <input <?php if ($page_name=="pending_payment"){ echo 'checked'; } ?>  name="type"  type="radio" class="custom-control-input" id="customCheck2" onclick="window.location.href='<?php echo base_url();?>doctor/pending_payment/';">
-            <span class="badge badge-pending pull-right"><?php 
-            if($filter){
-                echo $this->crud_model->count_appointment_payment_pending($doctor_id,$apply);
-               
-            }else{
-                echo $this->crud_model->count_appointment_payment_pending($doctor_id,date('d/m/Y'));
-            }
-            ?></span>
-            <label class="custom-control-label" for="customCheck2">Pendientes de pago</label>
-        </div>
-    </li>
-    <li>
-        <div class="custom-control custom-radio">
-            <input <?php if ($page_name=="soon"){ echo 'checked'; } ?> name="type"  type="radio" class="custom-control-input" id="customCheck3" onclick="window.location.href='<?php echo base_url();?>doctor/soon/';">
-            <span class="badge badge-soon pull-right"><?php
-            
-            if($filter){
-                echo $this->crud_model->count_soon($doctor_id,$apply);
-               
-            }else{
-                echo $this->crud_model->count_soon($doctor_id,date('d/m/Y', strtotime("+1 day")));
-            }
-            ?></span>
-            <label class="custom-control-label" for="customCheck3">Próximas</label>
-        </div>
-    </li>
-    <li>
-        <div class="custom-control custom-radio">
             <input <?php if ($page_name=="rescheduled"){ echo 'checked'; } ?> name="type"  type="radio" class="custom-control-input" id="customCheck4" onclick="window.location.href='<?php echo base_url();?>doctor/rescheduled/';">
             <span class="badge badge-rep pull-right"><?php 
             
@@ -71,28 +42,6 @@
             }
            ?></span>
             <label class="custom-control-label" for="customCheck5">Canceladas</label>
-        </div>
-    </li>
-    <li>
-        <div class="custom-control custom-radio">
-            <input <?php if ($page_name=="archived"){ echo 'checked'; } ?>  name="type"  type="radio" class="custom-control-input" id="customCheck6" onclick="window.location.href='<?php echo base_url();?>doctor/archived/';">
-            <span class="badge badge-archived pull-right"><?php 
-            
-            if($filter){
-                echo $this->crud_model->count_archived($doctor_id,$apply);
-               
-            }else{
-                echo $this->crud_model->count_archived($doctor_id,date('d/m/Y'));
-            }
-           ?></span>
-            <label class="custom-control-label" for="customCheck6">Archivadas</label>
-        </div>
-    </li>
-    <li>
-        <div class="custom-control custom-radio">
-            <input <?php if ($page_name=="fondo_ojo"){ echo 'checked'; } ?> name="type" type="radio" class="custom-control-input" id="customCheckFondo" onclick="window.location.href='<?php echo base_url();?>doctor/fondo_ojo/';">
-            <span class="badge badge-fondo pull-right"><?php echo $this->crud_model->count_fondo($doctor_id); ?></span>
-            <label class="custom-control-label" for="customCheckFondo">Fondo de ojo</label>
         </div>
     </li>
 </ul>
