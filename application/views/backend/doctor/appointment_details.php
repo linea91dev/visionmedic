@@ -93,14 +93,6 @@ var app = '<?php echo base64_decode($id_);?>';
                                             </div>
                                             <div class="col-sm-6 col-md-12 col-lg-6" style="overflow-wrap: anywhere;background: #f9fafc; width: 100%; padding: 10px; border-radius: 10px; border: 2px dotted #c6c6cc;margin-bottom: 10px!important;padding-left: 20px; text-align: left; margin: 0 auto;">
                                                 <div>
-                                                    <span style="display: block;">Tipo sanguíneo:</span>
-                                                    <span style="font-weight: bold;">
-                                                        <input onchange="updateDataPatient('blood',<?php echo  $patient_id ?>,this.value)" type="text" class="form-control" value=" <?php $blood = $this->db->get_where('patient', array('patient_id' => $patient_id))->row()->blood; if($blood != '') echo $blood; else echo 'No especificado'; ?>"></input>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6 col-md-12 col-lg-6" style="overflow-wrap: anywhere;background: #f9fafc; width: 100%; padding: 10px; border-radius: 10px; border: 2px dotted #c6c6cc;margin-bottom: 10px!important;padding-left: 20px; text-align: left; margin: 0 auto;">
-                                                <div>
                                                     <span style="display: block;">Correo:</span>
                                                     <span>
                                                         <input onchange="updateDataPatient('email',<?php echo  $patient_id ?>,this.value)" type="text" class="form-control" value=" <?php $mail =  $this->db->get_where('patient', array('patient_id' => $patient_id))->row()->email; if($mail != '') echo $mail; else echo 'No especificado'; ?>"></input>
