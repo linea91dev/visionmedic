@@ -15,7 +15,24 @@
                 <div class="card-widget">
                     <h4 class="panel-content-title">Transacciones recientes</h4>
                     <span class="app-divider2"></span>
-                    
+                    <div class="row" style="margin-bottom:12px;">
+                        <div class="col-sm-4">
+                            <label>Desde</label>
+                            <div class="input-group date datepicker" id="finDesde">
+                                <input type="text" autocomplete="off" id="fecha1" class="form-control" placeholder="dd/mm/aaaa">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label>Hasta</label>
+                            <div class="input-group date datepicker" id="finHasta">
+                                <input type="text" autocomplete="off" id="fecha2" class="form-control" placeholder="dd/mm/aaaa">
+                            </div>
+                        </div>
+                        <div class="col-sm-4" style="padding-top:24px;">
+                            <button type="button" class="btn btn-info" id="finFiltrar">Consultar</button>
+                            <button type="button" class="btn btn-secondary" id="finLimpiar">Limpiar</button>
+                        </div>
+                    </div>
     		        <div class="table-responsive">
         				<table class="table table-padded" id="user_data">
     	    			    <thead>
@@ -169,7 +186,11 @@
             "order":[],  
             "ajax":{  
                 url:"<?php echo base_url() . 'doctor/getTable/financial'; ?>",  
-                type:"POST"  
+                type:"POST",
+                data: function(d) {
+                    d.fecha1 = $('#fecha1').val();
+                    d.fecha2 = $('#fecha2').val();
+                }
             },  
             
                 "columnDefs":[  
@@ -177,7 +198,21 @@
                     "targets":0,  
                     "orderable":false,  
                 },],  
-            });  
+            });
+            if ($('#finDesde').length) {
+                $('#finDesde, #finHasta').datepicker({
+                    format: "dd/mm/yyyy",
+                    todayHighlight: true,
+                    autoclose: true
+                });
+            }
+            $('#finFiltrar').on('click', function() {
+                $('#user_data').DataTable().ajax.reload();
+            });
+            $('#finLimpiar').on('click', function() {
+                $('#fecha1, #fecha2').val('');
+                $('#user_data').DataTable().ajax.reload();
+            });
         });  
     </script>
 	<script>

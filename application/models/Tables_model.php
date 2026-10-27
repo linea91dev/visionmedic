@@ -80,6 +80,7 @@ class Tables_model extends CI_Model
             $this->db->order_by('financial_id', 'DESC');
             $this->db->from("financial");
             $this->db->where('clinic_id', $this->session->userdata('current_clinic'));
+            $this->financial_date_range();
         }
         
         elseif($table == 'activities')
@@ -541,6 +542,21 @@ class Tables_model extends CI_Model
            return $data;
     }
     
+    function financial_date_range()
+    {
+        $desde = isset($_POST['fecha1']) ? trim($_POST['fecha1']) : '';
+        $hasta = isset($_POST['fecha2']) ? trim($_POST['fecha2']) : '';
+        $desde_ok = preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $desde) && checkdate((int) substr($desde, 3, 2), (int) substr($desde, 0, 2), (int) substr($desde, 6, 4));
+        $hasta_ok = preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $hasta) && checkdate((int) substr($hasta, 3, 2), (int) substr($hasta, 0, 2), (int) substr($hasta, 6, 4));
+        if ($desde_ok && $hasta_ok) {
+            $this->db->where("str_to_date(date, '%d/%m/%Y') BETWEEN str_to_date(".$this->db->escape($desde).", '%d/%m/%Y') AND str_to_date(".$this->db->escape($hasta).", '%d/%m/%Y')", null, false);
+        } elseif ($desde_ok) {
+            $this->db->where("str_to_date(date, '%d/%m/%Y') >= str_to_date(".$this->db->escape($desde).", '%d/%m/%Y')", null, false);
+        } elseif ($hasta_ok) {
+            $this->db->where("str_to_date(date, '%d/%m/%Y') <= str_to_date(".$this->db->escape($hasta).", '%d/%m/%Y')", null, false);
+        }
+    }
+
     function get_financial($table, $fetch_data,$param1, $param2, $param3)
     {
         $currency = $this->db->get_where('clinic', array('clinic_id' => $this->session->userdata('current_clinic')))->row()->currency;
