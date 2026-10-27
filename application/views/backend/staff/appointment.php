@@ -244,12 +244,6 @@ var user_id = '<?php echo $this->session->userdata('login_user_id');?>';
                                                 <input type="text" class="form-control" name="second_last_name">
                                             </div>
                                         </div>
-                                        <div class="col-sm-4" style="display:none;" id="dpi">
-                                            <div class="form-group m-b-15">
-                                                <label for="simpleinput">DPI</label><span class="error_show" id="errordpi"></span>
-                                                <input type="number" class="form-control" name="dpi" id="">
-                                            </div>
-                                        </div>
                                         <div class="col-sm-4" style="display:none;" id="phone">
                                             <div class="form-group m-b-15">
                                                 <label for="simpleinput">Celular</label><span class="error_show" id="errorp"></span>
@@ -257,11 +251,16 @@ var user_id = '<?php echo $this->session->userdata('login_user_id');?>';
                                                 <small>* Ingresar código de área p.j: 502xxxxxxxx</small>
                                             </div>
                                         </div>
-
-                                        <div class="col-sm-3" style="display:none;" id="email">
+                                        <div class="col-sm-4" style="display:none;" id="dpi">
                                             <div class="form-group m-b-15">
-                                                <label for="simpleinput">Correo electronico:</label><span class="error_show" id="errorm"></span>
-                                                <input type="text" class="form-control" name="email">
+                                                <label for="simpleinput">DPI</label><span class="error_show" id="errordpi"></span>
+                                                <input type="number" class="form-control" name="dpi" id="">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4" style="display:none;" id="phone_contact">
+                                            <div class="form-group m-b-15">
+                                                <label for="simpleinput">Teléfono secundario</label>
+                                                <input type="text" class="form-control" name="phone_contact" maxlength="15">
                                             </div>
                                         </div>
 
@@ -271,6 +270,19 @@ var user_id = '<?php echo $this->session->userdata('login_user_id');?>';
                                                 <div class="input-group date datepicker" id="DoctorPicker1">
                                                     <input style="border: 1px solid #198cff8f;" type="text" id="applyDate" name="date_of_birth" autocomplete="off" style="border: 1px solid #198cff8f;" value="<?php echo date('d/m/Y');?>" class="form-control">
                                                     <span style="display: none;" class="input-group-addon"><i data-feather="calendar"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3" style="display:none;" id="whatsapp">
+                                            <div class="form-group">
+                                                <label>Whatsapp</label><span class="error_show" id="errorg"></span>
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" id="what1" name="whatsapp" value="1" class="custom-control-input" checked>
+                                                    <label class="custom-control-label" for="what1">Si</label>
+                                                </div>
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" id="what2" name="whatsapp" value="0" class="custom-control-input">
+                                                    <label class="custom-control-label" for="what2">No</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -285,6 +297,21 @@ var user_id = '<?php echo $this->session->userdata('login_user_id');?>';
                                                     <div class="form-check" style="padding-left: 0px;">
                                                         <input class="radiobutton" type="radio" name="gender" id="radio4" value="F">
                                                         <label class="radiobutton-label" for="radio4">Femenino</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3" style="display:none;" id="status">
+                                            <div class="form-group">
+                                                <label>Estado civil:</label>
+                                                <div class="input-group">
+                                                    <div class="form-check" style="padding-left: 0px;padding-right:2px">
+                                                        <input checked class="radiobutton" type="radio" name="marital_status" id="single" value="0">
+                                                        <label class="radiobutton-label" for="single">Casado</label>
+                                                    </div>
+                                                    <div class="form-check" style="padding-left: 0px;">
+                                                        <input class="radiobutton" type="radio" name="marital_status" id="married" value="1">
+                                                        <label class="radiobutton-label" for="married">Soltero</label>
                                                     </div>
                                                 </div>
                                             </div>
