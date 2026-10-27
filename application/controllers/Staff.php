@@ -2106,7 +2106,7 @@ class Staff extends Drive
             $this->log_model->download_file($patient_id);
             $file_name  = $this->db->get_where('patient_file', array('patient_file_id' => $param2))->row()->name;
             $old_name  = $this->db->get_where('patient_file', array('patient_file_id' => $param2))->row()->old_name;
-            $info = file_get_contents("uploads/patient_files/" . $file_name);
+            $info = file_get_contents("public/uploads/patient_files/" . $file_name);
             force_download($old_name, $info);
         }
 
