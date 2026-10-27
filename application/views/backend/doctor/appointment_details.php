@@ -27,7 +27,10 @@
     border-spacing: 5px
 }
 </style>
-<?php   
+<?php
+    if (!isset($appt_base)) {
+        $appt_base = 'doctor';
+    }
     $appointment_id = base64_decode($id_);
     $this->db->where('appointment_id', $appointment_id);
     $info = $this->db->get('appointment')->result_array();
@@ -61,7 +64,7 @@ var app = '<?php echo base64_decode($id_);?>';
                                     <div class="pt-avatar-w"><img alt="" src="<?php echo $this->accounts_model->get_photo('patient', $patient_id);?>">
                                     </div>
                                     <div class="pt-user-last">
-                                        <a href="<?php echo base_url(); ?>doctor/patient_profile/<?php echo base64_encode($patient_id); ?>" style="font-size:20px;color:black;text-decoration:none;"><?php echo $this->accounts_model->get_full_name('patient',$patient_id);?></a>
+                                        <a href="<?php echo base_url().$appt_base; ?>/patient_profile/<?php echo base64_encode($patient_id); ?>" style="font-size:20px;color:black;text-decoration:none;"><?php echo $this->accounts_model->get_full_name('patient',$patient_id);?></a>
                                     </div>
                                     <div class="col-sm-12 col-lg-12">
                                         <div class="form-group">
@@ -106,21 +109,21 @@ var app = '<?php echo base64_decode($id_);?>';
                                                 <div class="row">
                                                     <div class="col-sm-12 col-lg-4">
                                                         <div class="form-group">
-                                                            <a class="btn btn-success custom-radius full-width" href="<?php echo base_url();?>doctor/patient_profile/<?php echo  base64_encode($patient_id);?>">
+                                                            <a class="btn btn-success custom-radius full-width" href="<?php echo base_url().$appt_base;?>/patient_profile/<?php echo  base64_encode($patient_id);?>">
                                                                 Ir al perfil
                                                             </a>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-12 col-lg-4">
                                                         <div class="form-group">
-                                                            <a class="btn btn-primary custom-radius full-width" href="<?php echo base_url();?>doctor/medical_history/<?php echo  base64_encode($patient_id);?>">
+                                                            <a class="btn btn-primary custom-radius full-width" href="<?php echo base_url().$appt_base;?>/medical_history/<?php echo  base64_encode($patient_id);?>">
                                                                 Historial
                                                             </a>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-12 col-lg-4 col-md-6">
                                                         <div class="form-group">
-                                                            <a class="btn btn-danger custom-radius full-width" href="<?php echo base_url();?>doctor/patient_files/<?php echo  base64_encode($patient_id);?> ">
+                                                            <a class="btn btn-danger custom-radius full-width" href="<?php echo base_url().$appt_base;?>/patient_files/<?php echo  base64_encode($patient_id);?> ">
                                                                 Archivos
                                                             </a>
                                                         </div>
@@ -265,7 +268,7 @@ var app = '<?php echo base64_decode($id_);?>';
 
                 <div class="tab-pane container " id="c-<?php echo $details['appointment_id']?>">
 
-                    <form action="<?php echo base_url();?>doctor/appointment/finish" method="POST">
+                    <form action="<?php echo base_url().$appt_base;?>/appointment/finish" method="POST">
                         <input type="hidden" name="appointment_id" id="appointment_id" value="<?php echo $details['appointment_id'];?>">
                         <input type="hidden" name="patient_id" id="patient_id" value="<?php echo $this->db->get_where('patient', array('patient_id' => $det['patient_id']))->row()->patient_id; ?>">
                         <script>
@@ -761,7 +764,7 @@ var app = '<?php echo base64_decode($id_);?>';
                                         }).then(function(result) {
                                             if (result.value) {
                                                 $.ajax({
-                                                    url: '<?php echo base_url(); ?>doctor/appointments/fondo/' + appointment_id,
+                                                    url: '<?php echo base_url().$appt_base; ?>/appointments/fondo/' + appointment_id,
                                                     success: function() {
                                                         location.reload();
                                                     }
@@ -982,7 +985,7 @@ var app = '<?php echo base64_decode($id_);?>';
                                     <div class="form-group" style="border:1px solid #e6e8ee;border-radius:8px;padding:12px;">
                                         <div style="display:flex;justify-content:space-between;align-items:center;">
                                             <b>PLAN / TRATAMIENTO (TX)</b>
-                                            <a class="btn btn-primary btn-sm" target="_blank" href="<?php echo base_url();?>doctor/print_prescription_details/<?php echo $plan_id;?>/tratamiento">IMPRIMIR RECETA</a>
+                                            <a class="btn btn-primary btn-sm" target="_blank" href="<?php echo base_url().$appt_base;?>/print_prescription_details/<?php echo $plan_id;?>/tratamiento">IMPRIMIR RECETA</a>
                                         </div>
                                         <div style="margin-top:10px;"><b>DX</b></div>
                                         <div id="plan_dx_<?php echo $plan_id; ?>">
@@ -1055,7 +1058,7 @@ var app = '<?php echo base64_decode($id_);?>';
                             <h5 class="panel-content-title">Detalles de la cita</h5>
                             <span class="app-divider2"></span>
                             <div class="row">
-                                <a class="btn btn-success" target="_blank" href="<?php echo base_url();?>doctor/print_dictamen_details/<?php echo $details['appointment_id'];?>">Imprimir
+                                <a class="btn btn-success" target="_blank" href="<?php echo base_url().$appt_base;?>/print_dictamen_details/<?php echo $details['appointment_id'];?>">Imprimir
                                         Historia clínica</a>
                                 <div class="col-sm-12">
                                     <div class="form-group">
@@ -1144,7 +1147,7 @@ var app = '<?php echo base64_decode($id_);?>';
                                 </div>
                                 <div class="col-sm-12">
                                     <hr>
-                                    <a class="btn btn-success" target="_blank" href="<?php echo base_url();?>doctor/print_prescription_details/<?php echo $details['appointment_id'];?>/lentes">Imprimir receta de lentes</a>
+                                    <a class="btn btn-success" target="_blank" href="<?php echo base_url().$appt_base;?>/print_prescription_details/<?php echo $details['appointment_id'];?>/lentes">Imprimir receta de lentes</a>
                                 </div>
                             </div>
                         </div>

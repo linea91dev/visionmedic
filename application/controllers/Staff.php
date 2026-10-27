@@ -1152,6 +1152,13 @@ class Staff extends Drive
             
             
         }
+        if($param1 == 'fondo')
+        {
+            $this->db->where('appointment_id', $param2);
+            $this->db->update('appointment', array('status' => 11));
+            $this->session->set_flashdata('flash_message' , "Cita enviada a fondo de ojo.");
+            redirect(base_url() . 'staff/appointments/', 'refresh');
+        }
         
         if($this->input->post('date') != '')
         {
@@ -3186,7 +3193,18 @@ class Staff extends Drive
             redirect(base_url(), 'refresh');
         }
         $page_data['appointment_id']    = $param1;
+        $page_data['doc_type']          = ($param2 == 'lentes') ? 'lentes' : 'tratamiento';
         $this->load->view('backend/doctor/print_prescription_details', $page_data);
+    }
+
+    function print_dictamen_details($param1 = '', $param2 = '')
+    {
+        if ($this->session->userdata('staff_login') != 1)
+        {
+            redirect(base_url(), 'refresh');
+        }
+        $page_data['appointment_id']    = $param1;
+        $this->load->view('backend/doctor/print_dictamen_details', $page_data);
     }
 
 
