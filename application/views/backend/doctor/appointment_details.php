@@ -348,6 +348,7 @@ var app = '<?php echo base64_decode($id_);?>';
                                             <?php if (count($ants_md) == 0) $ants_md[] = array('antecedent_id' => '', 'item' => '', 'treatment' => '', 'notes' => ''); ?>
                                             <?php foreach ($ants_md as $ant): ?>
                                             <div class="ant-row" data-id="<?php echo $ant['antecedent_id']; ?>" data-type="md" data-patient="<?php echo $det['patient_id']; ?>" style="border-top:1px solid #f0f2f6;padding-top:10px;margin-top:8px;">
+                                                <div style="text-align:right;"><button type="button" class="btn btn-danger btn-sm" onclick="removeAntecedent(this)" title="Eliminar">&times;</button></div>
                                                 <div class="row">
                                                     <div class="col-sm-6"><label>DIAGNÓSTICO</label><input type="text" class="form-control ant-item" onchange="saveAntecedentRow(this)" value="<?php echo htmlspecialchars($ant['item']); ?>"></div>
                                                     <div class="col-sm-6"><label>TRATAMIENTO</label><input type="text" class="form-control ant-tx" onchange="saveAntecedentRow(this)" value="<?php echo htmlspecialchars($ant['treatment']); ?>"></div>
@@ -369,6 +370,7 @@ var app = '<?php echo base64_decode($id_);?>';
                                             <?php if (count($ants_qx) == 0) $ants_qx[] = array('antecedent_id' => '', 'item' => '', 'treatment' => '', 'notes' => ''); ?>
                                             <?php foreach ($ants_qx as $ant): ?>
                                             <div class="ant-row" data-id="<?php echo $ant['antecedent_id']; ?>" data-type="qx" data-patient="<?php echo $det['patient_id']; ?>" style="border-top:1px solid #f0f2f6;padding-top:10px;margin-top:8px;">
+                                                <div style="text-align:right;"><button type="button" class="btn btn-danger btn-sm" onclick="removeAntecedent(this)" title="Eliminar">&times;</button></div>
                                                 <div class="row">
                                                     <div class="col-sm-6"><label>CIRUGÍA</label><input type="text" class="form-control ant-item" onchange="saveAntecedentRow(this)" value="<?php echo htmlspecialchars($ant['item']); ?>"></div>
                                                     <div class="col-sm-6"><label>NOTAS</label><textarea class="form-control ant-notes" rows="2" onchange="saveAntecedentRow(this)"><?php echo htmlspecialchars($ant['notes']); ?></textarea></div>
@@ -389,6 +391,7 @@ var app = '<?php echo base64_decode($id_);?>';
                                             <?php if (count($ants_alg) == 0) $ants_alg[] = array('antecedent_id' => '', 'item' => '', 'treatment' => '', 'notes' => ''); ?>
                                             <?php foreach ($ants_alg as $ant): ?>
                                             <div class="ant-row" data-id="<?php echo $ant['antecedent_id']; ?>" data-type="alg" data-patient="<?php echo $det['patient_id']; ?>" style="border-top:1px solid #f0f2f6;padding-top:10px;margin-top:8px;">
+                                                <div style="text-align:right;"><button type="button" class="btn btn-danger btn-sm" onclick="removeAntecedent(this)" title="Eliminar">&times;</button></div>
                                                 <div class="row">
                                                     <div class="col-sm-6"><label>ALERGIA</label><input type="text" class="form-control ant-item" onchange="saveAntecedentRow(this)" value="<?php echo htmlspecialchars($ant['item']); ?>"></div>
                                                     <div class="col-sm-6"><label>NOTAS</label><textarea class="form-control ant-notes" rows="2" onchange="saveAntecedentRow(this)"><?php echo htmlspecialchars($ant['notes']); ?></textarea></div>
@@ -409,6 +412,7 @@ var app = '<?php echo base64_decode($id_);?>';
                                             <?php if (count($ants_trx) == 0) $ants_trx[] = array('antecedent_id' => '', 'item' => '', 'treatment' => '', 'notes' => ''); ?>
                                             <?php foreach ($ants_trx as $ant): ?>
                                             <div class="ant-row" data-id="<?php echo $ant['antecedent_id']; ?>" data-type="trx" data-patient="<?php echo $det['patient_id']; ?>" style="border-top:1px solid #f0f2f6;padding-top:10px;margin-top:8px;">
+                                                <div style="text-align:right;"><button type="button" class="btn btn-danger btn-sm" onclick="removeAntecedent(this)" title="Eliminar">&times;</button></div>
                                                 <div class="row">
                                                     <div class="col-sm-6"><label>TRAUMA</label><input type="text" class="form-control ant-item" onchange="saveAntecedentRow(this)" value="<?php echo htmlspecialchars($ant['item']); ?>"></div>
                                                     <div class="col-sm-6"><label>NOTAS</label><textarea class="form-control ant-notes" rows="2" onchange="saveAntecedentRow(this)"><?php echo htmlspecialchars($ant['notes']); ?></textarea></div>
@@ -429,6 +433,7 @@ var app = '<?php echo base64_decode($id_);?>';
                                             <?php if (count($ants_fam) == 0) $ants_fam[] = array('antecedent_id' => '', 'item' => '', 'treatment' => '', 'notes' => ''); ?>
                                             <?php foreach ($ants_fam as $ant): ?>
                                             <div class="ant-row" data-id="<?php echo $ant['antecedent_id']; ?>" data-type="fam" data-patient="<?php echo $det['patient_id']; ?>" style="border-top:1px solid #f0f2f6;padding-top:10px;margin-top:8px;">
+                                                <div style="text-align:right;"><button type="button" class="btn btn-danger btn-sm" onclick="removeAntecedent(this)" title="Eliminar">&times;</button></div>
                                                 <div class="row">
                                                     <div class="col-sm-6"><label>DIAGNÓSTICO</label><input type="text" class="form-control ant-item" onchange="saveAntecedentRow(this)" value="<?php echo htmlspecialchars($ant['item']); ?>"></div>
                                                     <div class="col-sm-6"><label>FAMILIAR</label><input type="text" class="form-control ant-tx" onchange="saveAntecedentRow(this)" value="<?php echo htmlspecialchars($ant['treatment']); ?>"></div>
@@ -1624,7 +1629,7 @@ function addAntecedentRow(type, appId, patientId) {
         fields = '<div class="col-sm-6"><label>ALERGIA</label><input type="text" class="form-control ant-item" onchange="saveAntecedentRow(this)"></div>' +
             '<div class="col-sm-6"><label>NOTAS</label><textarea class="form-control ant-notes" rows="2" onchange="saveAntecedentRow(this)"></textarea></div>';
     }
-    var row = '<div class="ant-row" data-id="" data-type="' + type + '" data-patient="' + patientId + '" style="border-top:1px solid #f0f2f6;padding-top:10px;margin-top:8px;"><div class="row">' + fields + '</div></div>';
+    var row = '<div class="ant-row" data-id="" data-type="' + type + '" data-patient="' + patientId + '" style="border-top:1px solid #f0f2f6;padding-top:10px;margin-top:8px;"><div style="text-align:right;"><button type="button" class="btn btn-danger btn-sm" onclick="removeAntecedent(this)" title="Eliminar">&times;</button></div><div class="row">' + fields + '</div></div>';
     $('#ant_' + type + '_rows_' + appId).append(row);
 }
 
@@ -1656,14 +1661,16 @@ function saveAntecedentRow(el) {
     });
 }
 
-function deleteAntecedent(antecedentId) {
-    $.ajax({
-        url: base_url + 'doctor/delete_antecedent/' + antecedentId,
-        type: 'POST',
-        success: function() {
-            location.reload();
-        }
-    });
+function removeAntecedent(btn) {
+    var row = $(btn).closest('.ant-row');
+    var id = row.attr('data-id');
+    if (!confirm('¿Eliminar este antecedente?')) {
+        return;
+    }
+    if (id) {
+        $.post(base_url + 'doctor/delete_antecedent/' + id);
+    }
+    row.remove();
 }
 
 <?php if($gen != "M"):?>
