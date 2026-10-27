@@ -444,46 +444,6 @@ var app = '<?php echo base64_decode($id_);?>';
                                     </div>
                                 </div>
                                 <div class="col-sm-12">
-                                    <div class="form-group">
-                                        <b>Evaluación visual:</b>
-                                        <div class="table-responsive" style="margin-top:8px;">
-                                            <table class="table table-bordered" style="margin-bottom:0;">
-                                                <thead>
-                                                    <tr>
-                                                        <th style="width:70px;"></th>
-                                                        <th style="width:70px;">AVsc</th>
-                                                        <th style="width:70px;">AVcc</th>
-                                                        <th style="width:70px;">AVph</th>
-                                                        <th style="width:70px;">MEO</th>
-                                                        <th style="width:70px;">PIO</th>
-                                                        <th style="width:90px;">Pupilas</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td><b>DO: OD</b></td>
-                                                        <td><input class="form-control" onchange="updateConsulta('od_avsc',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['od_avsc'];?>"></td>
-                                                        <td><input class="form-control" onchange="updateConsulta('od_avcc',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['od_avcc'];?>"></td>
-                                                        <td><input class="form-control" onchange="updateConsulta('od_avph',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['od_avph'];?>"></td>
-                                                        <td><input class="form-control" onchange="updateConsulta('od_meo',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['od_meo'];?>"></td>
-                                                        <td><input class="form-control" onchange="updateConsulta('od_pio',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['od_pio'];?>"></td>
-                                                        <td><input class="form-control" onchange="updateConsulta('od_pupilas',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['od_pupilas'];?>"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><b>OS</b></td>
-                                                        <td><input class="form-control" onchange="updateConsulta('os_avsc',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['os_avsc'];?>"></td>
-                                                        <td><input class="form-control" onchange="updateConsulta('os_avcc',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['os_avcc'];?>"></td>
-                                                        <td><input class="form-control" onchange="updateConsulta('os_avph',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['os_avph'];?>"></td>
-                                                        <td><input class="form-control" onchange="updateConsulta('os_meo',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['os_meo'];?>"></td>
-                                                        <td><input class="form-control" onchange="updateConsulta('os_pio',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['os_pio'];?>"></td>
-                                                        <td><input class="form-control" onchange="updateConsulta('os_pupilas',<?php echo $details['appointment_id'] ?>,this.value)" value="<?php echo $details['os_pupilas'];?>"></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12">
                                     <div class="form-group" style="border:1px solid #e6e8ee;border-radius:8px;padding:12px;">
                                         <b>QUERATOMETRÍA</b>
                                         <?php
@@ -555,13 +515,6 @@ var app = '<?php echo base64_decode($id_);?>';
                                     </div>
                                     <div class="form-group" style="border:1px solid #e6e8ee;border-radius:8px;padding:12px;margin-top:12px;">
                                         <b>AGUDEZA VISUAL</b>
-                                        <div style="display:flex;gap:8px;margin:10px 0 4px 36px;font-size:12px;font-weight:600;">
-                                            <span style="width:90px;">AVL SC</span>
-                                            <span style="width:90px;color:#2e9e4f;">AVL CC</span>
-                                            <span style="width:90px;color:#2e9e4f;">AVC SC</span>
-                                            <span style="width:90px;color:#2e9e4f;">AVC CC</span>
-                                            <span style="width:90px;color:#e23b3b;">AVL PH</span>
-                                        </div>
                                         <?php
                                             $av_cols = array(
                                                 'avl_sc' => 'AVL SC',
@@ -571,14 +524,36 @@ var app = '<?php echo base64_decode($id_);?>';
                                                 'avl_ph' => 'AVL PH'
                                             );
                                         ?>
-                                        <?php foreach ($kera_eyes as $eye => $eye_label): ?>
-                                        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px;">
-                                            <b style="width:28px;"><?php echo $eye_label; ?></b>
-                                            <?php foreach ($av_cols as $av_key => $av_label): ?>
-                                            <input class="form-control" readonly style="width:90px;cursor:pointer;background:#fff;" onclick="openAvNotation(this,'av_<?php echo $eye; ?>_<?php echo $av_key; ?>',<?php echo $aid; ?>,'<?php echo $av_label; ?>')" value="<?php echo $details['av_'.$eye.'_'.$av_key]; ?>">
-                                            <?php endforeach; ?>
+                                        <div class="table-responsive" style="margin-top:8px;">
+                                            <table class="table table-bordered" style="margin-bottom:0;">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width:50px;"></th>
+                                                        <th>AVL SC</th>
+                                                        <th style="color:#2e9e4f;">AVL CC</th>
+                                                        <th style="color:#2e9e4f;">AVC SC</th>
+                                                        <th style="color:#2e9e4f;">AVC CC</th>
+                                                        <th style="color:#e23b3b;">AVL PH</th>
+                                                        <th>MEO</th>
+                                                        <th>PIO</th>
+                                                        <th>Pupilas</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php foreach ($kera_eyes as $eye => $eye_label): ?>
+                                                    <tr>
+                                                        <td><b><?php echo $eye_label; ?></b></td>
+                                                        <?php foreach ($av_cols as $av_key => $av_label): ?>
+                                                        <td><input class="form-control" readonly style="cursor:pointer;background:#fff;" onclick="openAvNotation(this,'av_<?php echo $eye; ?>_<?php echo $av_key; ?>',<?php echo $aid; ?>,'<?php echo $av_label; ?>')" value="<?php echo $details['av_'.$eye.'_'.$av_key]; ?>"></td>
+                                                        <?php endforeach; ?>
+                                                        <td><input class="form-control" onchange="updateConsulta('<?php echo $eye; ?>_meo',<?php echo $aid; ?>,this.value)" value="<?php echo $details[$eye.'_meo']; ?>"></td>
+                                                        <td><input class="form-control" onchange="updateConsulta('<?php echo $eye; ?>_pio',<?php echo $aid; ?>,this.value)" value="<?php echo $details[$eye.'_pio']; ?>"></td>
+                                                        <td><input class="form-control" onchange="updateConsulta('<?php echo $eye; ?>_pupilas',<?php echo $aid; ?>,this.value)" value="<?php echo $details[$eye.'_pupilas']; ?>"></td>
+                                                    </tr>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
                                         </div>
-                                        <?php endforeach; ?>
                                         <div style="margin-top:14px;">
                                             <b>TIPO DE OPTOTIPO</b>
                                             <div style="display:flex;gap:28px;margin-top:8px;color:#e23b3b;font-size:22px;font-weight:700;">
