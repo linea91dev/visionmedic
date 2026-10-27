@@ -140,7 +140,7 @@
 	                                    <input type="text" style="border: 1px solid #198cff8f;" name="married_last_name"  value="<?php echo $details['married_last_name'] ?>" class="form-control">
 	                                </div>
 	                            </div>
-	                            <div class="col-sm-6">
+	                            <div class="col-sm-4">
                                 <div class="form-group date-time-picker m-b-15">
                                     <label for="simpleinvput"><span style="color:red">*</span> Nacimiento</label></label>
         			                <div class="input-group date datepicker" id="DoctorPicker1">
@@ -149,7 +149,30 @@
         			               </div>
         		                </div>
 	                        </div>
-                                <div class="col-sm-6">
+                                <?php
+                                    $edad_txt = '';
+                                    $dob_raw = isset($details['date_of_birth']) ? trim($details['date_of_birth']) : '';
+                                    if ($dob_raw !== '') {
+                                        $dob_fmt = $dob_raw;
+                                        if (strpos($dob_raw, '/') === false) {
+                                            $dob_ts = strtotime($dob_raw);
+                                            if ($dob_ts) {
+                                                $dob_fmt = date('d/m/Y', $dob_ts);
+                                            }
+                                        }
+                                        $dob_partes = explode('/', $dob_fmt);
+                                        if (count($dob_partes) === 3 && checkdate((int) $dob_partes[1], (int) $dob_partes[0], (int) $dob_partes[2])) {
+                                            $edad_txt = $this->accounts_model->get_age($dob_fmt);
+                                        }
+                                    }
+                                ?>
+                                <div class="col-sm-4">
+                                    <div class="form-group m-b-15">
+                                        <label for="patientAge">Edad:</label>
+                                        <input type="text" id="patientAge" class="form-control" readonly style="border: 1px solid #198cff8f; background: #f7f9fc;" value="<?php echo $edad_txt; ?>">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
 	                                <div class="form-group m-b-15"></label>
        		                            <label for="simpleinput">Correo:</label>
 	                                    <input type="email" style="border: 1px solid #198cff8f;" name="email" value="<?php echo $details['email'] ?>" class="form-control" onkeyup="validateEmail();">
@@ -336,7 +359,52 @@ var sidebar = new StickySidebar('#sticky', {topSpacing: 10});
                     format: "dd/mm/yyyy",
                     todayHighlight: true,
                     autoclose: true
+                }).on('changeDate', function() {
+                    actualizarEdad($('#applyDate').val());
                 });
+                $('#applyDate').on('change blur', function() {
+                    actualizarEdad(this.value);
+                });
+            }
+            function actualizarEdad(valor) {
+                var partes = String(valor || '').split('/');
+                if (partes.length !== 3) {
+                    $('#patientAge').val('');
+                    return;
+                }
+                var dia = parseInt(partes[0], 10);
+                var mes = parseInt(partes[1], 10) - 1;
+                var anio = parseInt(partes[2], 10);
+                var nace = new Date(anio, mes, dia);
+                if (isNaN(nace.getTime()) || nace.getDate() !== dia || nace.getMonth() !== mes) {
+                    $('#patientAge').val('');
+                    return;
+                }
+                var hoy = new Date();
+                var anos = hoy.getFullYear() - nace.getFullYear();
+                var meses = hoy.getMonth() - nace.getMonth();
+                if (hoy.getDate() < nace.getDate()) {
+                    meses--;
+                }
+                if (meses < 0) {
+                    anos--;
+                    meses += 12;
+                }
+                var texto = '';
+                if (anos > 1) {
+                    texto = anos + ' años y ' + meses + (meses === 1 ? ' mes' : ' meses');
+                } else if (anos === 1) {
+                    texto = anos + ' año y ' + meses + (meses === 1 ? ' mes' : ' meses');
+                } else if (meses > 1) {
+                    texto = meses + ' meses';
+                } else if (meses === 1) {
+                    texto = '1 mes';
+                } else {
+                    var dias = Math.floor((hoy - nace) / 86400000);
+                    if (dias < 0) dias = 0;
+                    texto = dias + (dias === 1 ? ' dia' : ' dias');
+                }
+                $('#patientAge').val(texto);
             }
         });
         $('.ae-side-menu-toggler').on('click', function () {
