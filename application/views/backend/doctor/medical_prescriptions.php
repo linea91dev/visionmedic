@@ -17,9 +17,6 @@
                             <a class="side-items" href="<?php echo base_url();?>doctor/medical_history/<?php echo base64_encode($details['patient_id']);?>/"><i class="side-icon picons-thin-icon-thin-0299_address_book_contacts"></i> Historial </a>
                         </li>
                         <li style="border-bottom: 1px solid #eee;padding-bottom: 15px;">
-                            <a class="side-items" href="<?php echo base_url();?>doctor/patient_security/<?php echo base64_encode($details['patient_id']);?>/"><i class="side-icon picons-thin-icon-thin-0705_user_profile_security_password_permissions"></i> Contraseña y seguridad </a>
-                        </li>
-                        <li style="border-bottom: 1px solid #eee;padding-bottom: 15px;">
                             <a class="side-items active" href="<?php echo base_url();?>doctor/medical_prescriptions/<?php echo base64_encode($details['patient_id']);?>/"><i class="side-icon picons-thin-icon-thin-0003_write_pencil_new_edit"></i> Recetas <span class="side-active"></span></a>
                         </li>
                         <li style="border-bottom: 1px solid #eee;padding-bottom: 15px;">
