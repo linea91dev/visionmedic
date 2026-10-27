@@ -48,6 +48,9 @@
         <h4 class="todo-content-header">
             <i class="batch-icon-arrow-right"></i><span>Recetas médicas - <?php echo $this->accounts_model->get_name('patient',$details['patient_id']);?></span>
         </h4>
+        <div class="row">
+            <?php $rx_base = 'staff'; include dirname(__FILE__).'/../doctor/prescription_lists.php'; ?>
+        </div>
         <?php
 				    $this->db->group_by('appointment_id');
 				    $prescriptions = $this->db->get_where('prescription', array('patient_id' => $patient_id));
