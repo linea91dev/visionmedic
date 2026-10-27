@@ -346,6 +346,9 @@ class Drive extends CI_Controller
         }else
         {
             $data = json_decode($var, true);
+            if (!is_array($data)) {
+                $data = array();
+            }
             foreach ($data as $row) {
                 $html_table .= '
                 
@@ -450,6 +453,9 @@ class Drive extends CI_Controller
         }else
         {
             $data = json_decode($var, true);
+            if (!is_array($data)) {
+                $data = array();
+            }
             foreach ($data as $row) {
                 $html_table .= '
                 

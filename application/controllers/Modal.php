@@ -24,7 +24,10 @@ class Modal extends CI_Controller {
 		$page_data['param3']		=	$param3;
 		$page_data['param4']		=	$param4;
 		$page_data['param5']		=	$param5;
-		//echo '<script src="http://anton.miaula.com.gt/assets/js/bootstrap-clockpicker.min.js"></script>';
+		$account_view = APPPATH.'views/backend/'.$account_type.'/'.$page_name.'.php';
+		if (!is_file($account_view) && is_file(APPPATH.'views/backend/doctor/'.$page_name.'.php')) {
+			$account_type = 'doctor';
+		}
 		$this->load->view( 'backend/'.$account_type.'/'.$page_name.'.php' ,$page_data);
 	}
 }
