@@ -220,9 +220,21 @@
 		                            </div>
 		                        </div>
                                 <?php endif;?>
-	                            <div class="col-sm-6">
+	                            <div class="col-sm-4">
 	                                <div class="form-group m-b-15">
-       		                            <label for="simpleinput">Profesión/Ocupación:</label>
+       		                            <label for="simpleinput">DPI:</label>
+	                                    <input type="text" style="border: 1px solid #198cff8f;" name="dpi" maxlength="13" value="<?php echo isset($details['dpi']) ? $details['dpi'] : ''; ?>" class="form-control">
+		                                </div>
+	                            </div>
+	                            <div class="col-sm-4">
+	                                <div class="form-group m-b-15">
+       		                            <label for="simpleinput">Quién lo refirió:</label>
+	                                    <input type="text" style="border: 1px solid #198cff8f;" name="referred_by" value="<?php echo isset($details['referred_by']) ? $details['referred_by'] : ''; ?>" class="form-control">
+		                                </div>
+	                            </div>
+	                            <div class="col-sm-4">
+	                                <div class="form-group m-b-15">
+       		                            <label for="simpleinput">Ocupación:</label>
 	                                    <input type="text" style="border: 1px solid #198cff8f;" name="profession"  value="<?php echo $details['profession'] ?>" class="form-control">
 		                                </div>
 	                            </div>

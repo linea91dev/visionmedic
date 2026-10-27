@@ -251,6 +251,12 @@ class Accounts_model extends CI_Model
         $data['blood']         = $this->input->post('blood');    
         $data['date_of_birth'] = $this->input->post('date_of_birth');    
         $data['profession']    = $this->input->post('profession');    
+        if (isset($_POST['dpi'])) {
+            $data['dpi'] = $this->input->post('dpi');
+        }
+        if (isset($_POST['referred_by'])) {
+            $data['referred_by'] = $this->input->post('referred_by');
+        }
            
         $data['gender']        = $this->input->post('gender');    
         $data['address']       = $this->input->post('address');  
