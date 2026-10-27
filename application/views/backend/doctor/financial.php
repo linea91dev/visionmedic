@@ -15,22 +15,25 @@
                 <div class="card-widget">
                     <h4 class="panel-content-title">Transacciones recientes</h4>
                     <span class="app-divider2"></span>
-                    <div class="row" style="margin-bottom:12px;">
-                        <div class="col-sm-4">
-                            <label>Desde</label>
-                            <div class="input-group date datepicker" id="finDesde">
+                    <div class="row" style="margin-bottom:8px;align-items:flex-end;">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label for="fecha1">Desde</label>
                                 <input type="text" autocomplete="off" id="fecha1" class="form-control" placeholder="dd/mm/aaaa">
                             </div>
                         </div>
-                        <div class="col-sm-4">
-                            <label>Hasta</label>
-                            <div class="input-group date datepicker" id="finHasta">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label for="fecha2">Hasta</label>
                                 <input type="text" autocomplete="off" id="fecha2" class="form-control" placeholder="dd/mm/aaaa">
                             </div>
                         </div>
-                        <div class="col-sm-4" style="padding-top:24px;">
-                            <button type="button" class="btn btn-info" id="finFiltrar">Consultar</button>
-                            <button type="button" class="btn btn-secondary" id="finLimpiar">Limpiar</button>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label style="display:block;visibility:hidden;">Acciones</label>
+                                <button type="button" class="btn btn-info" id="finFiltrar">Consultar</button>
+                                <button type="button" class="btn btn-secondary" id="finLimpiar">Limpiar</button>
+                            </div>
                         </div>
                     </div>
     		        <div class="table-responsive">
@@ -199,13 +202,13 @@
                     "orderable":false,  
                 },],  
             });
-            if ($('#finDesde').length) {
-                $('#finDesde, #finHasta').datepicker({
-                    format: "dd/mm/yyyy",
-                    todayHighlight: true,
-                    autoclose: true
-                });
-            }
+            $('#fecha1, #fecha2').datepicker({
+                format: "dd/mm/yyyy",
+                todayHighlight: true,
+                autoclose: true,
+                orientation: "bottom auto",
+                container: "body"
+            });
             $('#finFiltrar').on('click', function() {
                 $('#user_data').DataTable().ajax.reload();
             });
