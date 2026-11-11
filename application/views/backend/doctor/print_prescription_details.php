@@ -1,3 +1,9 @@
+<?php
+    if (!isset($doc_type) || $doc_type != 'lentes') {
+        include dirname(__FILE__).'/print_prescription_tratamiento.php';
+        return;
+    }
+?>
 <html>
 <head>
     <style>
