@@ -722,6 +722,32 @@ var app = '<?php echo base64_decode($id_);?>';
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group" style="border:1px solid #e6e8ee;border-radius:8px;padding:12px;margin-bottom:12px;">
+                                        <b>Fondo de ojo</b>
+                                        <?php
+                                            $fondo_rows = array(
+                                                array('key' => 'oft_vitreo', 'label' => 'Vítreo'),
+                                                array('key' => 'oft_nervio_optico', 'label' => 'Nervio Óptico'),
+                                                array('key' => 'oft_retina_p_post', 'label' => 'Retina p. post.'),
+                                                array('key' => 'oft_retina_periferica', 'label' => 'Retina Periférica')
+                                            );
+                                        ?>
+                                        <div class="row" style="margin-top:8px;">
+                                            <?php foreach (array('od' => 'OD', 'os' => 'OS') as $eye => $eye_label): ?>
+                                            <div class="col-sm-6">
+                                                <div style="font-weight:700;border-bottom:1px solid #e6e8ee;margin-bottom:8px;"><?php echo $eye_label; ?></div>
+                                                <?php foreach ($fondo_rows as $fondo): ?>
+                                                <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                                                    <span style="width:150px;flex:0 0 150px;font-size:13px;"><?php echo $fondo['label']; ?></span>
+                                                    <input class="form-control" onchange="updateConsulta('<?php echo $fondo['key']; ?>_<?php echo $eye; ?>',<?php echo $aid; ?>,this.value)" value="<?php echo htmlspecialchars($details[$fondo['key'].'_'.$eye]); ?>">
+                                                </div>
+                                                <?php endforeach; ?>
+                                            </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-sm-12" style="margin-bottom:12px;">
                                     <?php if ($details['status'] == 11): ?>
                                         <span style="display:inline-block;background:#6b4c9a;color:#fff;border-radius:4px;padding:6px 12px;font-size:13px;">En fondo de ojo</span>
